@@ -43,3 +43,8 @@ Liste des tâches :
 - Front : Julien & Guillaume
 - Back : Ahmed & Lola
 
+Clefs API Google Maps :
+- Android : AIzaSyCCxn9kAUHu4MDHlzoTAnDs_-AxyQByuCw
+- iOS : AIzaSyARQWrvUUIPR9h7B9DDfteZyq_oT8dFL3g
+
+ionic cordova plugin add cordova-plugin-googlemaps --variable API_KEY_FOR_ANDROID=AIzaSyCCxn9kAUHu4MDHlzoTAnDs_-AxyQByuCw --variable API_KEY_FOR_IOS=AIzaSyARQWrvUUIPR9h7B9DDfteZyq_oT8dFL3g
