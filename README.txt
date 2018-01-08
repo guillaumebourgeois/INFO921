@@ -1,5 +1,10 @@
 WESH C'EST ICI QU'ON VA TRAVAILLER
 
+- Ahmed : taoukilite.elmahdi@gmail.com
+- Lola : lola.bellamy.51@gmail.com
+- Julien : julien.hubert@outlook.com / yorukiyo@gmail.com
+- Guillaume : guillaume.bourgeois.51@gmail.com
+
 
 Chaque TP doit donner lieu à :
 • L'écriture d'un cahier des charges détaillé ;
