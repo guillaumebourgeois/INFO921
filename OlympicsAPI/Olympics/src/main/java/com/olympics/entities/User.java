@@ -4,16 +4,21 @@ import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class User implements Serializable{
 
+	private static final long serialVersionUID = 1L;
+	
 	@Id
 	@GeneratedValue
 	private Long idUser;
-	
+	@NotNull
 	private String username;
+	@NotNull
 	private String password;
+	@NotNull
 	private String email;
 	private Integer age;
 	
