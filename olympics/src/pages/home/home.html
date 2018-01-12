@@ -1,4 +1,4 @@
-<ion-header>
+  <ion-header>
   <ion-navbar>
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
@@ -8,11 +8,21 @@
 </ion-header>
 
 <ion-content padding>
-  <h3>Olympics</h3>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+      </ion-col>
+      <ion-col text-center>
+        <h1 text-uppercase>Olympics</h1>
 
-  <p>
-    Olympics : Application de tracking sportif
-  </p>
+        <p>Aucune session en cours. Commencez une activité !</p>
 
-  <button ion-button secondary menuToggle>Toggle Menu</button>
+        <button margin-vertical ion-button large round color="light" outline>Démarrer</button>
+      </ion-col>
+      <ion-col>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!-- <button ion-button secondary menuToggle>Toggle Menu</button> -->
 </ion-content>
