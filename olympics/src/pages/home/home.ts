@@ -7,8 +7,9 @@ import { NavController } from 'ionic-angular';
 })
 export class HomePage {
 
+  sports: any;
   constructor(public navCtrl: NavController) {
-
+    this.sports = window["Sports"].GetSports();
   }
 
 }

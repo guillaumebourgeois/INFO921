@@ -1,28 +1,29 @@
   <ion-header>
   <ion-navbar>
-    <button ion-button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
     <ion-title>Home</ion-title>
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  <ion-grid>
-    <ion-row>
-      <ion-col>
-      </ion-col>
-      <ion-col text-center>
-        <h1 text-uppercase>Olympics</h1>
+<ion-content padding class="no-scroll">
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+        </ion-col>
+        <ion-col text-center>
+          <h1 text-uppercase>Olympics</h1>
 
-        <p>Aucune session en cours. Commencez une activité !</p>
-
-        <button margin-vertical ion-button large round color="light" outline>Démarrer</button>
-      </ion-col>
-      <ion-col>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-
+          <!--p>Aucune session en cours. Commencez une activité !</p-->
+          <div style="display: inline-block;">
+            <label *ngFor="let current of sports" for={{current.name}}>
+              <input type="radio" id={{current.name}} name={{current.name}}>
+              <span>{{ current.name }}</span>
+            </label>
+          </div>
+          <button margin-vertical ion-button large round color="light" outline>Démarrer</button>
+        </ion-col>
+        <ion-col>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
   <!-- <button ion-button secondary menuToggle>Toggle Menu</button> -->
 </ion-content>

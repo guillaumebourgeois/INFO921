@@ -2,5 +2,6 @@ olympics/node_modules/
 olympics/.sourcemaps/
 olympics/platforms/
 olympics/plugins/
+olympics/resources/
 olympics/www/
 olympics/package-lock.json
