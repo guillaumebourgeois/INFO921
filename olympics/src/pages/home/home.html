@@ -13,17 +13,26 @@
           <h1 text-uppercase>Olympics</h1>
 
           <!--p>Aucune session en cours. Commencez une activité !</p-->
-          <div style="display: inline-block;">
-            <label *ngFor="let current of sports" for={{current.name}}>
+          <!--div style="display: inline-block;">
+            <ion-label *ngFor="let current of sports" for={{current.name}}>
               <input type="radio" id={{current.name}} name={{current.name}}>
               <span>{{ current.name }}</span>
             </label>
+          </div-->
+          <!--ion-list radio-group>
+            <ion-item *ngFor="let current of sports" style="background-color: transparent;">
+              <ion-label>{{ current.name }}</ion-label>
+              <ion-radio value={{current.name}} (click)="chooseActivity(current.name)"></ion-radio>
+            </ion-item>
+          </ion-list>
+          <button margin-vertical ion-button large block color="light" outline disabled id="start-button" (click)="startActivity()">Start</button-->
+
+          <div id="main-button">
           </div>
-          <button margin-vertical ion-button large round color="light" outline>Démarrer</button>
+
         </ion-col>
         <ion-col>
         </ion-col>
       </ion-row>
     </ion-grid>
-  <!-- <button ion-button secondary menuToggle>Toggle Menu</button> -->
 </ion-content>
