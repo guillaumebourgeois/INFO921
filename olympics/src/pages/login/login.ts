@@ -5,15 +5,15 @@ import { TabsPage } from '../tabs/tabs';
 import { CreateAccountPage } from '../create-account/create-account';
 
 @Component({
-  selector: 'page-connection',
-  templateUrl: 'connection.html',
+  selector: 'page-login',
+  templateUrl: 'login.html',
 })
-export class ConnectionPage {
+export class LoginPage {
 
   credentials:any = {
-                      email: "",
-                      password: ""
-                    };
+    email: "",
+    password: ""
+  };
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
@@ -27,8 +27,8 @@ export class ConnectionPage {
 
   public login() {
     if (this.credentials.email == "root" && this.credentials.password == "root") {
-        this.navCtrl.setRoot(TabsPage);
-        window["LocalData"].Set("Connected", "true");
+      this.navCtrl.setRoot(TabsPage);
+      window["LocalData"].Set("Connected", "true");
     }
   }
 }

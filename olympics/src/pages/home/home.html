@@ -12,23 +12,27 @@
         <ion-col text-center>
           <h1 text-uppercase>Olympics</h1>
 
-          <!--p>Aucune session en cours. Commencez une activité !</p-->
-          <!--div style="display: inline-block;">
+          <div id="noCurrentSessionOverlay">
+            <p>Aucune session en cours. Commencez une activité !</p>
+
+            <button ion-button round type="submit">Démarrer</button>
+          </div>
+          <!-- <div style="display: inline-block;">
             <ion-label *ngFor="let current of sports" for={{current.name}}>
               <input type="radio" id={{current.name}} name={{current.name}}>
               <span>{{ current.name }}</span>
             </label>
-          </div-->
-          <!--ion-list radio-group>
+          </div> -->
+          <!-- <ion-list radio-group>
             <ion-item *ngFor="let current of sports" style="background-color: transparent;">
               <ion-label>{{ current.name }}</ion-label>
               <ion-radio value={{current.name}} (click)="chooseActivity(current.name)"></ion-radio>
             </ion-item>
           </ion-list>
-          <button margin-vertical ion-button large block color="light" outline disabled id="start-button" (click)="startActivity()">Start</button-->
+          <button margin-vertical ion-button large block color="light" outline disabled id="start-button" (click)="startActivity()">Start</button>
 
           <div id="main-button">
-          </div>
+          </div> -->
 
         </ion-col>
         <ion-col>

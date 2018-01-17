@@ -13,7 +13,7 @@ import { MapPage            } from '../pages/map/map';
 import { ActivityPage       } from '../pages/activity/activity';
 import { StatisticsPage     } from '../pages/statistics/statistics';
 import { SettingsPage       } from '../pages/settings/settings';
-import { ConnectionPage     } from '../pages/connection/connection';
+import { LoginPage     } from '../pages/login/login';
 import { TabsPage           } from '../pages/tabs/tabs';
 import { CreateAccountPage  } from '../pages/create-account/create-account';
 
@@ -29,7 +29,7 @@ import { Sports     } from '../providers/sports'
     ActivityPage,
     StatisticsPage,
     SettingsPage,
-    ConnectionPage,
+    LoginPage,
     TabsPage,
     CreateAccountPage
   ],
@@ -45,7 +45,7 @@ import { Sports     } from '../providers/sports'
     ActivityPage,
     StatisticsPage,
     SettingsPage,
-    ConnectionPage,
+    LoginPage,
     TabsPage,
     CreateAccountPage
   ],

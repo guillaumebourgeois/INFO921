@@ -4,7 +4,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 // Pages
-import { ConnectionPage } from '../pages/connection/connection';
+import { LoginPage } from '../pages/login/login';
 import { TabsPage       } from '../pages/tabs/tabs';
 
 // Providers
@@ -37,7 +37,7 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
 
       if (window["LocalData"].Get("Connected") == undefined || window["LocalData"].Get("Connected") == "false")
-        this.rootPage = ConnectionPage;
+        this.rootPage = LoginPage;
         //this.rootPage = TabsPage;
       else
         this.rootPage = TabsPage;
