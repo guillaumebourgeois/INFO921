@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform } from 'ionic-angular';
+import { Nav, Platform, Events } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
@@ -22,7 +22,7 @@ export class MyApp {
   //pages: Array<{title: string, component: any}>;
 
   constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen,
-              private p_LocalData: LocalData, private p_Sports: Sports) {
+              private p_LocalData: LocalData, private p_Sports: Sports, public events: Events) {
     this.initializeApp();
 
     if (window["LocalData"] == undefined)
@@ -38,9 +38,24 @@ export class MyApp {
 
       if (window["LocalData"].Get("Connected") == undefined || window["LocalData"].Get("Connected") == "false")
         this.rootPage = LoginPage;
-        //this.rootPage = TabsPage;
       else
         this.rootPage = TabsPage;
+
+      // Login/logout event handling
+      this.events.subscribe('user:isLoggedIn', (isLoggedIn) => {
+        if(!isLoggedIn){
+          this.rootPage = LoginPage;
+          window["LocalData"].Set("Connected", "false");
+          this.nav.popToRoot();
+        }
+        else {
+          this.rootPage = TabsPage;
+          window["LocalData"].Set("Connected", "true");
+          this.nav.push(this.rootPage);
+        }
+
+        
+      });
 
       this.statusBar.styleDefault();
       this.splashScreen.hide();

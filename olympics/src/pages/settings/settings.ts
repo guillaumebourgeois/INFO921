@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, Events } from 'ionic-angular';
 
 import { LoginPage } from '../login/login';
 
@@ -9,14 +9,14 @@ import { LoginPage } from '../login/login';
 })
 export class SettingsPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public events: Events) {
   }
 
   ionViewDidLoad() {
   }
 
   public logout() {
+  	this.events.publish('user:isLoggedIn', false);
     window["LocalData"].Set("Connected", "false");
-  	this.navCtrl.setRoot(LoginPage);
   }
 }

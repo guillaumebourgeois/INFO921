@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, Events } from 'ionic-angular';
 
 import { TabsPage } from '../tabs/tabs';
 import { CreateAccountPage } from '../create-account/create-account';
@@ -15,7 +15,7 @@ export class LoginPage {
     password: ""
   };
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public events: Events) {
   }
 
   ionViewDidLoad() {
@@ -27,8 +27,7 @@ export class LoginPage {
 
   public login() {
     if (this.credentials.email == "root" && this.credentials.password == "root") {
-      this.navCtrl.setRoot(TabsPage);
-      window["LocalData"].Set("Connected", "true");
+      this.events.publish('user:isLoggedIn', true);
     }
   }
 }
