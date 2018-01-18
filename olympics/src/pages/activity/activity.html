@@ -5,6 +5,25 @@
 </ion-header>
 
 
-<ion-content padding class="no-scroll">
+<ion-content class="card-background-page">
+
+	<!-- J'étais parti sur une grille mais ma deuxième solution est plus stylée :^) -->
+	<!-- <ion-grid>
+	  <ion-row *ngFor="let t of temp(math.ceil(sports.length/2)).fill(); let i = index">
+      	<ion-col *ngFor="let sport of sports.slice(2*i,2*i + 2);" col-6>
+        	<ion-card>
+        		<img src="../../assets/imgs/{{sport.code}}.jpg"/>
+        		<div class="card-title">{{sport.name}}</div>
+        		<div class="card-subtitle">{{sport.description}}</div>
+        	</ion-card>
+      	</ion-col>
+  	  </ion-row>
+    </ion-grid> -->
+
+	<ion-card *ngFor="let s of sports;">
+		<img src="../../assets/imgs/{{s.code}}.jpg" />
+		<div class="card-title">{{s.name}}</div>
+		<div class="card-subtitle">{{s.description}}</div>
+	</ion-card>
 
 </ion-content>
