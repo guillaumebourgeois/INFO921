@@ -17,6 +17,5 @@ export class SettingsPage {
 
   public logout() {
   	this.events.publish('user:isLoggedIn', false);
-    window["LocalData"].Set("Connected", "false");
   }
 }

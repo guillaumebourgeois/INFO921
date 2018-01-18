@@ -43,18 +43,16 @@ export class MyApp {
 
       // Login/logout event handling
       this.events.subscribe('user:isLoggedIn', (isLoggedIn) => {
-        if(!isLoggedIn){
-          this.rootPage = LoginPage;
+        if(!isLoggedIn) {
+          this.rootPage = LoginPage; // Root page is set as application-level
           window["LocalData"].Set("Connected", "false");
-          this.nav.popToRoot();
+          this.nav.popToRoot(); // Return to login page, no tabs remaining
         }
         else {
-          this.rootPage = TabsPage;
+          this.rootPage = TabsPage; // Tabs is our way to display this app
           window["LocalData"].Set("Connected", "true");
-          this.nav.push(this.rootPage);
+          this.nav.push(this.rootPage); // Specify this.rootPage to be able to change page whenever we want
         }
-
-        
       });
 
       this.statusBar.styleDefault();
