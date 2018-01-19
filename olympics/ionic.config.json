@@ -1,6 +1,6 @@
 {
   "name": "olympics",
-  "app_id": "",
+  "app_id": "31ca2835",
   "type": "ionic-angular",
   "integrations": {
     "cordova": {}
