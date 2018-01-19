@@ -1,5 +1,6 @@
 package com.olympics.web;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,11 +57,17 @@ public class ActivityService {
 
 	@RequestMapping(value = "/activities/{id}", method = RequestMethod.PUT)
 	public Activity update(@PathVariable Long id, @RequestBody Activity a) {
-		/*
-		 * faut faire un get avant le update. (formulaire coté client ,ou recherche du
-		 * contact puis modification coté serveur)
-		 */
 		a.setIdActivity(id);
 		return activityRepository.save(a);
+	}
+	
+	@RequestMapping(value = "/activities/{id}/gps", method = RequestMethod.PUT)
+	public void gps(@PathVariable Long id,
+					@RequestParam(name="idPacket", defaultValue="0") int idPacket,
+					@RequestParam(name="date", defaultValue="0") Date date,
+					@RequestParam(name="coords", defaultValue="0") double coords[]) {
+		activityRepository.findOne(id);
+		String
+		
 	}
 }
