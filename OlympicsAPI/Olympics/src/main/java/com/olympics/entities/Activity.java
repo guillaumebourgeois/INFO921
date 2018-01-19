@@ -31,4 +31,45 @@ public class Activity implements Serializable {
 	
 	@Size(max = 2500)
 	private String gpsCoord;
+	
+	public Long getIdActivity() {
+		return idActivity;
+	}
+
+	public void setIdActivity(Long idActivity) {
+		this.idActivity = idActivity;
+	}
+
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
+	}
+
+	public Date getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+
+	public String getGpsCoord() {
+		return gpsCoord;
+	}
+
+	public void setGpsCoord(String gpsCoord) {
+		this.gpsCoord = gpsCoord;
+	}
+
 }
