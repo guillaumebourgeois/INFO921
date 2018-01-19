@@ -4,39 +4,41 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding class="no-scroll">
-    <ion-grid>
-      <ion-row>
-        <ion-col>
-        </ion-col>
-        <ion-col text-center>
+<ion-content padding text-center class="no-scroll">
           <h1 text-uppercase>Olympics</h1>
 
-          <div id="noCurrentSessionOverlay">
+          <!-- <div id="noCurrentSessionOverlay">
             <p>No session started. Begin now !</p>
 
             <button ion-button round type="submit">Start</button>
-          </div>
+
+
+          </div> -->
+          <!-- <ion-list>
+              <button ion-item *ngFor="let sport of sports" (click)="startActivity(sport)">
+                {{sport.name}}
+              </button>
+            </ion-list> -->
           <!-- <div style="display: inline-block;">
             <ion-label *ngFor="let current of sports" for={{current.name}}>
               <input type="radio" id={{current.name}} name={{current.name}}>
               <span>{{ current.name }}</span>
             </label>
           </div> -->
-          <!-- <ion-list radio-group>
-            <ion-item *ngFor="let current of sports" style="background-color: transparent;">
+          <p>Choose a sport</p>
+          <ion-list radio-group [(ngModel)]="sport">
+            <ion-item *ngFor="let current of sports.sports" style="background-color: transparent;">
               <ion-label>{{ current.name }}</ion-label>
-              <ion-radio value={{current.name}} (click)="chooseActivity(current.name)"></ion-radio>
+              <ion-radio value="{{current.name}}"></ion-radio>
             </ion-item>
           </ion-list>
-          <button margin-vertical ion-button large block color="light" outline disabled id="start-button" (click)="startActivity()">Start</button>
+
+          <button ion-button round id="start-button" (click)="startActivity()">Start</button>
+
+          <!-- {{sport}} -->
+
+          <!-- <button margin-vertical ion-button large block color="light" outline disabled id="start-button" (click)="startActivity()">Start</button>
 
           <div id="main-button">
           </div> -->
-
-        </ion-col>
-        <ion-col>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
 </ion-content>

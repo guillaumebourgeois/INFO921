@@ -1,7 +1,10 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import jQuery from "jquery";
-import * as d3 from 'd3';
+// import * as d3 from 'd3';
+
+import { Sports } from '../../providers/sports';
+import { ActivityPage } from '../activity/activity';
 
 @Component({
   selector: 'page-home',
@@ -9,29 +12,27 @@ import * as d3 from 'd3';
 })
 export class HomePage {
 
-  private sports: any;
-  private currentActivity: string;
+  sport: string = '';
 
   /// Graphic elements
-  private m_Margin = {top: 20, right: 0, bottom: 30, left: 110};
-  private m_Width: number;
-  private m_Height: number;
+  // private m_Margin = {top: 20, right: 0, bottom: 30, left: 110};
+  // private m_Width: number;
+  // private m_Height: number;
 
-  constructor(public navCtrl: NavController) {
-    this.sports = window["Sports"].GetSports();
+  constructor(public navCtrl: NavController, public sports: Sports) {
   }
 
   ngAfterViewInit(){
-      let l_WindowWidth  = jQuery(window).width();
-      let l_WindowHeight  = jQuery(window).height();
+      // let l_WindowWidth  = jQuery(window).width();
+      // let l_WindowHeight  = jQuery(window).height();
 
-      this.m_Width = (l_WindowWidth * 2) - this.m_Margin.left - this.m_Margin.right;
-      this.m_Height = l_WindowHeight - this.m_Margin.top - this.m_Margin.bottom;
+      // this.m_Width = (l_WindowWidth * 2) - this.m_Margin.left - this.m_Margin.right;
+      // this.m_Height = l_WindowHeight - this.m_Margin.top - this.m_Margin.bottom;
 
-      this.createButton();
+      // this.createButton();
   }
 
-  private createButton(){
+  /*private createButton(){
     let sport_names: Array<string> = new Array(this.sports.length);
     for (var i = 0; i < this.sports.length ; ++i)
       sport_names.push(this.sports[i].name);
@@ -75,7 +76,7 @@ export class HomePage {
         .data(sport_names)
         .enter().append("g")
         .attr("class", "arc")
-        /*.on("click", function(d: any) {
+        .on("click", function(d: any) {
             l_DOMMoodImg.css("background-image", 'url("' + l_Imgs[d.data.Level] + '2.png")' );
             l_DOMPiePercent.html(d.data.Percent + "%");
             l_DOMMoodWord.html(l_MoodsWord[d.data.Level] + " : ");
@@ -106,14 +107,14 @@ export class HomePage {
                 .attr("d", l_ArcExpend)
                 .style("stroke-width", 8)
                 .duration(500);
-        });*/
+        });
 
     /// Set the colors
-    /*l_G.append("path").attr("d", l_Arc)
-        .style("fill", (d: any) => l_Color(d.data.Level) );*/
+    l_G.append("path").attr("d", l_Arc)
+        .style("fill", (d: any) => l_Color(d.data.Level) );
 
     /// Set the images on each arc
-    /*l_G.append("g")
+    l_G.append("g")
         .attr("transform", (d: any) => "translate(" + l_LabelArc.centroid(d) + ")")
         .attr("dy", ".35em")
         .append("svg:image")
@@ -128,19 +129,18 @@ export class HomePage {
         .attr("width", l_ImgWidth)
         .attr("height", l_ImgHeight)
         .attr("x",-1*(l_ImgWidth)/2)
-        .attr("y",-1*(l_ImgHeight)/2);*/
-  }
+        .attr("y",-1*(l_ImgHeight)/2);
+  }*/
 
-  private chooseActivity(activity: string) {
+  public chooseActivity(activity: string) {
     if (jQuery("#start-button").prop("disabled") == true)
     {
       jQuery("#start-button").prop("disabled", false);
       jQuery("#start-button").prop("enabled", true);
     }
-    this.currentActivity = activity;
   }
 
-  private startActivity() {
-
+  public startActivity() {
+    this.navCtrl.push(ActivityPage, { 'sport': this.sport });
   }
 }

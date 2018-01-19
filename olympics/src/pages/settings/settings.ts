@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, Events } from 'ionic-angular';
 
-import { LoginPage } from '../login/login';
-
 @Component({
   selector: 'page-settings',
   templateUrl: 'settings.html',
@@ -16,6 +14,6 @@ export class SettingsPage {
   }
 
   public logout() {
-  	this.events.publish('user:isLoggedIn', false);
+  	this.events.publish('user:logout');
   }
 }

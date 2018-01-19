@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ToastController } from 'ionic-angular';
 import { NavController, NavParams } from 'ionic-angular';
 import { GoogleMaps, GoogleMap, GoogleMapsEvent, GoogleMapOptions, GoogleMapsAnimation,
-  CameraPosition, MarkerOptions, Marker, MyLocation } from '@ionic-native/google-maps';
+ Marker, MyLocation } from '@ionic-native/google-maps';
 
 @Component({
   selector: 'page-map',
@@ -14,7 +14,7 @@ export class MapPage {
   map: GoogleMap;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
-              public toastCtrl: ToastController, private googleMaps: GoogleMaps) {
+              public toastCtrl: ToastController) {
   }
 
   ionViewDidLoad() {
