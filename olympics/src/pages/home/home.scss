@@ -1,6 +1,6 @@
 page-home {
 	ion-content {
-	  background-image: url('../../assets/imgs/home-bg.jpg');
+	  background-image: url('../assets/imgs/home-bg.jpg'); // Pour que ça marche sur mobile, il faut mettre ../assets/........
 	  background-size: cover;
 	  background-origin: right;
 	}

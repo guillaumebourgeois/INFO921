@@ -24,4 +24,9 @@ page-activity {
     }
 
   }
+
+  #map_canvas {
+    height: 500px;
+    overflow: hidden;
+  }
 }
