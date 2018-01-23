@@ -4,10 +4,10 @@ import { NavController, NavParams } from 'ionic-angular';
 import { Sports } from '../../providers/sports';
 
 @Component({
-  selector: 'page-activities',
-  templateUrl: 'activities.html',
+  selector: 'page-history',
+  templateUrl: 'history.html',
 })
-export class ActivitiesPage {
+export class HistoryPage {
 
   // This is for the first idea (2 sports per row)
   public temp = Array;
@@ -17,7 +17,7 @@ export class ActivitiesPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad ActivitiesPage');
+    console.log('ionViewDidLoad HistoryPage');
   }
 
 }

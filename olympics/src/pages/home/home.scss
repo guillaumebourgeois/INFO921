@@ -1,7 +1,39 @@
 page-home {
-	ion-content {
-	  background-image: url('../assets/imgs/home-bg.jpg'); // Pour que ça marche sur mobile, il faut mettre ../assets/........
-	  background-size: cover;
-	  background-origin: right;
+	// ion-content {
+	//   background-image: url('../assets/imgs/home-bg.jpg'); // Pour que ça marche sur mobile, il faut mettre ../assets/........
+	//   background-size: cover;
+	//   background-origin: right;
+	// }
+
+	h1 {
+	  font-weight: bold;
+	}
+
+	.card-background-page {
+
+	    ion-card {
+	      box-shadow: none;
+	      -webkit-box-shadow: none;
+	      border-radius: 12px;
+	    }
+
+	    .card-title {
+	      position: absolute;
+	      top: 20%;
+	      left: 15%;
+	      font-size: 1.4em;
+	      width: 75%;
+	      font-weight: bold;
+	      color: #fff;
+	    }
+
+	    .card-subtitle {
+	      font-size: 1.0em;
+	      position: absolute;
+	      top: 52%;
+	      left: 15%;
+	      width: 75%;
+	      color: #fff;
+	    }
 	}
 }

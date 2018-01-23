@@ -93,6 +93,9 @@
         <variable name="LOCATION_WHEN_IN_USE_DESCRIPTION" value="Show your location on the map" />
         <variable name="LOCATION_ALWAYS_USAGE_DESCRIPTION" value="Trace your location on the map" />
     </plugin>
+    <plugin name="cordova-plugin-pedometer" spec="^0.4.1">
+        <variable name="MOTION_USAGE_DESCRIPTION" value="Trace your performances" />
+    </plugin>
     <engine name="android" spec="~7.0.0" />
     <engine name="browser" spec="~5.0.3" />
 </widget>

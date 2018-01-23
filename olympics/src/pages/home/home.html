@@ -1,11 +1,11 @@
-  <ion-header>
+<ion-header>
   <ion-navbar>
     <ion-title>Home</ion-title>
   </ion-navbar>
 </ion-header>
 
-<ion-content padding text-center class="no-scroll">
-          <h1 text-uppercase>Olympics</h1>
+<ion-content no-padding class="no-scroll card-background-page">
+          <h1 padding no-margin>Choose a sport to begin</h1>
 
           <!-- <div id="noCurrentSessionOverlay">
             <p>No session started. Begin now !</p>
@@ -25,15 +25,27 @@
               <span>{{ current.name }}</span>
             </label>
           </div> -->
-          <p>Choose a sport</p>
-          <ion-list radio-group [(ngModel)]="sport">
+
+          <ion-grid>
+            <ion-row *ngFor="let t of temp(math.ceil(sports.sports.length/2)).fill(); let i = index">
+              <ion-col *ngFor="let sport of sports.sports.slice(2*i,2*i + 2);" col-6 no-padding>
+                <ion-card (click)="startActivity(sport.name)">
+                  <img src="assets/imgs/{{sport.code}}.jpg"/>
+                  <div class="card-title">{{sport.name}}</div>
+                  <div class="card-subtitle">{{sport.description}}</div>
+                </ion-card>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+
+          <!-- <ion-list radio-group [(ngModel)]="sport">
             <ion-item *ngFor="let current of sports.sports" style="background-color: transparent;">
               <ion-label>{{ current.name }}</ion-label>
               <ion-radio value="{{current.name}}"></ion-radio>
             </ion-item>
           </ion-list>
 
-          <button ion-button round id="start-button" (click)="startActivity()">Start</button>
+          <button ion-button round id="start-button" (click)="startActivity()">Start</button> -->
 
           <!-- {{sport}} -->
 

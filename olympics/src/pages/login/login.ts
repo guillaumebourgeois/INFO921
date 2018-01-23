@@ -27,7 +27,7 @@ export class LoginPage {
   public login() {
     // If we enter the right credidentials, we are able to log in
     // TODO A real auth system :^)
-    if (this.credentials.email == "root" && this.credentials.password == "root") {
+    if (this.credentials.email.toLowerCase() == "root" && this.credentials.password.toLowerCase() == "root") {
       this.events.publish('user:login');
     }
   }

@@ -1,6 +1,9 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>Activity</ion-title>
+  <img src="assets/imgs/{{sport.code}}.jpg" />
+  <ion-navbar no-border-bottom>
+    <ion-title>
+      {{sport.name}}
+    </ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -20,28 +23,49 @@
   	  </ion-row>
     </ion-grid> -->
 
-    <h2>{{sport}}</h2>
-
-    <ion-grid>
-    	<ion-row>
-    		<ion-col col-6>
-    		</ion-col>
-    		<ion-col col-6>
-    			<button ion-button color="primary" (click)="updateMap()">Update map</button>
-    		</ion-col>
-    	</ion-row>
-    	<ion-row>
-    		<ion-col col-6>
-    			
-    		</ion-col>
-    		<ion-col col-6>
-
-    		</ion-col>
-    	</ion-row>
-    </ion-grid>
-
-    <div id="map_canvas">
-    				
-    </div>
+  <ion-grid>
+  	<!-- Debug purpose -->
+  	<!-- <ion-row>
+  		<ion-col col-6>
+  			{{ selfPosition.lng }},
+  			{{ selfPosition.lat }}
+  		</ion-col>
+  		<ion-col col-6>
+  			<button ion-button color="primary" (click)="updateMap()">Update map</button> 
+  		</ion-col>
+  	</ion-row> -->
+  	<ion-row>
+  		<ion-col col-6>
+        <ion-card>
+          <ion-card-header>
+            <ion-icon name="stopwatch"></ion-icon> <span margin-left>Time</span>
+          </ion-card-header>
+          <ion-card-content>
+      			<h1 no-margin>{{timer.displayTime}}</h1>
+            <button ion-button margin-top color="primary" *ngIf="!isStopped && isPaused" (click)="resumeActivity()"><ion-icon name="play"></ion-icon></button> 
+            <button ion-button margin-top color="warning" *ngIf="!isStopped && !isPaused" (click)="pauseActivity()"><ion-icon name="pause"></ion-icon></button> 
+            <button ion-button margin-top color="danger" *ngIf="!isStopped" (click)="showStopActivityConfirm()"><ion-icon name="square"></ion-icon></button> 
+          </ion-card-content>
+        </ion-card>
+  		</ion-col>
+  		<ion-col col-6>
+        
+  		</ion-col>
+  	</ion-row>
+    <ion-row>
+      <ion-col col-12>
+        <ion-card>
+          <ion-card-header>
+            <ion-icon name="navigate"></ion-icon> <span margin-left>Location</span>
+          </ion-card-header>
+          <ion-card-content>
+            <div id="map-container">
+              <div id="map_canvas"></div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
 </ion-content>

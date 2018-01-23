@@ -14,6 +14,9 @@ export class HomePage {
 
   sport: string = '';
 
+  public temp = Array;
+  public math = Math;
+
   /// Graphic elements
   // private m_Margin = {top: 20, right: 0, bottom: 30, left: 110};
   // private m_Width: number;
@@ -140,7 +143,7 @@ export class HomePage {
     }
   }
 
-  public startActivity() {
-    this.navCtrl.push(ActivityPage, { 'sport': this.sport });
+  public startActivity(sport) {
+    this.navCtrl.push(ActivityPage, { 'sport': sport });
   }
 }

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 
 import { HomePage       } from '../home/home';
-import { ActivitiesPage   } from '../activities/activities';
+import { HistoryPage   } from '../history/history';
 import { StatisticsPage } from '../statistics/statistics';
 import { SettingsPage   } from '../settings/settings';
 
@@ -13,7 +13,7 @@ import { SettingsPage   } from '../settings/settings';
 export class TabsPage {
 
   tab1Root = HomePage;
-  tab2Root = ActivitiesPage;
+  tab2Root = HistoryPage;
   tab3Root = StatisticsPage;
   tab4Root = SettingsPage;
 
