@@ -9,12 +9,16 @@ page-activity {
     }
 
     ion-navbar {
+      position: absolute;
+      bottom: 5%;
+
       .toolbar-background {
         background: transparent !important;
         border-width: 0 !important;
       }
       .toolbar-title {
         color: white;
+        font-size: 2.5rem;
       }
       .back-button {
         color: white;
@@ -23,8 +27,6 @@ page-activity {
       ion-title {
         color: white;
       }
-      position: absolute;
-      bottom: 5%;
     }
   }
   #map_canvas {

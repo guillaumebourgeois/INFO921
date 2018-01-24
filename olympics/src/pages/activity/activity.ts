@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, Events, AlertController } from 'ionic-angular';
+import { Storage } from '@ionic/storage';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Pedometer } from '@ionic-native/pedometer';
 import { StatusBar } from '@ionic-native/status-bar';
@@ -15,6 +16,7 @@ import { Sports } from '../../providers/sports';
 export class ActivityPage {
 
   private sport: any;
+  private activityId: number;
 
   private locationUpdater: any;
   private map: GoogleMap;
@@ -25,15 +27,31 @@ export class ActivityPage {
   private isPaused: boolean = false;
   private isStopped: boolean = false;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, private geolocation: Geolocation, public events: Events, private pedometer: Pedometer, private timer: Timer, public sports: Sports, private statusBar: StatusBar) {
-  	this.sport = this.sports.sports.find((element) => {
-      return element.name == this.navParams.get('sport');
-    }); // this.navParams.get('sport');
-    this.selfPosition = new LatLng(0,0); // Debug purpose
-
+  constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, private geolocation: Geolocation, public events: Events, private pedometer: Pedometer, private timer: Timer, public sports: Sports, private statusBar: StatusBar, private storage: Storage) {
+    // this.selfPosition = new LatLng(0,0); // Debug purpose
   }
 
   ionViewDidLoad() {
+    this.sport = this.sports.sports.find((element) => {
+      return element.name == this.navParams.get('sport');
+    });
+
+    this.storage.get('last' + this.sport.name + 'ActivityId').then((value) => {
+      this.activityId = (value !== undefined) ? ++value : 0;
+
+      this.storage.set('last' + this.sport.name + 'ActivityId', this.activityId);
+
+      this.storage.get('activities' + this.sport.name + 'Id').then((array) => {
+        if (array) array.push(this.activityId);
+        else array = [ this.activityId ];
+
+        this.storage.set('activities' + this.sport.name + 'Id', array);
+
+        console.log('List of actities ID for this sport : ' + array);
+      })
+      console.log('Activity ID : ' + this.activityId);
+    });
+
     this.statusBar.styleLightContent();
     this.timer.startTimer();
     this.loadMap();
@@ -45,7 +63,7 @@ export class ActivityPage {
   ionViewWillLeave() {
     this.statusBar.styleDefault();
     this.timer.resetTimer();
-    this.unloadMap();
+    if(this.locationUpdater) this.unloadMap();
   }
 
   loadPedometer() {
@@ -63,7 +81,6 @@ export class ActivityPage {
   }
 
   loadMap() {
-
     let mapElement: HTMLElement = document.getElementById('map_canvas');
 
     // Set map origin

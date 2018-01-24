@@ -1,7 +1,7 @@
 <ion-header>
-  <img src="assets/imgs/{{sport.code}}.jpg" />
+  <img *ngIf="sport" src="assets/imgs/{{sport.code}}.jpg" />
   <ion-navbar no-border-bottom>
-    <ion-title>
+    <ion-title *ngIf="sport">
       {{sport.name}}
     </ion-title>
   </ion-navbar>
