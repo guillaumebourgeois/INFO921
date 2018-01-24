@@ -87,15 +87,15 @@
     <plugin name="cordova-sqlite-storage" spec="^2.2.0" />
     <plugin name="cordova-plugin-splashscreen" spec="^4.0.3" />
     <plugin name="cordova-plugin-statusbar" spec="^2.4.1" />
+    <plugin name="cordova-plugin-pedometer" spec="^0.4.1">
+        <variable name="MOTION_USAGE_DESCRIPTION" value="Trace your performances" />
+    </plugin>
+    <engine name="android" spec="~7.0.0" />
+    <engine name="browser" spec="~5.0.3" />
     <plugin name="cordova-plugin-googlemaps" spec="^2.1.1">
         <variable name="API_KEY_FOR_ANDROID" value="AIzaSyCCxn9kAUHu4MDHlzoTAnDs_-AxyQByuCw" />
         <variable name="API_KEY_FOR_IOS" value="AIzaSyARQWrvUUIPR9h7B9DDfteZyq_oT8dFL3g" />
         <variable name="LOCATION_WHEN_IN_USE_DESCRIPTION" value="Show your location on the map" />
         <variable name="LOCATION_ALWAYS_USAGE_DESCRIPTION" value="Trace your location on the map" />
     </plugin>
-    <plugin name="cordova-plugin-pedometer" spec="^0.4.1">
-        <variable name="MOTION_USAGE_DESCRIPTION" value="Trace your performances" />
-    </plugin>
-    <engine name="android" spec="~7.0.0" />
-    <engine name="browser" spec="~5.0.3" />
 </widget>

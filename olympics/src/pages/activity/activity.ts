@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { NavController, NavParams, Events, AlertController } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { NavController, NavParams, Navbar, Events, AlertController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Pedometer } from '@ionic-native/pedometer';
@@ -8,6 +8,7 @@ import { GoogleMaps, GoogleMap, GoogleMapsEvent, GoogleMapOptions, Marker, Marke
 import 'rxjs/add/operator/filter';
 import { Timer } from '../../providers/timer';
 import { Sports } from '../../providers/sports';
+import { IActivityData } from './iactivitydata';
 
 @Component({
   selector: 'page-activity',
@@ -15,10 +16,14 @@ import { Sports } from '../../providers/sports';
 })
 export class ActivityPage {
 
+  @ViewChild('navbar') navBar: Navbar;
+
   private sport: any;
-  private activityId: number;
+  // private activityId: number;
+  private activityData: IActivityData;
 
   private locationUpdater: any;
+  private pedometerUpdater: any;
   private map: GoogleMap;
   private mapOrigin: CameraPosition<any>;
   public selfPosition: LatLng;
@@ -32,24 +37,42 @@ export class ActivityPage {
   }
 
   ionViewDidLoad() {
+    // activityData initialization
+    this.activityData = {
+      userId: 0,
+      activityId: 0,
+      sportCode: '',
+      gpsCoordinates: {},
+      distanceInMeter: 0,
+      timeInSeconds: 0
+    };
+    // Back button handler
+    this.navBar.backButtonClick = () => {
+      this.showStopActivityConfirm('navbar');
+    };
+
     this.sport = this.sports.sports.find((element) => {
       return element.name == this.navParams.get('sport');
     });
 
-    this.storage.get('last' + this.sport.name + 'ActivityId').then((value) => {
-      this.activityId = (value !== undefined) ? ++value : 0;
+    this.activityData.sportCode = this.sport.code;
 
-      this.storage.set('last' + this.sport.name + 'ActivityId', this.activityId);
+    this.storage.get('lastActivityId').then((value) => {
+      this.activityData.activityId = (value !== undefined) ? ++value : 0;
+
+      // this.activityData.activityId = this.activityId;
+
+      this.storage.set('lastActivityId', this.activityData.activityId);
 
       this.storage.get('activities' + this.sport.name + 'Id').then((array) => {
-        if (array) array.push(this.activityId);
-        else array = [ this.activityId ];
+        if (array) array.push(this.activityData.activityId);
+        else array = [ this.activityData.activityId ];
 
         this.storage.set('activities' + this.sport.name + 'Id', array);
 
-        console.log('List of actities ID for this sport : ' + array);
+        console.log('List of actities ID for ' + this.sport.name + ' : ' + array);
       })
-      console.log('Activity ID : ' + this.activityId);
+      console.log('Activity ID : ' + this.activityData.activityId);
     });
 
     this.statusBar.styleLightContent();
@@ -61,16 +84,20 @@ export class ActivityPage {
   }
 
   ionViewWillLeave() {
+    // TODO When we leave the activity, we want to upload data
+    this.sendData();
+
     this.statusBar.styleDefault();
     this.timer.resetTimer();
-    if(this.locationUpdater) this.unloadMap();
+    this.unloadMap();
+    this.unloadPedometer();
   }
 
   loadPedometer() {
     this.pedometer.isDistanceAvailable()
       .then((available: boolean) => {
         if (available) {
-          this.pedometer.startPedometerUpdates()
+          this.pedometerUpdater = this.pedometer.startPedometerUpdates()
            .subscribe((data) => {
              console.log(data);
            });
@@ -78,6 +105,10 @@ export class ActivityPage {
         else console.log('Pedometer is not available');
       })
       .catch((error: any) => console.log('Pedometer error : ' + error));
+  }
+
+  unloadPedometer() {
+    if(this.pedometerUpdater) this.pedometer.stopPedometerUpdates()
   }
 
   loadMap() {
@@ -134,7 +165,7 @@ export class ActivityPage {
   }
 
   unloadMap() {
-    this.locationUpdater.unsubscribe();
+    if(this.locationUpdater) this.locationUpdater.unsubscribe();
   }
 
   pauseActivity() {
@@ -147,13 +178,22 @@ export class ActivityPage {
     this.timer.startTimer();
   }
 
-  stopActivity() {
+  stopActivity(source) {
     this.isStopped = true;
     this.timer.pauseTimer();
-    this.sendData();
+    // this.sendData();
+
+    // Reset back button handler
+    this.navBar.backButtonClick = () => {
+      this.navCtrl.pop();
+    };
+
+    // If we're coming here from back button, we want to go back NOW
+    if (source == 'navbar') this.navCtrl.pop();
   }
 
-  showStopActivityConfirm() {
+  // Source is the origin of the stop request (navbar or something else)
+  showStopActivityConfirm(source) {
     let confirm = this.alertCtrl.create({
       title: 'End of activity',
       message : 'Do you want to stop this activity?',
@@ -165,7 +205,7 @@ export class ActivityPage {
         {
           text: 'Yes',
           handler: () => {
-            this.stopActivity();
+            this.stopActivity(source);
           }
         }
       ]
@@ -174,5 +214,7 @@ export class ActivityPage {
     confirm.present();
   }
 
-  sendData() {}
+  sendData() {
+    // this.storage.set('activity' + this.sport.name + this.activityId, this.activityData);
+  }
 }

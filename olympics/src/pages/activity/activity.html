@@ -1,6 +1,6 @@
 <ion-header>
   <img *ngIf="sport" src="assets/imgs/{{sport.code}}.jpg" />
-  <ion-navbar no-border-bottom>
+  <ion-navbar #navbar no-border-bottom>
     <ion-title *ngIf="sport">
       {{sport.name}}
     </ion-title>
@@ -44,7 +44,7 @@
       			<h1 no-margin>{{timer.displayTime}}</h1>
             <button ion-button margin-top color="primary" *ngIf="!isStopped && isPaused" (click)="resumeActivity()"><ion-icon name="play"></ion-icon></button> 
             <button ion-button margin-top color="warning" *ngIf="!isStopped && !isPaused" (click)="pauseActivity()"><ion-icon name="pause"></ion-icon></button> 
-            <button ion-button margin-top color="danger" *ngIf="!isStopped" (click)="showStopActivityConfirm()"><ion-icon name="square"></ion-icon></button> 
+            <button ion-button margin-top color="danger" *ngIf="!isStopped" (click)="showStopActivityConfirm('button')"><ion-icon name="square"></ion-icon></button> 
           </ion-card-content>
         </ion-card>
   		</ion-col>
