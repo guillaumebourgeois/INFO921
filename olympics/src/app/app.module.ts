@@ -14,6 +14,7 @@ import { MyApp              } from './app.component';
 import { HomePage           } from '../pages/home/home';
 import { MapPage            } from '../pages/map/map';
 import { HistoryPage        } from '../pages/history/history';
+import { SportHistoryPage   } from '../pages/sport-history/sport-history';
 import { ActivityPage       } from '../pages/activity/activity';
 import { StatisticsPage     } from '../pages/statistics/statistics';
 import { SettingsPage       } from '../pages/settings/settings';
@@ -36,7 +37,8 @@ import { Timer      } from '../providers/timer';
     SettingsPage,
     LoginPage,
     TabsPage,
-    CreateAccountPage
+    CreateAccountPage,
+    SportHistoryPage
   ],
   imports: [
     BrowserModule,
@@ -54,7 +56,8 @@ import { Timer      } from '../providers/timer';
     SettingsPage,
     LoginPage,
     TabsPage,
-    CreateAccountPage
+    CreateAccountPage,
+    SportHistoryPage
   ],
   providers: [
     StatusBar,

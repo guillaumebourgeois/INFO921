@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{sport.name}} History</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content class="grey-background">
+
+	<ion-list margin-top>
+    <button ion-item *ngFor="let activity of activitiesList">
+      {{ activity.startDate.toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' }) }} at {{ activity.startDate.toLocaleTimeString('en-US') }}
+    </button>  
+	</ion-list>
+	
+	<!-- <ion-card *ngFor="let activity of activitiesList">
+		<ion-item>
+			<ion-img src="assets/imgs/icon-{{ sport.code }}.png" width="32" height="32"></ion-img>
+			<h2>Museum of Football</h2>
+			<p>{{ activity.startDate }}</p>
+		</ion-item>
+	
+		<ion-item>
+			<span item-left>18 min</span>
+			<span item-left>(2.6 mi)</span>
+			<button ion-button icon-left clear item-end>
+				<ion-icon name="eye"></ion-icon>
+				Details
+			</button>
+		</ion-item>
+  </ion-card> -->
+
+</ion-content>

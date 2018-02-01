@@ -1,8 +1,8 @@
-import { Coordinates } from "@ionic-native/geolocation";
-
 export interface IActivityData {
 	userId: number;
 	activityId: number;
+	startDate: Date;
+	endDate: Date;
 	sportCode: string;
 	gpsCoordinates: Array<any>;
 	distanceInMeter: number;

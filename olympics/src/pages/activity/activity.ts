@@ -34,28 +34,34 @@ export class ActivityPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, private geolocation: Geolocation, public events: Events, private pedometer: Pedometer, private timer: Timer, public sports: Sports, private statusBar: StatusBar, private storage: Storage) {
     // this.selfPosition = new LatLng(0,0); // Debug purpose
-  }
+    this.navParams.get('sport');
 
-  ionViewDidLoad() {
-    // activityData initialization
     this.activityData = {
       userId: 0,
       activityId: 0,
+      startDate: null, // Return actual time
+      endDate: null,
       sportCode: '',
       gpsCoordinates: [],
       distanceInMeter: 0,
       timeInSeconds: 0
     };
+  }
+
+  ionViewDidLoad() {
+    this.sport = this.navParams.get('sport');
+
+    // activityData initialization
+    this.storage.get('userId').then((userId) => {
+      this.activityData.userId = userId;
+    });
+    this.activityData.startDate = new Date();
+    this.activityData.sportCode = this.sport.code;
+    
     // Back button handler
     this.navBar.backButtonClick = () => {
       this.showStopActivityConfirm('navbar');
     };
-
-    this.sport = this.sports.sports.find((element) => {
-      return element.name == this.navParams.get('sport');
-    });
-
-    this.activityData.sportCode = this.sport.code;
 
     this.storage.get('lastActivityId').then((value) => {
       this.activityData.activityId = (value !== undefined) ? ++value : 0;
@@ -64,13 +70,13 @@ export class ActivityPage {
 
       this.storage.set('lastActivityId', this.activityData.activityId);
 
-      this.storage.get('activities' + this.sport.name + 'Id').then((array) => {
+      this.storage.get('activities' + this.activityData.userId + this.sport.name + 'Id').then((array) => {
         if (array) array.push(this.activityData.activityId);
         else array = [ this.activityData.activityId ];
 
-        this.storage.set('activities' + this.sport.name + 'Id', array);
+        this.storage.set('activities' + this.activityData.userId + this.sport.name + 'Id', array);
 
-        console.log('List of actities ID for ' + this.sport.name + ' : ' + array);
+        console.log('List of actities ID for ' + this.activityData.userId + this.sport.name + ' : ' + array);
       })
       console.log('Activity ID : ' + this.activityData.activityId);
     });
@@ -85,7 +91,7 @@ export class ActivityPage {
 
   ionViewDidLeave() {
     // TODO When we leave the activity, we want to upload data
-    this.sendData();
+    // this.sendData();
 
     this.statusBar.styleDefault();
     this.timer.resetTimer();
@@ -132,6 +138,7 @@ export class ActivityPage {
       this.map.one(GoogleMapsEvent.MAP_READY).then(() => {
         console.log('Map is ready!');
 
+        // Location service
         this.locationUpdater = this.geolocation.watchPosition()
           .filter((p) => p.coords !== undefined) //Filter Out Errors
           .subscribe((position) => {
@@ -189,6 +196,11 @@ export class ActivityPage {
   stopActivity(source) {
     this.isStopped = true;
     this.timer.pauseTimer();
+
+    this.activityData.endDate = new Date();
+
+    this.storeActivityData();
+    
     // this.sendData();
 
     // Reset back button handler
@@ -222,7 +234,13 @@ export class ActivityPage {
     confirm.present();
   }
 
-  sendData() {
-    // this.storage.set('activity' + this.sport.name + this.activityId, this.activityData);
+  /* Store the activity data into Ionic storage */
+  storeActivityData() {
+    this.storage.set('activity' + this.activityData.userId + this.sport.name + this.activityData.activityId, this.activityData);
+  }
+
+  /* Send activity data to server */
+  sendActivityData() {
+    
   }
 }

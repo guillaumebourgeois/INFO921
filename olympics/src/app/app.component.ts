@@ -32,6 +32,7 @@ export class MyApp {
       // Login/logout event handling
       this.events.subscribe('user:login', () => {
         this.storage.set('authed', true);
+        this.storage.set('userId', 1);
         this.rootPage = TabsPage;
         this.nav.push(this.rootPage);
       });

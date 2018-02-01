@@ -9,7 +9,8 @@
 
 	<!-- J'étais parti sur une grille mais ma deuxième solution est plus stylée :^) -->
   <ion-list margin-top>
-    <button ion-item *ngFor="let sport of sports.sports">
+    <button ion-item *ngFor="let sport of sports.sports" (click)="loadSportHistoryPage(sport)">
+			<img src="assets/imgs/icon-{{sport.code}}.png" width="32" height="32" margin-right item-start />
       {{ sport.name }}
     </button>  
   </ion-list>
