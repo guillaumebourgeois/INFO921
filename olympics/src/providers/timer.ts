@@ -5,7 +5,8 @@ import { Injectable } from '@angular/core';
     private seconds: number;
 	private secondsRemaining: number;
 	private runTimer: boolean;
-	private hasStarted: boolean;
+    private hasStarted: boolean;
+    private lastTimeout: any;
 	public displayTime: string;
 
     constructor() {
@@ -29,6 +30,7 @@ import { Injectable } from '@angular/core';
 
     pauseTimer() {
         this.runTimer = false;
+        clearTimeout(this.lastTimeout);
     }
 
     resumeTimer() {
@@ -36,11 +38,12 @@ import { Injectable } from '@angular/core';
     }
 
     resetTimer() {
+        clearTimeout(this.lastTimeout);
     	this.initTimer();
     }
 
     timerTick() {
-        setTimeout(() => {
+        this.lastTimeout = setTimeout(() => {
             if (!this.runTimer) { return; }
             this.secondsRemaining++;
             

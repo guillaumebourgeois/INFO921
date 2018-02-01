@@ -26,7 +26,7 @@ export class ActivityPage {
   private pedometerUpdater: any;
   private map: GoogleMap;
   private mapOrigin: CameraPosition<any>;
-  public selfPosition: LatLng;
+  // public selfPosition: LatLng;
   private selfMarker: Marker;
 
   private isPaused: boolean = false;
@@ -42,7 +42,7 @@ export class ActivityPage {
       userId: 0,
       activityId: 0,
       sportCode: '',
-      gpsCoordinates: {},
+      gpsCoordinates: [],
       distanceInMeter: 0,
       timeInSeconds: 0
     };
@@ -83,7 +83,7 @@ export class ActivityPage {
     console.log('ionViewDidLoad ActivityPage');
   }
 
-  ionViewWillLeave() {
+  ionViewDidLeave() {
     // TODO When we leave the activity, we want to upload data
     this.sendData();
 
@@ -135,33 +135,41 @@ export class ActivityPage {
         this.locationUpdater = this.geolocation.watchPosition()
           .filter((p) => p.coords !== undefined) //Filter Out Errors
           .subscribe((position) => {
-            this.selfPosition = new LatLng(position.coords.latitude, position.coords.longitude);
-            this.updateMap();
+            // this.selfPosition = new LatLng(position.coords.latitude, position.coords.longitude);
+
+            this.activityData.gpsCoordinates.push({
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            });
+
+            console.log(this.activityData.gpsCoordinates);
+
+            this.updateMap(position.coords);
         });
       });
     });
   }
 
-  updateMap() {
-    console.log(this.selfPosition.lng + ' ' + this.selfPosition.lat);
+  updateMap(position) {
+    // console.log(this.selfPosition.lng + ' ' + this.selfPosition.lat);
 
     let selfMarkerOptions: MarkerOptions = {
       title: 'My position',
-      position: this.selfPosition,
+      position: new LatLng(position.latitude, position.longitude),
       icon: 'blue',
       draggable: false
     };
 
     if (this.selfMarker != null) {
       this.map.clear(); // Remove previous marker
-      this.selfMarker.setPosition(this.selfPosition); // Set new position
+      this.selfMarker.setPosition(new LatLng(position.latitude, position.longitude)); // Set new position
       this.map.addMarker(selfMarkerOptions); // Add new marker
     }
     else {
       this.map.addMarker(selfMarkerOptions).then((marker) => { this.selfMarker = marker; });
     }
   
-    this.map.setCameraTarget(this.selfPosition);
+    this.map.setCameraTarget(new LatLng(position.latitude, position.longitude));
   }
 
   unloadMap() {
