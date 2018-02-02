@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
+import { API } from '../../providers/api';
 
 @Component({
   selector: 'page-create-account',
@@ -8,22 +9,27 @@ import { NavController, NavParams } from 'ionic-angular';
 export class CreateAccountPage {
 
   credentials:any = {
-                      email:"",
-                      password:"",
-                      confirmPassword:"",
-                      firstname:"",
-                      lastname:""
-                    };
+    email: "",
+    password: "",
+    username: "",
+    userId: null,
+    age: null
+  };
+  private confirmPassword: string = "";
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public api: API) {
   }
 
   ionViewDidLoad() {
   }
 
   public signup() {
-    if (this.credentials.password == this.credentials.confirmPassword)
-      this.navCtrl.pop();
+    if (this.credentials.password == this.confirmPassword) {
+      this.api.createUser(this.credentials).then(data => {
+        console.log(data);
+      })
+    }
+      //this.navCtrl.pop();
   }
 
 }

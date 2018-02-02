@@ -3,11 +3,11 @@ import { Injectable } from '@angular/core';
 @Injectable() export class Timer {
 
     private seconds: number;
-	private secondsRemaining: number;
-	private runTimer: boolean;
+  	private secondsRemaining: number;
+  	private runTimer: boolean;
     private hasStarted: boolean;
     private lastTimeout: any;
-	public displayTime: string;
+  	public displayTime: string;
 
     constructor() {
     	this.initTimer();
@@ -46,7 +46,7 @@ import { Injectable } from '@angular/core';
         this.lastTimeout = setTimeout(() => {
             if (!this.runTimer) { return; }
             this.secondsRemaining++;
-            
+
             this.displayTime = this.getSecondsAsDigitalClock(this.secondsRemaining);
             this.timerTick();
         }, 1000);
@@ -65,5 +65,5 @@ import { Injectable } from '@angular/core';
         secondsString = (seconds < 10) ? "0" + seconds : seconds.toString();
         return hoursString + ':' + minutesString + ':' + secondsString;
     }
-    
+
 }

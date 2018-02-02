@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.olympics.dao.ActivityRepository;
@@ -20,7 +19,7 @@ import com.olympics.entities.Activity;
 
 @Controller
 @RestController
-public class ActivityService {
+public class ActivityController {
 	
 	@Autowired
 	private ActivityRepository activityRepository;
@@ -67,7 +66,5 @@ public class ActivityService {
 					@RequestParam(name="date", defaultValue="0") Date date,
 					@RequestParam(name="coords", defaultValue="0") double coords[]) {
 		activityRepository.findOne(id);
-		String
-		
 	}
 }
