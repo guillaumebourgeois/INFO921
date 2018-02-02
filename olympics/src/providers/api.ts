@@ -27,9 +27,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
   public addUser(data) {
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl+'/users', JSON.stringify(data), {
-        headers: new HttpHeaders().set('Content-Type', 'application/json')
-      })
+      this.http.post(this.apiUrl+'/users', data)
         .subscribe(res => {
           resolve(res);
         }, (err) => {
@@ -40,7 +38,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
   public createUser(data) {
     return new Promise(resolve => {
-      this.http.post(this.apiUrl + '/user/create', JSON.stringify(data))
+      this.http.post(this.apiUrl + '/user/create', data)
         .subscribe(res => {
           resolve(res);
         });
