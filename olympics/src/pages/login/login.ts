@@ -3,7 +3,7 @@ import { NavController, NavParams, Events } from 'ionic-angular';
 
 import { CreateAccountPage } from '../create-account/create-account';
 
-import { Api } from '../../providers/api';
+import { API } from '../../providers/api';
 import * as bcrypt from 'bcryptjs';
 
 @Component({
