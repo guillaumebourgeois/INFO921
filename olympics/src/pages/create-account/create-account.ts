@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { API } from '../../providers/api';
+import * as bcrypt from 'bcryptjs';
 
 @Component({
   selector: 'page-create-account',
@@ -25,9 +26,17 @@ export class CreateAccountPage {
 
   public signup() {
     if (this.credentials.password == this.confirmPassword) {
-      this.api.createUser(this.credentials).then(data => {
-        console.log(data);
-      })
+      // Encrypt password
+      bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(this.credentials.password, salt, (err, hash) => {
+          this.credentials.password = hash;
+          
+          // Send data with encrypted password
+          this.api.createUser(this.credentials).then(data => {
+            console.log("OK");
+          })
+        });
+      });
     }
       //this.navCtrl.pop();
   }
