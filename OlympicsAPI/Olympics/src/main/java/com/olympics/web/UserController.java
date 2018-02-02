@@ -30,7 +30,7 @@ public class UserController {
         return userService.findAll();
     }*/
 
-    @RequestMapping(value = "/user", method = RequestMethod.POST)
+    @RequestMapping(value = "/user/create", method = RequestMethod.POST)
     public User create(@RequestBody User user){
         return userService.save(user);
     }
