@@ -1,0 +1,23 @@
+INFO921
+
+Gestion des tâches : 
+
+Client : 
+- API :
+	- Connexion
+	- Création de compte
+	- Gestion de profil
+	- Récupération historique activités
+	- Envoie des données après une activité
+	- Récupération activités individuelles
+
+Front :
+	- Gestion de profil
+	- Affichage des activités individuelles
+
+Serveur :
+	- Génération des stats
+	- Gestion de profil
+	- Récupération historique activités
+	- Envoie des données après une activité
+	- Récupération activités individuelles
