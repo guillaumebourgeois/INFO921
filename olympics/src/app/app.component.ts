@@ -6,6 +6,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 // Pages
 import { LoginPage } from '../pages/login/login';
 import { TabsPage       } from '../pages/tabs/tabs';
+import { API        } from '../providers/api';
 
 // Providers
 

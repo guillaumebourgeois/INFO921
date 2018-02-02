@@ -1,7 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { IonicStorageModule } from '@ionic/storage';
+
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -24,6 +26,7 @@ import { CreateAccountPage  } from '../pages/create-account/create-account';
 // Application providers
 import { Sports     } from '../providers/sports';
 import { Timer      } from '../providers/timer';
+import { API        } from '../providers/api';
 
 @NgModule({
   declarations: [
@@ -40,6 +43,7 @@ import { Timer      } from '../providers/timer';
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot()
   ],
@@ -65,7 +69,8 @@ import { Timer      } from '../providers/timer';
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     // Providers
     Sports,
-    Timer
+    Timer,
+    API
   ]
 })
 export class AppModule {}

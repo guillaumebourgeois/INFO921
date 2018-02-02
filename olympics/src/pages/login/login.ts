@@ -3,6 +3,9 @@ import { NavController, NavParams, Events } from 'ionic-angular';
 
 import { CreateAccountPage } from '../create-account/create-account';
 
+import { Api } from '../../providers/api';
+import * as bcrypt from 'bcryptjs';
+
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html',
@@ -27,6 +30,16 @@ export class LoginPage {
   public login() {
     // If we enter the right credidentials, we are able to log in
     // TODO A real auth system :^)
+
+    bcrypt.genSalt(10, (err, salt) => {
+       bcrypt.hash(this.credentials.password, salt, (err, hash) => {
+         //TODO
+       });
+     });
+
+     /*bcrypt.compare(this.credentials.password, hash,  (err, res) => {
+       //TODO
+     });*/
     if (this.credentials.email.toLowerCase() == "root" && this.credentials.password.toLowerCase() == "root") {
       this.events.publish('user:login');
     }
