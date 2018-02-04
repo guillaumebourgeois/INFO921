@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HTTP } from '@ionic-native/http';
 
 @Injectable() export class API
 {
 
-  private apiUrl : string = ""; // TIL We need to use a proxy in order to bypass CORS
+  //private apiUrl : string = ""; // TIL We need to use a proxy in order to bypass CORS
   // Proxy is defined in ionic.config.json
-  // private apiUrl : string = "http://olympics.hidora.com";
+  private apiUrl : string = "http://olympics.hidora.com";
 
-  constructor(public http: HttpClient) {
+  constructor(public http: HTTP) {
     console.log('Hello RestServiceProvider Provider');
   }
 
@@ -22,17 +22,19 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
       'Authorization': 'Basic ' + btoa('olympics-client:olympics-secret')
     };
 
-    return new Promise (resolve => {
-      this.http.post(this.apiUrl + '/oauth', credidentials, { headers: headers })
-      .subscribe(res => {
+    return new Promise ((resolve, reject) => {
+      this.http.post(this.apiUrl + '/oauth/token', credidentials, headers)
+      .then(res => {
         resolve(res);
+      }, (err) => {
+        console.log(err);
       })
     })
   }
 
   public getUsers() {
     return new Promise(resolve => {
-      this.http.get(this.apiUrl+'/users').subscribe(data => {
+      this.http.get(this.apiUrl+'/users', {}, {}).then(data => {
         resolve(data);
       }, err => {
         console.log(err);
@@ -42,8 +44,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
   public addUser(data) {
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl+'/users', data)
-        .subscribe(res => {
+      this.http.post(this.apiUrl+'/users', data, {})
+        .then(res => {
           resolve(res);
         }, (err) => {
           reject(err);
@@ -53,8 +55,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
   public createUser(data) {
     return new Promise(resolve => {
-      this.http.post(this.apiUrl + '/user/create', data)
-        .subscribe(res => {
+      this.http.post(this.apiUrl + '/user/create', data, {})
+        .then(res => {
           resolve(res);
         });
     })

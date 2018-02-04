@@ -83,7 +83,8 @@
       "cordova-sqlite-storage": {},
       "cordova-plugin-pedometer": {
         "MOTION_USAGE_DESCRIPTION": "Trace your performances"
-      }
+      },
+      "cordova-plugin-advanced-http": {}
     },
     "platforms": [
       "android",

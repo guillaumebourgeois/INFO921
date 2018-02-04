@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { IonicStorageModule } from '@ionic/storage';
 
@@ -10,6 +9,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { GoogleMaps } from '@ionic-native/google-maps';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Pedometer } from '@ionic-native/pedometer';
+import { HTTP } from '@ionic-native/http';
 
 /// Application pages
 import { MyApp              } from './app.component';
@@ -45,7 +45,6 @@ import { API        } from '../providers/api';
   ],
   imports: [
     BrowserModule,
-    HttpClientModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot()
   ],
@@ -73,6 +72,7 @@ import { API        } from '../providers/api';
     // Providers
     Sports,
     Timer,
+    HTTP,
     API
   ]
 })
