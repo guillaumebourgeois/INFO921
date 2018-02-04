@@ -12,12 +12,12 @@ import * as bcrypt from 'bcryptjs';
 })
 export class LoginPage {
 
-  credentials:any = {
-    email: "",
+  credentials: any = {
+    username: "",
     password: ""
   };
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public events: Events) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public events: Events, private api: API) {
   }
 
   ionViewDidLoad() {
@@ -40,8 +40,27 @@ export class LoginPage {
      /*bcrypt.compare(this.credentials.password, hash,  (err, res) => {
        //TODO
      });*/
-    if (this.credentials.email.toLowerCase() == "root" && this.credentials.password.toLowerCase() == "root") {
-      this.events.publish('user:login');
+    if (this.credentials.username.toLowerCase() == "root" && this.credentials.password.toLowerCase() == "root") {
+      // Debug purpose
+      // this.events.publish('user:login');
+    } else {
+      bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(this.credentials.password, salt, (err, hash) => {
+          // Password encrypted, now send data to server
+          let payload = {
+            'username': this.credentials.username,
+            // 'password': hash
+            'password': this.credentials.password // Password is now encrypted server-side
+          };
+
+          this.api.auth(payload).then(data => {
+            console.log(data);
+          }).catch(error => {
+            console.log('Error: ');
+            console.log(error);
+          })
+        });
+      });
     }
   }
 }

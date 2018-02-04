@@ -4,14 +4,29 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 @Injectable() export class API
 {
 
-  private apiUrl : string = "http://10.129.15.160:8080";
+  private apiUrl : string = ""; // TIL We need to use a proxy in order to bypass CORS
+  // Proxy is defined in ionic.config.json
+  // private apiUrl : string = "http://olympics.hidora.com";
 
   constructor(public http: HttpClient) {
     console.log('Hello RestServiceProvider Provider');
   }
 
-  public auth() {
+  public auth(credidentials) {
+    credidentials.grant_type = 'password';
+
+    console.log(btoa('olympics-client:olympics-secret'));
+
+    let headers = {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Authorization': 'Basic ' + btoa('olympics-client:olympics-secret')
+    };
+
     return new Promise (resolve => {
+      this.http.post(this.apiUrl + '/oauth', credidentials, { headers: headers })
+      .subscribe(res => {
+        resolve(res);
+      })
     })
   }
 
