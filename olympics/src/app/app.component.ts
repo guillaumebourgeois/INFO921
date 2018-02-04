@@ -50,6 +50,7 @@ export class MyApp {
 
       this.events.subscribe('user:logout', () => {
         this.storage.set('authed', false);
+        this.storage.remove('oauth-credentials')
         this.rootPage = LoginPage; // Root page is set as application-level
         this.nav.popToRoot(); // Return to login page, no tabs remaining
       });

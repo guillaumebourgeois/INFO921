@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, Events } from 'ionic-angular';
+import { AlertController, NavController, NavParams, Events } from 'ionic-angular';
 
 import { CreateAccountPage } from '../create-account/create-account';
 
 import { API } from '../../providers/api';
 import * as bcrypt from 'bcryptjs';
+import { Storage } from '@ionic/storage/dist/storage';
 
 @Component({
   selector: 'page-login',
@@ -17,7 +18,7 @@ export class LoginPage {
     password: ""
   };
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public events: Events, private api: API) {
+  constructor(public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams, public events: Events, private api: API, public storage: Storage) {
   }
 
   ionViewDidLoad() {
@@ -53,14 +54,33 @@ export class LoginPage {
             'password': this.credentials.password // Password is now encrypted server-side
           };
 
-          this.api.auth(payload).then(data => {
+          this.api.getToken(payload).then(data => {
             console.log(data);
+            
+            this.storage.set('oauth-credentials', data).then(() => {
+              this.events.publish('user:login');
+            });
           }).catch(error => {
-            console.log('Error: ');
-            console.log(error);
+            // console.log('Error: ');
+            // console.log(error);
+
+            if(error.error.error == 'invalid_grant') {
+              console.log("Erreur d'authentification : identifiant/mot de passe incorrect");
+
+              this.showBadCredentialsAlert();
+            }
           })
         });
       });
     }
+  }
+
+  showBadCredentialsAlert() {
+    let alert = this.alertCtrl.create({
+      title: 'Bad credentials',
+      subTitle: 'Your username nor password is wrong.',
+      buttons: ['Close']
+    });
+    alert.present();
   }
 }
