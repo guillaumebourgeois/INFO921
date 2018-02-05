@@ -20,7 +20,7 @@ import { Timer  } from '../providers/timer';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any;
+  rootPage: any = LoginPage;
 
   constructor(private storage: Storage, public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen, public events: Events,
               private p_Sports: Sports, private p_Api: API, private p_Timer : Timer) {
@@ -37,7 +37,7 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
 
       this.storage.get('authed').then((authed) => {
-          this.rootPage = authed ? TabsPage : LoginPage;
+        this.rootPage = authed ? TabsPage : LoginPage;
       });
 
       // Login/logout event handling
@@ -50,7 +50,8 @@ export class MyApp {
 
       this.events.subscribe('user:logout', () => {
         this.storage.set('authed', false);
-        this.storage.remove('oauth-credentials')
+        this.storage.remove('userCredentials');
+        this.storage.remove('userId');
         this.rootPage = LoginPage; // Root page is set as application-level
         this.nav.popToRoot(); // Return to login page, no tabs remaining
       });

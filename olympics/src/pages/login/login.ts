@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AlertController, NavController, NavParams, Events } from 'ionic-angular';
+import { AlertController, LoadingController, NavController, NavParams, Events } from 'ionic-angular';
 
 import { CreateAccountPage } from '../create-account/create-account';
 
@@ -13,12 +13,14 @@ import { Storage } from '@ionic/storage/dist/storage';
 })
 export class LoginPage {
 
-  credentials: any = {
+  private credentials: any = {
     username: "",
     password: ""
   };
 
-  constructor(public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams, public events: Events, private api: API, public storage: Storage) {
+  private loader: any;
+
+  constructor(public alertCtrl: AlertController, public loadingCtrl: LoadingController, public navCtrl: NavController, public navParams: NavParams, public events: Events, private api: API, public storage: Storage) {
   }
 
   ionViewDidLoad() {
@@ -28,58 +30,58 @@ export class LoginPage {
     this.navCtrl.push(CreateAccountPage);
   }
 
-  public login() {
-    // If we enter the right credidentials, we are able to log in
-    // TODO A real auth system :^)
-
+  private login() {
+    this.presentLoginLoading();
+    
     bcrypt.genSalt(10, (err, salt) => {
-       bcrypt.hash(this.credentials.password, salt, (err, hash) => {
-         //TODO
-       });
-     });
+      bcrypt.hash(this.credentials.password, salt, (err, hash) => {
+        // Password encrypted, now send data to server
+        let payload = {
+          'username': this.credentials.username,
+          // 'password': hash
+          'password': this.credentials.password // Password is now encrypted server-side
+        };
 
-     /*bcrypt.compare(this.credentials.password, hash,  (err, res) => {
-       //TODO
-     });*/
-    if (this.credentials.username.toLowerCase() == "root" && this.credentials.password.toLowerCase() == "root") {
-      // Debug purpose
-      // this.events.publish('user:login');
-    } else {
-      bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash(this.credentials.password, salt, (err, hash) => {
-          // Password encrypted, now send data to server
-          let payload = {
-            'username': this.credentials.username,
-            // 'password': hash
-            'password': this.credentials.password // Password is now encrypted server-side
-          };
+        this.api.getToken(payload).then(data => {
+          this.loader.dismiss();
+          this.events.publish('user:login');
+        }).catch(e => {
+          let error = e.error;
 
-          this.api.getToken(payload).then(data => {
-            console.log(data);
-            
-            this.storage.set('oauth-credentials', data).then(() => {
-              this.events.publish('user:login');
-            });
-          }).catch(error => {
-            // console.log('Error: ');
-            // console.log(error);
+          this.loader.dismiss();
 
-            if(error.error.error == 'invalid_grant') {
-              console.log("Erreur d'authentification : identifiant/mot de passe incorrect");
+          if(error.error == 'invalid_grant') {
+            console.log("Erreur d'authentification : identifiant/mot de passe incorrect");
 
-              this.showBadCredentialsAlert();
-            }
-          })
-        });
+            this.showAlert('Bad credentials', 'Your username nor password is wrong.');
+          }
+          else if (error.error == 'unauthorized') {
+            console.log(error.error_description);
+
+            this.showAlert('Unauthorized', error.error_description);
+          }
+          else {
+            console.log(`${error.error} : ${error.error_description}`);
+
+            this.showAlert(error.error, error.error_description);
+          }
+        })
       });
-    }
+    });
   }
 
-  showBadCredentialsAlert() {
+  private presentLoginLoading() {
+    this.loader = this.loadingCtrl.create({
+      content: "Connecting..."
+    });
+    this.loader.present();
+  }
+
+  private showAlert(title: string, content: string, buttons?: Array<string>) {
     let alert = this.alertCtrl.create({
-      title: 'Bad credentials',
-      subTitle: 'Your username nor password is wrong.',
-      buttons: ['Close']
+      title: title,
+      subTitle: content,
+      buttons: buttons ? buttons : ['Close']
     });
     alert.present();
   }

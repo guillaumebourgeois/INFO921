@@ -2,12 +2,6 @@
   "name": "olympics",
   "app_id": "31ca2835",
   "type": "ionic-angular",
-  "proxies": [
-    {
-      "path": "/oauth",
-      "proxyUrl": "http://olympics.hidora.com/oauth/token"
-    }
-  ],
   "integrations": {
     "cordova": {}
   }

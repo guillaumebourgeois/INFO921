@@ -7,25 +7,6 @@
 <ion-content no-padding class="no-scroll card-background-page">
           <h1 padding no-margin>Choose a sport to begin</h1>
 
-          <!-- <div id="noCurrentSessionOverlay">
-            <p>No session started. Begin now !</p>
-
-            <button ion-button round type="submit">Start</button>
-
-
-          </div> -->
-          <!-- <ion-list>
-              <button ion-item *ngFor="let sport of sports" (click)="startActivity(sport)">
-                {{sport.name}}
-              </button>
-            </ion-list> -->
-          <!-- <div style="display: inline-block;">
-            <ion-label *ngFor="let current of sports" for={{current.name}}>
-              <input type="radio" id={{current.name}} name={{current.name}}>
-              <span>{{ current.name }}</span>
-            </label>
-          </div> -->
-
           <ion-grid>
             <ion-row *ngFor="let t of temp(math.ceil(sports.sports.length/2)).fill(); let i = index">
               <ion-col *ngFor="let sport of sports.sports.slice(2*i,2*i + 2);" col-6 no-padding>
@@ -37,20 +18,5 @@
               </ion-col>
             </ion-row>
           </ion-grid>
-
-          <!-- <ion-list radio-group [(ngModel)]="sport">
-            <ion-item *ngFor="let current of sports.sports" style="background-color: transparent;">
-              <ion-label>{{ current.name }}</ion-label>
-              <ion-radio value="{{current.name}}"></ion-radio>
-            </ion-item>
-          </ion-list>
-
-          <button ion-button round id="start-button" (click)="startActivity()">Start</button> -->
-
-          <!-- {{sport}} -->
-
-          <!-- <button margin-vertical ion-button large block color="light" outline disabled id="start-button" (click)="startActivity()">Start</button>
-
-          <div id="main-button">
-          </div> -->
+          
 </ion-content>
