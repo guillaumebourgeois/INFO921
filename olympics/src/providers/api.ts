@@ -24,8 +24,12 @@ class HttpRequestKind {
     console.log('Hello RestServiceProvider Provider');
 
     this.storage.get('userCredentials').then(credentials => {
-      this.userCredentials = credentials;
-      console.log('User credentials found in database !');
+      if(credentials) {
+        this.userCredentials = credentials;
+        console.log('User credentials found in database !');
+      } else {
+        console.log('No user credentials found in database.');
+      }
     })
     .catch(error => {
       console.log(`No credentials fetched. Reason : ${error}`);

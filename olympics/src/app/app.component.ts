@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform, Events } from 'ionic-angular';
+import { Nav, Platform, Events, LoadingController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Storage } from '@ionic/storage';
@@ -22,7 +22,7 @@ export class MyApp {
 
   rootPage: any = LoginPage;
 
-  constructor(private storage: Storage, public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen, public events: Events,
+  constructor(private loadingCtrl: LoadingController, private storage: Storage, public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen, public events: Events,
               private p_Sports: Sports, private p_Api: API, private p_Timer : Timer) {
 
     if (window["Sports"] == undefined)
@@ -36,24 +36,28 @@ export class MyApp {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
 
+      let loader = this.loadingCtrl.create({
+        content: "Please wait..."
+      });
+      loader.present();
+
       this.storage.get('authed').then((authed) => {
-        this.rootPage = authed ? TabsPage : LoginPage;
+        loader.dismiss();
+
+        if (authed) {
+          this.nav.push(TabsPage);
+        }
       });
 
       // Login/logout event handling
       this.events.subscribe('user:login', () => {
-        this.storage.set('authed', true);
-        this.storage.set('userId', 1);
-        this.rootPage = TabsPage;
-        this.nav.push(this.rootPage);
+        // this.rootPage = TabsPage;
+        this.nav.push(TabsPage);
       });
 
       this.events.subscribe('user:logout', () => {
-        this.storage.set('authed', false);
-        this.storage.remove('userCredentials');
-        this.storage.remove('userId');
-        this.rootPage = LoginPage; // Root page is set as application-level
-        this.nav.popToRoot(); // Return to login page, no tabs remaining
+        this.nav.popTo(LoginPage);
+        // this.rootPage = LoginPage; // Root page is set as application-level
       });
 
       this.statusBar.styleDefault();
