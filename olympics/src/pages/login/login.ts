@@ -33,16 +33,16 @@ export class LoginPage {
   private login() {
     this.presentLoginLoading();
     
-    bcrypt.genSalt(10, (err, salt) => {
-      bcrypt.hash(this.credentials.password, salt, (err, hash) => {
-        // Password encrypted, now send data to server
-        let payload = {
-          'username': this.credentials.username,
-          // 'password': hash
-          'password': this.credentials.password // Password is now encrypted server-side
-        };
+    // bcrypt.genSalt(10, (err, salt) => {
+      // bcrypt.hash(this.credentials.password, salt, (err, hash) => {
+        // // Password encrypted, now send data to server
+        // let payload = {
+        //   'username': this.credentials.username,
+        //   // 'password': hash
+        //   'password': this.credentials.password // Password is now encrypted server-side
+        // };
 
-        this.api.getToken(payload).then(data => {
+        this.api.getToken(this.credentials).then(data => {
           this.loader.dismiss();
           this.events.publish('user:login');
         }).catch(e => {
@@ -50,7 +50,7 @@ export class LoginPage {
 
           this.loader.dismiss();
 
-          if(error.error == 'invalid_grant') {
+          if (error.error == 'invalid_grant') {
             console.log("Erreur d'authentification : identifiant/mot de passe incorrect");
 
             this.showAlert('Bad credentials', 'Your username nor password is wrong.');
@@ -66,8 +66,8 @@ export class LoginPage {
             this.showAlert(error.error, error.error_description);
           }
         })
-      });
-    });
+      // });
+  //  });
   }
 
   private presentLoginLoading() {
