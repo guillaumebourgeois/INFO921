@@ -4,13 +4,12 @@ page-login {
 	  background-size: cover;
 	  background-origin: right;
 	}
-  .register-btn {
-    //color: grey;
-  }
 
   .v-center {
-  	height: 100%;
-  	margin-top:25%;
+    height:100%;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
   	//display: flex !important;
   	//align-items: center !important;
   	//justify-content: center !important;
@@ -20,5 +19,10 @@ page-login {
     color: white;
     font-size:40px;
     font-weight: bold;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
   }
 }

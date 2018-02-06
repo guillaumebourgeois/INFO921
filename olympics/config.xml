@@ -3,7 +3,7 @@
     <name>Olympics</name>
     <description>Track your activity and run to the Olympics Games.</description>
     <author email="hi@ionicframework" href="http://ionicframework.com/">Guillaume Bourgeois, Julien Hubert, Ahmed Taoukilite, Lola Bellamy</author>
-    <content src="index.html" />
+    <content original-src="index.html" src="http://10.145.1.1:8100" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -96,6 +96,9 @@
         <variable name="LOCATION_WHEN_IN_USE_DESCRIPTION" value="Show your location on the map" />
         <variable name="LOCATION_ALWAYS_USAGE_DESCRIPTION" value="Trace your location on the map" />
     </plugin>
+    <allow-navigation href="http://10.145.1.1:8100" />
+    <allow-navigation href="http://localhost:8100" />
+    <allow-navigation href="http://10.145.1.1:8101" />
     <engine name="android" spec="~7.0.0" />
     <engine name="browser" spec="~5.0.3" />
     <engine name="ios" spec="git+https://github.com/apache/cordova-ios.git#4.4.0-ios-sim" />
