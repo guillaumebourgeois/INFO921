@@ -4,9 +4,8 @@ import { AlertController, LoadingController, NavController, NavParams, Events } 
 import { CreateAccountPage } from '../create-account/create-account';
 
 import { API } from '../../providers/api';
-import * as bcrypt from 'bcryptjs';
+// import * as bcrypt from 'bcryptjs';
 import { Storage } from '@ionic/storage/dist/storage';
-import { TabsPage } from '../tabs/tabs';
 
 @Component({
   selector: 'page-login',
@@ -25,6 +24,28 @@ export class LoginPage {
   }
 
   ionViewDidLoad() {
+    this.events.subscribe('user:logged', () => {
+      this.loader.dismiss();
+
+      this.storage.set('authed', true);
+      this.storage.set('userId', 1);
+    });
+
+    this.events.subscribe('user:error', (error) => {
+      this.loader.dismiss();
+
+      if (error.error == 'invalid_grant') {
+        this.showAlert('Bad credentials', 'Your username nor password is wrong.');
+      }
+      else if (error.error == 'unauthorized') {
+        this.showAlert('Unauthorized', error.error_description);
+      }
+      else {
+        console.log(`${error.error} : ${error.error_description}`);
+
+        this.showAlert(error.error, error.error_description);
+      }
+    })
   }
 
   public createAccount() {
@@ -33,6 +54,8 @@ export class LoginPage {
 
   private login() {
     this.presentLoginLoading();
+
+    this.events.publish('user:login', this.credentials);
     
     // bcrypt.genSalt(10, (err, salt) => {
       // bcrypt.hash(this.credentials.password, salt, (err, hash) => {
@@ -42,35 +65,6 @@ export class LoginPage {
         //   // 'password': hash
         //   'password': this.credentials.password // Password is now encrypted server-side
         // };
-
-    this.api.getToken(this.credentials).then(data => {
-      this.loader.dismiss();
-      
-      this.storage.set('authed', true);
-      this.storage.set('userId', 1);
-      
-      this.events.publish('user:login');
-    }).catch(e => {
-      let error = e.error;
-
-      this.loader.dismiss();
-
-      if (error.error == 'invalid_grant') {
-        console.log("Erreur d'authentification : identifiant/mot de passe incorrect");
-
-        this.showAlert('Bad credentials', 'Your username nor password is wrong.');
-      }
-      else if (error.error == 'unauthorized') {
-        console.log(error.error_description);
-
-        this.showAlert('Unauthorized', error.error_description);
-      }
-      else {
-        console.log(`${error.error} : ${error.error_description}`);
-
-        this.showAlert(error.error, error.error_description);
-      }
-    })
       // });
   //  });
   }

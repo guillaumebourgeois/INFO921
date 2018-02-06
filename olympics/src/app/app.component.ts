@@ -50,14 +50,24 @@ export class MyApp {
       });
 
       // Login/logout event handling
-      this.events.subscribe('user:login', () => {
-        // this.rootPage = TabsPage;
-        this.nav.push(TabsPage);
+      this.events.subscribe('user:login', (credentials) => {
+        this.p_Api.getToken(credentials)
+        .then(data => {
+          this.events.publish('user:logged');
+
+          this.nav.push(TabsPage);
+        })
+        .catch(e => {
+          this.events.publish('user:error', e.error);
+        })
       });
 
       this.events.subscribe('user:logout', () => {
+        this.storage.set('authed', false);
+        this.storage.remove('userCredentials');
+        this.storage.remove('userId');
+        
         this.nav.popTo(LoginPage);
-        // this.rootPage = LoginPage; // Root page is set as application-level
       });
 
       this.statusBar.styleDefault();

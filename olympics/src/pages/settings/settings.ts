@@ -3,6 +3,7 @@ import { NavController, NavParams, Events } from 'ionic-angular';
 import { Storage } from '@ionic/storage/dist/storage';
 import { LoginPage } from '../login/login';
 import { App } from 'ionic-angular/components/app/app';
+import { API } from '../../providers/api';
 
 @Component({
   selector: 'page-settings',
@@ -10,7 +11,7 @@ import { App } from 'ionic-angular/components/app/app';
 })
 export class SettingsPage {
 
-  constructor(public appCtrl: App, public navCtrl: NavController, public navParams: NavParams, public events: Events, public storage: Storage) {
+  constructor(public appCtrl: App, public api: API, public navCtrl: NavController, public navParams: NavParams, public events: Events, public storage: Storage) {
   }
 
   ionViewDidLoad() {
@@ -18,10 +19,17 @@ export class SettingsPage {
 
   public logout() {
     // this.events.publish('user:logout');
-    this.storage.set('authed', false);
-    this.storage.remove('userCredentials');
-    this.storage.remove('userId');
     
     this.events.publish('user:logout');
+  }
+
+  public activitiesRequest() {
+    this.api.getActivities().then(data => {
+      console.log(data);
+
+      this.api.postActivity({"idActivity":null,"type":1,"startDate":"2018-02-01","endDate":"2018-02-01","gpsCoord":"1,0;0,1;"}).then(data => {
+        console.log(data);
+      })
+    })
   }
 }

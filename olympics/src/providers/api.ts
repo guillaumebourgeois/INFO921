@@ -25,7 +25,7 @@ class HttpRequestKind {
 
     this.storage.get('userCredentials').then(credentials => {
       if(credentials) {
-        this.userCredentials = credentials;
+        this.userCredentials = new OAuthToken(credentials);
         console.log('User credentials found in database !');
       } else {
         console.log('No user credentials found in database.');
@@ -44,6 +44,14 @@ class HttpRequestKind {
     age?: number;
   }) : Promise<any> {
     return this.request('/signup', HttpRequestKind.POST, data);
+  }
+
+  public getActivities() : Promise<any> {
+    return this.authedRequest('/activities', HttpRequestKind.GET, this.userCredentials);
+  }
+
+  public postActivity(data) : Promise<any> {
+    return this.authedRequest('/activities', HttpRequestKind.POST, this.userCredentials, data);
   }
 
   //region API basic handling
@@ -104,11 +112,16 @@ class HttpRequestKind {
    * @param kind - An HttpRequestKing constant representing the type of the request (GET, POST)
    * @param token - The OAuth token to authentify the request
    * @param body - Object to send in requests body.
-   * @param headers - Headers to send with request. Need to be an object with string-formatted headers or an HttpHeaders object.
+   * @param headers - Headers to send with request. Need to be an object with string-formatted headers.
    */
-  private authedRequest(url: string, kind: HttpRequestKind, token: OAuthToken, body?: any, headers?: any) : Promise<any> {
+  private authedRequest(url: string, kind: HttpRequestKind, token: OAuthToken, body?: any, headers?: { [header: string]: string }) : Promise<any> {
+    headers = headers ? headers : {};
+
+    headers['Access-Control-Allow-Origin'] = '*';
+    headers['Authorization'] = `Bearer ${token.access_token}`;
+
     return this.checkTokenValidity(token).then(result => {
-      return this.request(url, kind, token, body ? body : null, headers ? headers : null);
+      return this.request(url, kind, body ? body : null, headers ? headers : null);
     })
     .catch(reason => {
       console.log(`Error refreshing OAuth access token. Reason : ${reason}`);
@@ -121,14 +134,14 @@ class HttpRequestKind {
    * @param url - The url to send the request. API's URL is already included. (i.e. '/oauth')
    * @param kind - An HttpRequestKing constant representing the type of the request (GET, POST)
    * @param body - Object to send in requests body.
-   * @param headers - Headers to send with request. Need to be an object with string-formatted headers or an HttpHeaders object.
+   * @param headers - Headers to send with request. Need to be an object with string-formatted headers.
    * @param token - The OAuth token to authentify the request
    */
-  private request(url: String, kind: HttpRequestKind, body?: String | Object, headers?: HttpHeaders | { [header: string]: string }, token?: OAuthToken) : Promise<any> {
+  private request(url: String, kind: HttpRequestKind, body?: String | Object, headers?: { [header: string]: string }) : Promise<any> {
     switch(kind) {
       case HttpRequestKind.GET: {
         return new Promise ((resolve, reject) => {
-          this.http.get(API.apiUrl + url + (token ? `access_token=${token.access_token}` : ''),
+          this.http.get(API.apiUrl + url,
             { headers: headers ? headers : {} })
             .subscribe(
               res => { resolve(res); },
@@ -139,7 +152,8 @@ class HttpRequestKind {
       case HttpRequestKind.POST: {
         return new Promise ((resolve, reject) => {
           this.http.post(API.apiUrl + url,
-            body ? ((token && typeof(body == String)) ? (`access_token=${token.access_token}` + body) : body) : {},
+            // body ? ((token && typeof(body == String)) ? (`?access_token=${token.access_token}` + body) : body) : {},
+            body ? body : {},
             { headers: headers ? headers : {} })
             .subscribe(
               res => { resolve(res); },

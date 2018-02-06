@@ -11,7 +11,7 @@ interface IOAuthToken {
     expires_at?: Date;
     scope: string;
 
-    isExpired();
+    isExpired() : boolean;
 }
 
 /**
