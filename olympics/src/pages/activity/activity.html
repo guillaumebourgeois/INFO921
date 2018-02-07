@@ -8,7 +8,7 @@
 </ion-header>
 
 
-<ion-content>
+<ion-content class="no-scroll">
 
 	<!-- J'étais parti sur une grille mais ma deuxième solution est plus stylée :^) -->
 	<!-- <ion-grid>
@@ -41,10 +41,12 @@
             <ion-icon name="stopwatch"></ion-icon> <span margin-left>Time</span>
           </ion-card-header>
           <ion-card-content>
-      			<h1 no-margin>{{timer.displayTime}}</h1>
-            <button ion-button margin-top color="primary" *ngIf="!isStopped && isPaused" (click)="resumeActivity()"><ion-icon name="play"></ion-icon></button> 
-            <button ion-button margin-top color="warning" *ngIf="!isStopped && !isPaused" (click)="pauseActivity()"><ion-icon name="pause"></ion-icon></button> 
-            <button ion-button margin-top color="danger" *ngIf="!isStopped" (click)="showStopActivityConfirm('button')"><ion-icon name="square"></ion-icon></button> 
+            <h1 no-margin>{{timer.displayTime}}</h1>
+            <div margin-top *ngIf="!isStopped" class="timer-buttons">
+              <button ion-button color="primary" *ngIf="!isStopped && isPaused" (click)="resumeActivity()"><ion-icon name="play"></ion-icon></button> 
+              <button ion-button color="warning" *ngIf="!isStopped && !isPaused" (click)="pauseActivity()"><ion-icon name="pause"></ion-icon></button> 
+              <button ion-button color="danger" *ngIf="!isStopped" (click)="showStopActivityConfirm('button')"><ion-icon name="square"></ion-icon></button> 
+            </div>
           </ion-card-content>
         </ion-card>
   		</ion-col>

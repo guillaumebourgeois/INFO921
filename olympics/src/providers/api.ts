@@ -75,6 +75,12 @@ class HttpRequestKind {
     
     promise.then(data => {
       this.userCredentials = new OAuthToken(data);
+
+      let now = new Date();
+      let expires_at = new Date();
+      expires_at.setTime(now.getTime() + (this.userCredentials.expires_in * 1000));
+      this.userCredentials.expires_at = expires_at;
+
       this.storage.set('userCredentials', this.userCredentials).then(() => {
         console.log(`${credentials.username} credentials stored in database !`);
       });
@@ -96,7 +102,8 @@ class HttpRequestKind {
       let body = `grant_type=refresh_token&refresh_token=${token.refresh_token}`
       let headers = {
         'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization': 'Basic ' + btoa(this.clientId + ':' + this.clientSecret)
+        'Authorization': 'Basic ' + btoa(this.clientId + ':' + this.clientSecret),
+        //'Access-Control-Allow-Origin': '*'
       };
 
       return this.request(url, HttpRequestKind.POST, body, headers);
@@ -117,14 +124,14 @@ class HttpRequestKind {
   private authedRequest(url: string, kind: HttpRequestKind, token: OAuthToken, body?: any, headers?: { [header: string]: string }) : Promise<any> {
     headers = headers ? headers : {};
 
-    headers['Access-Control-Allow-Origin'] = '*';
     headers['Authorization'] = `Bearer ${token.access_token}`;
-
+    
     return this.checkTokenValidity(token).then(result => {
       return this.request(url, kind, body ? body : null, headers ? headers : null);
     })
     .catch(reason => {
-      console.log(`Error refreshing OAuth access token. Reason : ${reason}`);
+      console.log(`Error refreshing OAuth access token. Reason :`);
+      console.log(reason);
       return Promise.resolve(reason);
     })
   }
@@ -138,6 +145,9 @@ class HttpRequestKind {
    * @param token - The OAuth token to authentify the request
    */
   private request(url: String, kind: HttpRequestKind, body?: String | Object, headers?: { [header: string]: string }) : Promise<any> {
+    headers = headers ? headers : {};
+
+    headers['Access-Control-Allow-Origin'] = '*';
     switch(kind) {
       case HttpRequestKind.GET: {
         return new Promise ((resolve, reject) => {

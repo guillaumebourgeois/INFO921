@@ -24,7 +24,7 @@ export class ActivityPage {
 
   private locationUpdater: any;
   private pedometerUpdater: any;
-  private map: GoogleMap;
+  map: GoogleMap;
   private mapOrigin: CameraPosition<any>;
   // public selfPosition: LatLng;
   private selfMarker: Marker;
@@ -84,7 +84,7 @@ export class ActivityPage {
     this.statusBar.styleLightContent();
     this.timer.startTimer();
     this.loadMap();
-    this.loadPedometer();
+    // this.loadPedometer();
 
     console.log('ionViewDidLoad ActivityPage');
   }
@@ -118,21 +118,20 @@ export class ActivityPage {
   }
 
   loadMap() {
-    let mapElement: HTMLElement = document.getElementById('map_canvas');
-
     // Set map origin
     this.geolocation.getCurrentPosition().then((position) => { // CALLBACK HELL
-      this.mapOrigin = {
-          target: new LatLng(position.coords.latitude, position.coords.longitude),
+      console.log(`${position.coords.latitude}, ${position.coords.longitude}`);
+
+      this.map = GoogleMaps.create('map_canvas', {
+        camera: {
+          target: {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          },
           zoom: 15,
           tilt: 0
-      };
-
-      let mapOptions: GoogleMapOptions = {
-        camera: this.mapOrigin
-      };
-
-      this.map = GoogleMaps.create(mapElement, mapOptions);
+        }
+      });
 
       // Wait the MAP_READY before using any methods.
       this.map.one(GoogleMapsEvent.MAP_READY).then(() => {

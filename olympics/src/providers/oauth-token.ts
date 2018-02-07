@@ -35,17 +35,17 @@ interface IOAuthToken {
         this.refresh_token = _token ? _token.refresh_token : null;
         this.expires_in = _token ? _token.expires_in : 0;
         this.scope = _token ? _token.scope : null;
-
-        expires_at.setTime(date.getTime() + this.expires_in * 1000);
-
-        this.expires_at = expires_at;
+        this.expires_at = _token? _token.expires_at : null;
     }
 
     /**
-     * Check if a n OAuth2 token's access_token is still valid.
+     * Check if an OAuth2 token's access_token is still valid.
      * @param token The token to compare
      */
     public isExpired() : boolean {
-        return new Date() >= this.expires_at ? true : false;
+        let now = new Date();
+        let isExpired: boolean = now.getTime() > this.expires_at.getTime() ? true : false;
+        console.log('Token is expired ? ' + isExpired);
+        return isExpired;
     }
 }

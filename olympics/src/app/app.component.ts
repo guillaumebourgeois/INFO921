@@ -13,6 +13,7 @@ import { TabsPage  } from '../pages/tabs/tabs';
 import { Sports } from '../providers/sports';
 import { API    } from '../providers/api';
 import { Timer  } from '../providers/timer';
+import { AuthService } from '../providers/api/services/auth.service';
 
 @Component({
   templateUrl: 'app.html'
@@ -23,7 +24,7 @@ export class MyApp {
   rootPage: any = LoginPage;
 
   constructor(private loadingCtrl: LoadingController, private storage: Storage, public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen, public events: Events,
-              private p_Sports: Sports, private p_Api: API, private p_Timer : Timer) {
+              private p_Sports: Sports, private p_Api: API, private p_Timer : Timer, private auth: AuthService) {
 
     if (window["Sports"] == undefined)
         window["Sports"] = p_Sports;
@@ -51,14 +52,25 @@ export class MyApp {
 
       // Login/logout event handling
       this.events.subscribe('user:login', (credentials) => {
-        this.p_Api.getToken(credentials)
-        .then(data => {
+        // this.p_Api.getToken(credentials)
+        // .then(data => {
+        //   this.events.publish('user:logged');
+
+        //   this.nav.push(TabsPage);
+        // })
+        // .catch(e => {
+        //   this.events.publish('user:error', e.error);
+        // })
+
+        this.auth.getToken(credentials).subscribe(token => {
+          this.storage.set('token', token);
+          this.auth.setToken(token);
+          
           this.events.publish('user:logged');
 
           this.nav.push(TabsPage);
-        })
-        .catch(e => {
-          this.events.publish('user:error', e.error);
+        }, error => {
+          this.events.publish('user:error', error);
         })
       });
 
