@@ -15,20 +15,18 @@ const httpOptions = {
 };
 
 @Injectable() export class AuthService {
-  userCredentials: UserCredentials;
-
   private token: OAuthToken;
-
+  userCredentials: UserCredentials;
   cachedRequests: Array<HttpRequest<any>> = [];
 
-  public collectFailedRequest(request): void {
-    this.cachedRequests.push(request);
-  }
+  // public collectFailedRequest(request): void {
+  //   this.cachedRequests.push(request);
+  // }
 
-  public retryFailedRequests(): void {
-    // retry the requests. this method can
-    // be called after the token is refreshed
-  }
+  // public retryFailedRequests(): void {
+  //   // retry the requests. this method can
+  //   // be called after the token is refreshed
+  // }
 
   constructor(private http: HttpClient, private storage: Storage) {
     this.storage.get('token').then(token => this.token = token);
@@ -55,6 +53,13 @@ const httpOptions = {
       )
   }
 
+  refreshToken() {
+    return this.http.post<OAuthToken>('/oauth/token', `refresh_token=${this.token.refresh_token}&grant_type=refresh_token`, httpOptions)
+      .pipe(
+        catchError(this.handleError)
+      )
+  }
+
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
       // A client-side or network error occurred. Handle it accordingly.
@@ -67,7 +72,6 @@ const httpOptions = {
         `body was: ${error.error.error}`);
     }
     // return an ErrorObservable with a user-facing error message
-    return new ErrorObservable(
-      'Something bad happened; please try again later.');
+    return new ErrorObservable(error);
   };
 }

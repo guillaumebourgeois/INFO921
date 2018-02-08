@@ -19,8 +19,6 @@ export class SettingsPage {
   }
 
   public logout() {
-    // this.events.publish('user:logout');
-    
     this.events.publish('user:logout');
   }
 

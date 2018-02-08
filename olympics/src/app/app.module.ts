@@ -27,11 +27,11 @@ import { CreateAccountPage  } from '../pages/create-account/create-account';
 // Application providers
 import { Sports     } from '../providers/sports';
 import { Timer      } from '../providers/timer';
-import { API        } from '../providers/api';
 
 import { httpInterceptorProviders } from '../providers/api/http-interceptors/index';
 import { AuthService } from '../providers/api/services/auth.service';
 import { ActivitiesService } from '../providers/api/services/activities.service';
+import { UserService } from '../providers/api/services/user.service';
 
 @NgModule({
   declarations: [
@@ -78,9 +78,10 @@ import { ActivitiesService } from '../providers/api/services/activities.service'
     // Providers
     Sports,
     Timer,
-    API,
+    // API Services
     AuthService,
-    ActivitiesService
+    ActivitiesService,
+    UserService
   ]
 })
 export class AppModule {}

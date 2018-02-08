@@ -1,11 +1,15 @@
 import { Component } from '@angular/core';
-import { AlertController, LoadingController, NavController, NavParams, Events } from 'ionic-angular';
+import { AlertController, LoadingController, NavController, NavParams, Events, Tabs } from 'ionic-angular';
 
 import { CreateAccountPage } from '../create-account/create-account';
 
-import { API } from '../../providers/api';
 // import * as bcrypt from 'bcryptjs';
 import { Storage } from '@ionic/storage/dist/storage';
+import { HttpErrorResponse } from '@angular/common/http';
+import { TabsPage } from '../tabs/tabs';
+import { AuthService } from '../../providers/api/services/auth.service';
+import { OAuthToken } from '../../providers/api/models/oauth-token';
+import { UserCredentials } from '../../providers/api/models/user-credentials';
 
 @Component({
   selector: 'page-login',
@@ -13,38 +17,21 @@ import { Storage } from '@ionic/storage/dist/storage';
 })
 export class LoginPage {
 
-  private credentials: any = {
+  private credentials: UserCredentials = {
     username: "",
     password: ""
   };
 
   private loader: any;
 
-  constructor(public alertCtrl: AlertController, public loadingCtrl: LoadingController, public navCtrl: NavController, public navParams: NavParams, public events: Events, private api: API, public storage: Storage) {
+  constructor(public auth: AuthService, public alertCtrl: AlertController, public loadingCtrl: LoadingController, public navCtrl: NavController, public navParams: NavParams, public events: Events, public storage: Storage) {
   }
 
   ionViewDidLoad() {
-    this.events.subscribe('user:logged', () => {
-      this.loader.dismiss();
-
-      this.storage.set('authed', true);
-      this.storage.set('userId', 1);
-    });
-
     this.events.subscribe('user:error', (error) => {
       this.loader.dismiss();
 
-      if (error.error == 'invalid_grant') {
-        this.showAlert('Bad credentials', 'Your username nor password is wrong.');
-      }
-      else if (error.error == 'unauthorized') {
-        this.showAlert('Unauthorized', error.error_description);
-      }
-      else {
-        console.log(`${error.error} : ${error.error_description}`);
-
-        this.showAlert(error.error, error.error_description);
-      }
+      this.handleError(error);
     })
   }
 
@@ -55,8 +42,23 @@ export class LoginPage {
   private login() {
     this.presentLoginLoading();
 
-    this.events.publish('user:login', this.credentials);
-    
+    this.auth.getToken(this.credentials).subscribe(token => {
+      this.storage.set('token', token);
+      this.auth.setToken(token);
+      
+      this.storage.set('authed', true);
+      this.storage.set('userId', 1);
+
+      this.loader.dismiss();
+
+      this.navCtrl.push(TabsPage);
+    }, error => {
+      // this.events.publish('user:error', error);
+      this.loader.dismiss();
+
+      this.showAlert('Bad credentials', 'Your username nor password is wrong.');
+    })
+
     // bcrypt.genSalt(10, (err, salt) => {
       // bcrypt.hash(this.credentials.password, salt, (err, hash) => {
         // // Password encrypted, now send data to server
@@ -83,5 +85,29 @@ export class LoginPage {
       buttons: buttons ? buttons : ['Close']
     });
     alert.present();
+  }
+
+  private handleError(error) {
+    if (error instanceof HttpErrorResponse) {
+      if (error.status == 400) {
+        this.showAlert('Bad credentials', 'Your username nor password is wrong.');
+      }
+      else if (error.error.error == 'unauthorized') {
+        this.showAlert('Unauthorized', error.error.error_description);
+      }
+      else {
+        console.log(`${error.error.error} : ${error.error.error_description}`);
+
+        this.showAlert(error.error.error, error.error.error_description);
+      }
+    }
+    else {
+      if(error == 'invalid_refresh_token') {
+        this.showAlert('Expired token', 'Please login again.');
+      }
+      else {
+        this.showAlert('Oh no !', 'Something terrible happened... Please login again.')
+      }
+    }
   }
 }

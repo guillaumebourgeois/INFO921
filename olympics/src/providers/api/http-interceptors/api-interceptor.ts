@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpRequest, HttpHandler } from '@angular/common/http';
 
-const apiUrl = 'http://olympics.hidora.com';
+// const apiUrl = 'http://olympics.hidora.com';
+const apiUrl = 'http://localhost:8080';
 
 @Injectable()
 export class ApiInterceptor implements HttpInterceptor {

@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform, Events, LoadingController } from 'ionic-angular';
+import { Nav, Platform, Events, LoadingController, AlertController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Storage } from '@ionic/storage';
@@ -11,9 +11,9 @@ import { TabsPage  } from '../pages/tabs/tabs';
 
 // Providers
 import { Sports } from '../providers/sports';
-import { API    } from '../providers/api';
 import { Timer  } from '../providers/timer';
 import { AuthService } from '../providers/api/services/auth.service';
+import { OAuthToken } from '../providers/api/models/oauth-token';
 
 @Component({
   templateUrl: 'app.html'
@@ -23,13 +23,11 @@ export class MyApp {
 
   rootPage: any = LoginPage;
 
-  constructor(private loadingCtrl: LoadingController, private storage: Storage, public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen, public events: Events,
-              private p_Sports: Sports, private p_Api: API, private p_Timer : Timer, private auth: AuthService) {
+  constructor(private alertCtrl: AlertController,private loadingCtrl: LoadingController, private storage: Storage, public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen, public events: Events,
+              private p_Sports: Sports, private p_Timer : Timer, private auth: AuthService) {
 
     if (window["Sports"] == undefined)
         window["Sports"] = p_Sports;
-    if (window["API"] == undefined)
-        window["API"] = p_Api;
     if (window["Timer"] == undefined)
         window["Timer"] = p_Timer;
 
@@ -50,30 +48,7 @@ export class MyApp {
         }
       });
 
-      // Login/logout event handling
-      this.events.subscribe('user:login', (credentials) => {
-        // this.p_Api.getToken(credentials)
-        // .then(data => {
-        //   this.events.publish('user:logged');
-
-        //   this.nav.push(TabsPage);
-        // })
-        // .catch(e => {
-        //   this.events.publish('user:error', e.error);
-        // })
-
-        this.auth.getToken(credentials).subscribe(token => {
-          this.storage.set('token', token);
-          this.auth.setToken(token);
-          
-          this.events.publish('user:logged');
-
-          this.nav.push(TabsPage);
-        }, error => {
-          this.events.publish('user:error', error);
-        })
-      });
-
+      // Logout event handling
       this.events.subscribe('user:logout', () => {
         this.storage.set('authed', false);
         this.storage.remove('userCredentials');
@@ -82,9 +57,21 @@ export class MyApp {
         this.nav.popTo(LoginPage);
       });
 
+      // Handling errors properly
+      this.events.subscribe('error', (title, message) => this.showAlert(title, message))
+
       this.statusBar.styleDefault();
       this.splashScreen.hide();
     });
+  }
+
+  private showAlert(title: string, content: string, buttons?: Array<string>) {
+    let alert = this.alertCtrl.create({
+      title: title,
+      subTitle: content,
+      buttons: buttons ? buttons : ['Close']
+    });
+    alert.present();
   }
 
   openPage(page) {

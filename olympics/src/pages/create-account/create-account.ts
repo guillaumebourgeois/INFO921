@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
-import { API } from '../../providers/api';
 import * as bcrypt from 'bcryptjs';
+import { UserService } from '../../providers/api/services/user.service';
+import { User } from '../../providers/api/models/user';
 
 @Component({
   selector: 'page-create-account',
@@ -9,7 +10,7 @@ import * as bcrypt from 'bcryptjs';
 })
 export class CreateAccountPage {
 
-  private credentials: any = {
+  private credentials: User = {
     email: "",
     password: "",
     username: "",
@@ -18,7 +19,7 @@ export class CreateAccountPage {
   };
   private confirmPassword: string = "";
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public api: API) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public userService: UserService) {
   }
 
   ionViewDidLoad() {
@@ -32,9 +33,10 @@ export class CreateAccountPage {
           this.credentials.password = hash;
           
           // Send data with encrypted password
-          this.api.createUser(this.credentials).then(data => {
-            console.log("OK");
-          })
+          this.userService.createUser(this.credentials).subscribe(
+            data => console.log(data),
+            err => console.log(err)
+          )
         });
       });
     }
