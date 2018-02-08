@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, Events } from 'ionic-angular';
+import { AlertController, LoadingController, NavController, NavParams, Events } from 'ionic-angular';
 
 import { CreateAccountPage } from '../create-account/create-account';
 
 import { API } from '../../providers/api';
-import * as bcrypt from 'bcryptjs';
+// import * as bcrypt from 'bcryptjs';
+import { Storage } from '@ionic/storage/dist/storage';
 
 @Component({
   selector: 'page-login',
@@ -12,36 +13,75 @@ import * as bcrypt from 'bcryptjs';
 })
 export class LoginPage {
 
-  credentials:any = {
-    email: "",
+  private credentials: any = {
+    username: "",
     password: ""
   };
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public events: Events) {
+  private loader: any;
+
+  constructor(public alertCtrl: AlertController, public loadingCtrl: LoadingController, public navCtrl: NavController, public navParams: NavParams, public events: Events, private api: API, public storage: Storage) {
   }
 
   ionViewDidLoad() {
+    this.events.subscribe('user:logged', () => {
+      this.loader.dismiss();
+
+      this.storage.set('authed', true);
+      this.storage.set('userId', 1);
+    });
+
+    this.events.subscribe('user:error', (error) => {
+      this.loader.dismiss();
+
+      if (error.error == 'invalid_grant') {
+        this.showAlert('Bad credentials', 'Your username nor password is wrong.');
+      }
+      else if (error.error == 'unauthorized') {
+        this.showAlert('Unauthorized', error.error_description);
+      }
+      else {
+        console.log(`${error.error} : ${error.error_description}`);
+
+        this.showAlert(error.error, error.error_description);
+      }
+    })
   }
 
   public createAccount() {
     this.navCtrl.push(CreateAccountPage);
   }
 
-  public login() {
-    // If we enter the right credidentials, we are able to log in
-    // TODO A real auth system :^)
+  private login() {
+    this.presentLoginLoading();
 
-    bcrypt.genSalt(10, (err, salt) => {
-       bcrypt.hash(this.credentials.password, salt, (err, hash) => {
-         //TODO
-       });
-     });
+    this.events.publish('user:login', this.credentials);
+    
+    // bcrypt.genSalt(10, (err, salt) => {
+      // bcrypt.hash(this.credentials.password, salt, (err, hash) => {
+        // // Password encrypted, now send data to server
+        // let payload = {
+        //   'username': this.credentials.username,
+        //   // 'password': hash
+        //   'password': this.credentials.password // Password is now encrypted server-side
+        // };
+      // });
+  //  });
+  }
 
-     /*bcrypt.compare(this.credentials.password, hash,  (err, res) => {
-       //TODO
-     });*/
-    if (this.credentials.email.toLowerCase() == "root" && this.credentials.password.toLowerCase() == "root") {
-      this.events.publish('user:login');
-    }
+  private presentLoginLoading() {
+    this.loader = this.loadingCtrl.create({
+      content: "Connecting..."
+    });
+    this.loader.present();
+  }
+
+  private showAlert(title: string, content: string, buttons?: Array<string>) {
+    let alert = this.alertCtrl.create({
+      title: title,
+      subTitle: content,
+      buttons: buttons ? buttons : ['Close']
+    });
+    alert.present();
   }
 }

@@ -29,6 +29,10 @@ import { Sports     } from '../providers/sports';
 import { Timer      } from '../providers/timer';
 import { API        } from '../providers/api';
 
+import { httpInterceptorProviders } from '../providers/api/http-interceptors/index';
+import { AuthService } from '../providers/api/services/auth.service';
+import { ActivitiesService } from '../providers/api/services/activities.service';
+
 @NgModule({
   declarations: [
     MyApp,
@@ -70,10 +74,13 @@ import { API        } from '../providers/api';
     Geolocation,
     Pedometer,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
+    httpInterceptorProviders,
     // Providers
     Sports,
     Timer,
-    API
+    API,
+    AuthService,
+    ActivitiesService
   ]
 })
 export class AppModule {}

@@ -7,6 +7,17 @@
 </ion-header>
 
 
-<ion-content padding class="no-scroll">
-	<button ion-button full color="danger" (click)="logout()">Logout</button>
+<ion-content class="no-scroll grey-background">
+  <ion-list margin-top>
+    <ion-item (click)="activitiesRequest()">
+      <ion-icon name="leaf" item-start></ion-icon>
+      Test authed request
+    </ion-item>
+  </ion-list>
+  <ion-list>
+    <ion-item (click)="logout()" class="logout" text-center>
+      Logout
+    </ion-item>
+  </ion-list>
+	
 </ion-content>

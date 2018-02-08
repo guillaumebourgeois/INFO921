@@ -9,7 +9,7 @@ import * as bcrypt from 'bcryptjs';
 })
 export class CreateAccountPage {
 
-  credentials:any = {
+  private credentials: any = {
     email: "",
     password: "",
     username: "",

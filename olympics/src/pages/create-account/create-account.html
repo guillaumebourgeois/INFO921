@@ -30,6 +30,8 @@
               <ion-input type="text" placeholder="Username" name="username" [(ngModel)]="credentials.username" required></ion-input>
             </ion-item>
 
+            <ion-input type="hidden" name="userId" [(ngModel)]="credentials.userId" ng-value="null"></ion-input>
+
             <!-- <ion-item margin-top>
               <ion-input type="text" placeholder="Lastname" name="lastname" [(ngModel)]="credentials.lastname" required></ion-input>
             </ion-item> -->
