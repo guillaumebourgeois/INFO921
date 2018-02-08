@@ -14,4 +14,6 @@ public interface ActivityRepository extends JpaRepository<Activity, Long>{
 	
 	@Query("select a from Activity a where a.type = :type")
 	public Page<Activity> findActivities(@Param("type") int type, Pageable pageable);
+	
+	
 }

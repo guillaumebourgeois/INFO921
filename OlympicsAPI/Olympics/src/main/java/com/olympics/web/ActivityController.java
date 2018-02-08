@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,8 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.olympics.dao.ActivityRepository;
 import com.olympics.entities.Activity;
 
+
 @Controller
 @RestController
+
 public class ActivityController {
 	
 	@Autowired
@@ -29,12 +32,12 @@ public class ActivityController {
 		return activityRepository.findAll();
 	}
 
-	@RequestMapping(value = "/activities/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/activity/{id}", method = RequestMethod.GET)
 	public Activity getActivitie(@PathVariable Long id) {
 		return activityRepository.findOne(id);
 	}
 
-	@RequestMapping(value = "/activity/type/", method = RequestMethod.GET)
+	@RequestMapping(value = "/activity", method = RequestMethod.GET)
 	public Page<Activity> findByType(
 			@RequestParam(name="type",defaultValue= "") int type,
 			@RequestParam(name="page",defaultValue="0") int page,

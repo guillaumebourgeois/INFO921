@@ -1,9 +1,13 @@
 package com.olympics.entities;
 
 import java.io.Serializable;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -14,14 +18,29 @@ public class User implements Serializable{
 	@Id
 	@GeneratedValue
 	private Long idUser;
+	
 	@NotNull
 	private String username;
+	
 	@NotNull
 	private String password;
+	
 	@NotNull
 	private String email;
+	
 	private Integer age;
 	
+	/*private Set<Activity> activities;
+	
+	@OneToMany(mappedBy = "u_id", cascade = CascadeType.ALL)
+	public Set<Activity> getActivities() {
+		return activities;
+	}
+
+	public void setActivities(Set<Activity> activities) {
+		this.activities = activities;
+	}*/
+
 	public User() { super(); }
 	
 	public Long getIdUser() {

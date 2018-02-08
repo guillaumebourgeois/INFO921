@@ -9,12 +9,17 @@ import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.approval.UserApprovalHandler;
+import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
+import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
+import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 
 @Configuration
@@ -31,8 +36,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	static final String SCOPE_READ = "read";
 	static final String SCOPE_WRITE = "write";
     static final String TRUST = "trust";
-	static final int ACCESS_TOKEN_VALIDITY_SECONDS = 1*60*60;
-    static final int FREFRESH_TOKEN_VALIDITY_SECONDS = 6*60*60;
+	static final int ACCESS_TOKEN_VALIDITY_SECONDS = 10;
+    static final int FREFRESH_TOKEN_VALIDITY_SECONDS = 168*60*60;
 	
 	@Autowired
 	private TokenStore tokenStore;
@@ -43,6 +48,11 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	@Autowired
 	private AuthenticationManager authenticationManager;
 
+	/*@Override
+    public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
+        security.allowFormAuthenticationForClients(); 
+    }
+	*/
 	@Override
 	public void configure(ClientDetailsServiceConfigurer configurer) throws Exception {
 
@@ -61,32 +71,4 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 		endpoints.tokenStore(tokenStore).userApprovalHandler(userApprovalHandler)
 				.authenticationManager(authenticationManager);
 	}
-	/*
-  @Bean
-  public EmbeddedServletContainerFactory servletContainer() {
-    TomcatEmbeddedServletContainerFactory tomcat = new TomcatEmbeddedServletContainerFactory() {
-        @Override
-        protected void postProcessContext(Context context) {
-          SecurityConstraint securityConstraint = new SecurityConstraint();
-          securityConstraint.setUserConstraint("CONFIDENTIAL");
-          SecurityCollection collection = new SecurityCollection();
-          collection.addPattern("/*");
-          securityConstraint.addCollection(collection);
-          context.addConstraint(securityConstraint);
-        }
-      };
-    
-    tomcat.addAdditionalTomcatConnectors(initiateHttpConnector());
-    return tomcat;
-  }
-  
-  private Connector initiateHttpConnector() {
-    Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
-    connector.setScheme("http");
-    connector.setPort(8080);
-    connector.setSecure(false);
-    connector.setRedirectPort(8443);
-    
-    return connector;
-  }*/
 }

@@ -3,8 +3,11 @@ package com.olympics.entities;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
@@ -32,9 +35,22 @@ public class Activity implements Serializable {
 	@Size(max = 2500)
 	private String gpsCoord;
 	
+	
+	private User user_id;
+	
+	
+	public User getUser_id() {
+		return user_id;
+	}
+	/*@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "idUser")
+	public void setUser_id(User user_id) {
+		this.user_id = user_id;
+	}
+
 	public Long getIdActivity() {
 		return idActivity;
-	}
+	}*/
 
 	public void setIdActivity(Long idActivity) {
 		this.idActivity = idActivity;
