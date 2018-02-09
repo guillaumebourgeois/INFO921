@@ -9,7 +9,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import com.olympics.entities.GpsCoordinates;
 
-@RepositoryRestResource(collectionResourceRel="activity", path= "activity")
+@RepositoryRestResource(collectionResourceRel="gpscoordinates", path= "gpscoordinates")
 public interface GpsCoordinatesRepository extends JpaRepository<GpsCoordinates, Long>{
 	
 }

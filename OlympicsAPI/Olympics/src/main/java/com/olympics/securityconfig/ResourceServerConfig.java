@@ -27,11 +27,18 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
         http
-            .cors().and()
-            .anonymous().disable()
-            .authorizeRequests()
-            .antMatchers("/activities").access("hasRole('ADMIN')")
-            .and().exceptionHandling().accessDeniedHandler(new OAuth2AccessDeniedHandler());
+
+                .cors().and()
+                .anonymous().disable()
+                .authorizeRequests()
+                .antMatchers("/activities").access("hasRole('ADMIN')")
+                .antMatchers("/activity").access("hasRole('ADMIN')")
+                .antMatchers("/profile").access("hasRole('ADMIN')")
+                .antMatchers("/revoke").access("hasRole('ADMIN')")
+                .antMatchers("/").access("hasRole('ADMIN')")
+                .antMatchers("/hello").access("hasRole('ADMIN')")
+                .and()
+                .exceptionHandling().accessDeniedHandler(new OAuth2AccessDeniedHandler());
     }
     
     @Bean
