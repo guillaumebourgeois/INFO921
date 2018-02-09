@@ -61,7 +61,7 @@ public class ActivityController {
 
 	@RequestMapping(value = "/activity/{id}", method = RequestMethod.PUT)
 	public Activity update(@PathVariable Long id, @RequestBody Activity a) {
-		a.setId(id);
+		a.setIdActivity(id);
 		return activityRepository.save(a);
 	}
 	

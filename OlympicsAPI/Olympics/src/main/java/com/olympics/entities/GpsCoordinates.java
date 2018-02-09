@@ -23,7 +23,7 @@ public class GpsCoordinates implements Serializable {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "idActivity")
     private Activity activity;
 
     @NotNull

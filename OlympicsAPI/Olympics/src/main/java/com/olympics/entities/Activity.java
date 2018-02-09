@@ -18,7 +18,7 @@ public class Activity implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue
-	private Long id;
+	private Long idActivity;
 	
 	@NotNull
 	private String sport;
@@ -45,12 +45,12 @@ public class Activity implements Serializable {
 		this.user_id = user_id;
 	}*/
 
-	public Long getId() {
-		return id;
+	public Long getIdActivity() {
+		return idActivity;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setIdActivity(Long id) {
+		this.idActivity = id;
 	}
 
 	public String getSport() {
