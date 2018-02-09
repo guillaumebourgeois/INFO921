@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.olympics.dao.ActivityRepository;
+import com.olympics.dao.GpsCoordinatesRepository;
 import com.olympics.entities.Activity;
+import com.olympics.entities.GpsCoordinates;
 
 
 @Controller
@@ -24,6 +26,9 @@ public class ActivityController {
 	
 	@Autowired
 	private ActivityRepository activityRepository;
+
+	@Autowired
+	private GpsCoordinatesRepository gpsCoordinatesRepository;
 	
 	@RequestMapping(value = "/activities", method = RequestMethod.GET)
 	public List<Activity> getActivites() {
@@ -56,15 +61,22 @@ public class ActivityController {
 
 	@RequestMapping(value = "/activity/{id}", method = RequestMethod.PUT)
 	public Activity update(@PathVariable Long id, @RequestBody Activity a) {
-		// a.setIdActivity(id);
+		a.setId(id);
 		return activityRepository.save(a);
 	}
 	
+	// @RequestMapping(value = "/activity/{id}/gps", method = RequestMethod.PUT)
+	// public void gps(@PathVariable Long id,
+	// 				@RequestParam(name="idPacket", defaultValue="0") int idPacket,
+	// 				@RequestParam(name="date", defaultValue="0") Date date,
+	// 				@RequestParam(name="coords", defaultValue="0") double coords[]) {
+	// 	activityRepository.findOne(id);
+	// }
+
 	@RequestMapping(value = "/activity/{id}/gps", method = RequestMethod.PUT)
-	public void gps(@PathVariable Long id,
-					@RequestParam(name="idPacket", defaultValue="0") int idPacket,
-					@RequestParam(name="date", defaultValue="0") Date date,
-					@RequestParam(name="coords", defaultValue="0") double coords[]) {
-		activityRepository.findOne(id);
+	public boolean gpsUpdate(@PathVariable Long id, @RequestBody GpsCoordinates c) {
+		c.setActivity(activityRepository.findOne(id));
+		gpsCoordinatesRepository.save(c);
+		return true;
 	}
 }

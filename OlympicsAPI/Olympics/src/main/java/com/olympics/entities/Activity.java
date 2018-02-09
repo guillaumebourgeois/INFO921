@@ -3,7 +3,6 @@ package com.olympics.entities;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -30,7 +29,7 @@ public class Activity implements Serializable {
 	
 	@NotNull // A date cannot be null in JPA, just set it to zero in the request
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date endDate;
+	private Calendar endDate;
 	
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="activity")
 	private Collection<GpsCoordinates> gpsCoordinates;
@@ -70,11 +69,11 @@ public class Activity implements Serializable {
 		this.startDate = startDate;
 	}
 
-	public Date getEndDate() {
+	public Calendar getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(Date endDate) {
+	public void setEndDate(Calendar endDate) {
 		this.endDate = endDate;
 	}
 

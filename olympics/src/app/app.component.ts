@@ -41,20 +41,24 @@ export class MyApp {
       });
       loader.present();
 
-      this.storage.get('authed').then((authed) => {
-        this.noop.hello().subscribe(response => {
-          if(response === "Hello !") {
-            loader.dismiss();
-            this.nav.push(TabsPage);
-          }
-          else {
+      this.storage.get('token').then((token) => {
+        if(token.access_token) { // If there is a token, we may try to log in again
+          this.auth.setToken(token); // Set the token again by safety
+          this.noop.hello().subscribe(response => { // middleware will intercept this request and, if the token is no longer valid, will refresh it
+            if(response === "Hello !") {
+              loader.dismiss();
+              this.nav.push(TabsPage);
+            }
+            else {
+              loader.dismiss();
+              this.events.publish('error', 'Session expired', 'Please login again.');
+            }
+          }, err => {
+            console.log(err);
             loader.dismiss();
             this.events.publish('error', 'Session expired', 'Please login again.');
-          }
-        }, err => {
-          loader.dismiss();
-          this.events.publish('error', 'Session expired', 'Please login again.');
-        })
+          })
+        } else loader.dismiss();
       });
 
       // Logout event handling

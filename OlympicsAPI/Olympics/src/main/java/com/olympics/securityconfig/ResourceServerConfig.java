@@ -40,6 +40,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         CorsConfiguration config = new CorsConfiguration().applyPermitDefaultValues();
         source.registerCorsConfiguration("/**", config);
         config.addAllowedMethod(HttpMethod.PUT);
+        config.addAllowedMethod(HttpMethod.PATCH);
         FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));
         bean.setOrder(0);
         return new CorsFilter(source);
