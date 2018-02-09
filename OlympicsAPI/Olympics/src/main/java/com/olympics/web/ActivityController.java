@@ -34,7 +34,15 @@ public class ActivityController {
 	public List<Activity> getActivites() {
 		return activityRepository.findAll();
 	}
-
+	
+	/*@RequestMapping(value = "/user/Activities", method = RequestMethod.GET)
+	public Page<Activity> getActivitesByUser(
+			@RequestParam(name="userid",defaultValue="",required=true) String id,
+			@RequestParam(name="page",defaultValue="0") int page,
+			@RequestParam(name="size",defaultValue="5") int size) {
+		return activityRepository.findActivitiesByUser(id,new PageRequest(page, size));
+	}*/
+	
 	@RequestMapping(value = "/activity/{id}", method = RequestMethod.GET)
 	public Activity getActivitie(@PathVariable Long id) {
 		return activityRepository.findOne(id);
@@ -74,9 +82,8 @@ public class ActivityController {
 	// }
 
 	@RequestMapping(value = "/activity/{id}/gps", method = RequestMethod.PUT)
-	public boolean gpsUpdate(@PathVariable Long id, @RequestBody GpsCoordinates c) {
+	public GpsCoordinates gpsUpdate(@PathVariable Long id, @RequestBody GpsCoordinates c) {
 		c.setActivity(activityRepository.findOne(id));
-		gpsCoordinatesRepository.save(c);
-		return true;
+		return gpsCoordinatesRepository.save(c);
 	}
 }

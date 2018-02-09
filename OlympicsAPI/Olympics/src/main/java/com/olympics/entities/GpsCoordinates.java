@@ -1,5 +1,6 @@
 package com.olympics.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.io.Serializable;
 import java.util.Calendar;
 
@@ -13,6 +14,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 public class GpsCoordinates implements Serializable {
 
@@ -24,6 +27,7 @@ public class GpsCoordinates implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "idActivity")
+    @JsonBackReference
     private Activity activity;
 
     @NotNull
@@ -53,6 +57,7 @@ public class GpsCoordinates implements Serializable {
     /**
      * @return the activity
      */
+    @JsonBackReference
     public Activity getActivity() {
         return activity;
     }
