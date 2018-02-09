@@ -1,6 +1,7 @@
 package com.olympics.securityconfig;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
@@ -26,12 +27,11 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
         http
-                .cors().and()
-                .anonymous().disable()
-                .authorizeRequests()
-                .antMatchers("/activities").access("hasRole('ADMIN')")
-                
-                .and().exceptionHandling().accessDeniedHandler(new OAuth2AccessDeniedHandler());
+            .cors().and()
+            .anonymous().disable()
+            .authorizeRequests()
+            .antMatchers("/activities").access("hasRole('ADMIN')")
+            .and().exceptionHandling().accessDeniedHandler(new OAuth2AccessDeniedHandler());
     }
     
     @Bean
@@ -39,6 +39,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration().applyPermitDefaultValues();
         source.registerCorsConfiguration("/**", config);
+        config.addAllowedMethod(HttpMethod.PUT);
         FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));
         bean.setOrder(0);
         return new CorsFilter(source);

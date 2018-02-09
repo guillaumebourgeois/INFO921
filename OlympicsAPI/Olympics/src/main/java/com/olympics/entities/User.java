@@ -1,13 +1,10 @@
 package com.olympics.entities;
 
 import java.io.Serializable;
-import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -85,10 +82,4 @@ public class User implements Serializable{
 	public void setAge(Integer age) {
 		this.age = age;
 	}
-
-
-	
-	
-	
-	
 }

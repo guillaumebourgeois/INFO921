@@ -1,8 +1,14 @@
 import { Injectable } from '@angular/core';
 
+export interface Sport {
+    name: string,
+    code: string,
+    description: string
+}
+
 @Injectable() export class Sports
 {
-    sports: Array<any> = [
+    sports: Array<Sport> = [
       {
           name: "Walking",
           code: "walk",

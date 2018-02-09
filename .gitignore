@@ -5,3 +5,4 @@ olympics/plugins/
 olympics/www/
 olympics/package-lock.json
 olympics/ionic.config.json
+client.code-workspace

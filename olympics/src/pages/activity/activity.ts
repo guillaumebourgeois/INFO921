@@ -9,6 +9,8 @@ import 'rxjs/add/operator/filter';
 import { Timer } from '../../providers/timer';
 import { Sports } from '../../providers/sports';
 import { IActivityData } from './iactivitydata';
+import { Activity } from '../../providers/api/models/activity';
+import { ActivitiesService } from '../../providers/api/services/activities.service';
 
 @Component({
   selector: 'page-activity',
@@ -21,6 +23,14 @@ export class ActivityPage {
   private sport: any;
   // private activityId: number;
   private activityData: IActivityData;
+  private data: Activity = {
+    id: null,
+    userId: 0,
+    sport: '',
+    startDate: 0,
+    endDate: 0,
+    gpsCoordinates: []
+  };
 
   private locationUpdater: any;
   private pedometerUpdater: any;
@@ -32,20 +42,20 @@ export class ActivityPage {
   private isPaused: boolean = false;
   private isStopped: boolean = false;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, private geolocation: Geolocation, public events: Events, private pedometer: Pedometer, private timer: Timer, public sports: Sports, private statusBar: StatusBar, private storage: Storage) {
+  constructor(public activitiesService: ActivitiesService, public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, private geolocation: Geolocation, public events: Events, private pedometer: Pedometer, private timer: Timer, public sports: Sports, private statusBar: StatusBar, private storage: Storage) {
     // this.selfPosition = new LatLng(0,0); // Debug purpose
-    this.navParams.get('sport');
+    // this.navParams.get('sport');
 
-    this.activityData = {
-      userId: 0,
-      activityId: 0,
-      startDate: null, // Return actual time
-      endDate: null,
-      sportCode: '',
-      gpsCoordinates: [],
-      distanceInMeter: 0,
-      timeInSeconds: 0
-    };
+    // this.activityData = {
+    //   userId: 0,
+    //   activityId: 0,
+    //   startDate: null, // Return actual time
+    //   endDate: null,
+    //   sportCode: '',
+    //   gpsCoordinates: [],
+    //   distanceInMeter: 0,
+    //   timeInSeconds: 0
+    // };
   }
 
   ionViewDidLoad() {
@@ -53,34 +63,42 @@ export class ActivityPage {
 
     // activityData initialization
     this.storage.get('userId').then((userId) => {
-      this.activityData.userId = userId;
+      this.data.userId = userId;
+      this.data.sport = this.sport.code;
+      this.data.startDate = Date.now();
+
+      this.activitiesService.startActivity(this.data).subscribe(data => {
+        this.data.id = data.id; // Retrieved activity's ID from server
+        console.log(data);
+      }, err => {
+        console.log('Error creating activity');
+      })
     });
-    this.activityData.startDate = new Date();
-    this.activityData.sportCode = this.sport.code;
+    // this.activityData.startDate = new Date();
+    // this.activityData.sportCode = this.sport.code;
     
+    // this.storage.get('lastActivityId').then((value) => {
+    //   this.activityData.activityId = (value !== undefined) ? ++value : 0;
+
+    //   // this.activityData.activityId = this.activityId;
+
+    //   this.storage.set('lastActivityId', this.activityData.activityId);
+
+    //   this.storage.get('activities' + this.activityData.userId + this.sport.name + 'Id').then((array) => {
+    //     if (array) array.push(this.activityData.activityId);
+    //     else array = [ this.activityData.activityId ];
+
+    //     this.storage.set('activities' + this.activityData.userId + this.sport.name + 'Id', array);
+
+    //     console.log('List of actities ID for ' + this.activityData.userId + this.sport.name + ' : ' + array);
+    //   })
+    //   console.log('Activity ID : ' + this.activityData.activityId);
+    // });
+
     // Back button handler
     this.navBar.backButtonClick = () => {
       this.showStopActivityConfirm('navbar');
     };
-
-    this.storage.get('lastActivityId').then((value) => {
-      this.activityData.activityId = (value !== undefined) ? ++value : 0;
-
-      // this.activityData.activityId = this.activityId;
-
-      this.storage.set('lastActivityId', this.activityData.activityId);
-
-      this.storage.get('activities' + this.activityData.userId + this.sport.name + 'Id').then((array) => {
-        if (array) array.push(this.activityData.activityId);
-        else array = [ this.activityData.activityId ];
-
-        this.storage.set('activities' + this.activityData.userId + this.sport.name + 'Id', array);
-
-        console.log('List of actities ID for ' + this.activityData.userId + this.sport.name + ' : ' + array);
-      })
-      console.log('Activity ID : ' + this.activityData.activityId);
-    });
-
     this.statusBar.styleLightContent();
     this.timer.startTimer();
     this.loadMap();

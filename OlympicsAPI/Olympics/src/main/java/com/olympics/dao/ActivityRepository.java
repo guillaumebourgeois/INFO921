@@ -12,8 +12,8 @@ import com.olympics.entities.Activity;
 @RepositoryRestResource(collectionResourceRel="activity", path= "activity")
 public interface ActivityRepository extends JpaRepository<Activity, Long>{
 	
-	@Query("select a from Activity a where a.type = :type")
-	public Page<Activity> findActivities(@Param("type") int type, Pageable pageable);
+	@Query("select a from Activity a where a.sport = :sport")
+	public Page<Activity> findActivities(@Param("sport") String sport, Pageable pageable);
 	
 	
 }

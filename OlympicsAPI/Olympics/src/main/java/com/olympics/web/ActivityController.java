@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +20,6 @@ import com.olympics.entities.Activity;
 
 @Controller
 @RestController
-
 public class ActivityController {
 	
 	@Autowired
@@ -39,31 +37,30 @@ public class ActivityController {
 
 	@RequestMapping(value = "/activity", method = RequestMethod.GET)
 	public Page<Activity> findByType(
-			@RequestParam(name="type",defaultValue= "") int type,
+			@RequestParam(name="sport",defaultValue="") String sport,
 			@RequestParam(name="page",defaultValue="0") int page,
 			@RequestParam(name="size",defaultValue="5") int size){
-		return activityRepository.findActivities(type, new PageRequest(page, size));
+		return activityRepository.findActivities(sport, new PageRequest(page, size));
 	}
-	
 
-	@RequestMapping(value = "/activities", method = RequestMethod.POST)
+	@RequestMapping(value = "/activity", method = RequestMethod.PUT)
 	public Activity save(@RequestBody Activity a) {
 		return activityRepository.save(a);
 	}
 
-	@RequestMapping(value = "/activities/{id}", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/activity/{id}", method = RequestMethod.DELETE)
 	public boolean delete(@PathVariable Long id) {
 		activityRepository.delete(id);
 		return true;
 	}
 
-	@RequestMapping(value = "/activities/{id}", method = RequestMethod.PUT)
+	@RequestMapping(value = "/activity/{id}", method = RequestMethod.PUT)
 	public Activity update(@PathVariable Long id, @RequestBody Activity a) {
-		a.setIdActivity(id);
+		// a.setIdActivity(id);
 		return activityRepository.save(a);
 	}
 	
-	@RequestMapping(value = "/activities/{id}/gps", method = RequestMethod.PUT)
+	@RequestMapping(value = "/activity/{id}/gps", method = RequestMethod.PUT)
 	public void gps(@PathVariable Long id,
 					@RequestParam(name="idPacket", defaultValue="0") int idPacket,
 					@RequestParam(name="date", defaultValue="0") Date date,

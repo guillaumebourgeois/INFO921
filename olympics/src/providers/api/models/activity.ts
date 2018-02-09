@@ -1,7 +1,10 @@
+import { GpsCoordinates } from "./gps-coordinates";
+
 export interface Activity {
-    idActivity: number;
-    type: number;
-    startDate: string;
-    endDate: string;
-    gpsCoord: string;
+    id?: number;
+    sport: string;
+    startDate: number;
+    endDate: number;
+    gpsCoordinates?: Array<GpsCoordinates>;
+    userId: number;
 }

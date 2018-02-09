@@ -14,6 +14,7 @@ import { Sports } from '../providers/sports';
 import { Timer  } from '../providers/timer';
 import { AuthService } from '../providers/api/services/auth.service';
 import { OAuthToken } from '../providers/api/models/oauth-token';
+import { NoopService } from '../providers/api/services/noop.service';
 
 @Component({
   templateUrl: 'app.html'
@@ -24,7 +25,7 @@ export class MyApp {
   rootPage: any = LoginPage;
 
   constructor(private alertCtrl: AlertController,private loadingCtrl: LoadingController, private storage: Storage, public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen, public events: Events,
-              private p_Sports: Sports, private p_Timer : Timer, private auth: AuthService) {
+              private p_Sports: Sports, private p_Timer : Timer, private auth: AuthService, public noop: NoopService) {
 
     if (window["Sports"] == undefined)
         window["Sports"] = p_Sports;
@@ -41,11 +42,19 @@ export class MyApp {
       loader.present();
 
       this.storage.get('authed').then((authed) => {
-        loader.dismiss();
-
-        if (authed) {
-          this.nav.push(TabsPage);
-        }
+        this.noop.hello().subscribe(response => {
+          if(response === "Hello !") {
+            loader.dismiss();
+            this.nav.push(TabsPage);
+          }
+          else {
+            loader.dismiss();
+            this.events.publish('error', 'Session expired', 'Please login again.');
+          }
+        }, err => {
+          loader.dismiss();
+          this.events.publish('error', 'Session expired', 'Please login again.');
+        })
       });
 
       // Logout event handling

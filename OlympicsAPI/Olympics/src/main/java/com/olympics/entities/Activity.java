@@ -1,18 +1,17 @@
 package com.olympics.entities;
 
 import java.io.Serializable;
-
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import java.util.Date;
 
 @Entity
 public class Activity implements Serializable {
@@ -20,55 +19,54 @@ public class Activity implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue
-	private Long idActivity;
-	
-	private Integer type;
+	private Long id;
 	
 	@NotNull
-	@Temporal(TemporalType.DATE)
-	private Date startDate;
+	private String sport;
 	
 	@NotNull
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
+	private Calendar startDate;
+	
+	@NotNull // A date cannot be null in JPA, just set it to zero in the request
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date endDate;
 	
-	@Size(max = 2500)
-	private String gpsCoord;
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="activity")
+	private Collection<GpsCoordinates> gpsCoordinates;
 	
+	private Long userId;
 	
-	private User user_id;
-	
-	
-	public User getUser_id() {
-		return user_id;
+	public Long getUserId() {
+		return userId;
 	}
 	/*@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "idUser")
 	public void setUser_id(User user_id) {
 		this.user_id = user_id;
-	}
-
-	public Long getIdActivity() {
-		return idActivity;
 	}*/
 
-	public void setIdActivity(Long idActivity) {
-		this.idActivity = idActivity;
+	public Long getId() {
+		return id;
 	}
 
-	public Integer getType() {
-		return type;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
-	public void setType(Integer type) {
-		this.type = type;
+	public String getSport() {
+		return sport;
 	}
 
-	public Date getStartDate() {
+	public void setSport(String sport) {
+		this.sport = sport;
+	}
+
+	public Calendar getStartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(Date startDate) {
+	public void setStartDate(Calendar startDate) {
 		this.startDate = startDate;
 	}
 
@@ -80,12 +78,12 @@ public class Activity implements Serializable {
 		this.endDate = endDate;
 	}
 
-	public String getGpsCoord() {
-		return gpsCoord;
+	public Collection<GpsCoordinates> getGpsCoordinates() {
+		return gpsCoordinates;
 	}
 
-	public void setGpsCoord(String gpsCoord) {
-		this.gpsCoord = gpsCoord;
+	public void setGpsCoordinates(Collection<GpsCoordinates> gpsCoordinates) {
+		this.gpsCoordinates = gpsCoordinates;
 	}
 
 }
