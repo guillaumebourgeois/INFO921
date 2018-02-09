@@ -8,17 +8,29 @@
 
 
 <ion-content class="no-scroll">
-  <h1 margin-left>Welcome, {{user.username}}.</h1>
-  <ion-list margin-top>
+  <!--h1 margin-left>Welcome, {{user.username}}.</h1-->
+  <!--ion-list margin-top>
     <ion-item (click)="activitiesRequest()">
       <ion-icon name="leaf" item-start></ion-icon>
       Test authed request
     </ion-item>
+  </ion-list-->
+  <ion-list>
+    <ion-item>
+      <ion-label>Username</ion-label>
+      <ion-input readonly placeholder="{{ user.username }}"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Email</ion-label>
+      <ion-input readonly placeholder="{{ user.email }}"></ion-input>
+    </ion-item>
   </ion-list>
+
   <ion-list>
     <ion-item (click)="logout()" class="logout" text-center>
       Logout
     </ion-item>
   </ion-list>
-	
+
 </ion-content>
