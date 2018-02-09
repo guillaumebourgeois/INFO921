@@ -14,6 +14,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 public class GpsCoordinates implements Serializable {
 
@@ -25,6 +27,7 @@ public class GpsCoordinates implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "idActivity")
+    @JsonBackReference
     private Activity activity;
 
     @NotNull

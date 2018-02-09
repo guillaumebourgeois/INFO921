@@ -1,13 +1,17 @@
 package com.olympics.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Collection;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -35,16 +39,18 @@ public class Activity implements Serializable {
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="activity")
 	private Collection<GpsCoordinates> gpsCoordinates;
 	
-	private Long userId;
+	@ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "idUser")
+    @JsonBackReference
+	private User user;
 	
-	public Long getUserId() {
-		return userId;
+    @JsonBackReference
+    public User getUser() {
+		return user;
 	}
-	/*@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "idUser")
-	public void setUser_id(User user_id) {
-		this.user_id = user_id;
-	}*/
+	public void setUser(User user) {
+		this.user = user;
+	}
 
 	public Long getIdActivity() {
 		return idActivity;
