@@ -10,6 +10,7 @@ import { TabsPage } from '../tabs/tabs';
 import { AuthService } from '../../providers/api/services/auth.service';
 import { OAuthToken } from '../../providers/api/models/oauth-token';
 import { UserCredentials } from '../../providers/api/models/user-credentials';
+import { UserService } from '../../providers/api/services/user.service';
 
 @Component({
   selector: 'page-login',
@@ -24,7 +25,7 @@ export class LoginPage {
 
   private loader: any;
 
-  constructor(public auth: AuthService, public alertCtrl: AlertController, public loadingCtrl: LoadingController, public navCtrl: NavController, public navParams: NavParams, public events: Events, public storage: Storage) {
+  constructor(public auth: AuthService, public userService: UserService, public alertCtrl: AlertController, public loadingCtrl: LoadingController, public navCtrl: NavController, public navParams: NavParams, public events: Events, public storage: Storage) {
   }
 
   ionViewDidLoad() {
@@ -43,15 +44,19 @@ export class LoginPage {
     this.presentLoginLoading();
 
     this.auth.getToken(this.credentials).subscribe(token => {
-      this.storage.set('token', token);
       this.auth.setToken(token);
+      this.storage.set('token', token);
       
-      this.storage.set('authed', true);
-      this.storage.set('userId', 1);
-
-      this.loader.dismiss();
-
-      this.navCtrl.push(TabsPage);
+      this.userService.getCurrentUser().subscribe(user => {
+        this.storage.set('authed', true);
+        this.storage.set('user', user);
+        this.storage.set('userId', 1);
+        this.loader.dismiss();
+        this.navCtrl.push(TabsPage);
+      }, error => {
+        this.loader.dismiss();
+        this.events.publish('error', 'Error during user fetching', 'Something bad happened, please try again later. :(');
+      })
     }, error => {
       // this.events.publish('user:error', error);
       this.loader.dismiss();

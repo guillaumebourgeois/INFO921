@@ -16,9 +16,7 @@ export class CreateAccountPage {
   private credentials: User = {
     email: "",
     password: "",
-    username: "",
-    userId: null,
-    age: null
+    username: ""
   };
   private confirmPassword: string = "";
 
@@ -41,19 +39,26 @@ export class CreateAccountPage {
           this.userService.createUser({
             username: this.credentials.username,
             password: hash,
-            userId: null,
-            age: null,
             email: this.credentials.email
           }).subscribe(
             data => {
               this.auth.getToken({ username: this.credentials.username, password: this.credentials.password }).subscribe(token => {
                 this.auth.setToken(token);
                 this.storage.set('token', token);
-                this.storage.set('authed', true);
-                this.storage.set('userId', 1);
-                this.navCtrl.pop(); // Pop signup page not to see it when we log out
-                this.loader.dismiss();
-                this.navCtrl.push(TabsPage);
+
+                this.userService.getCurrentUser().subscribe(user => {
+                  this.storage.set('authed', true);
+                  this.storage.set('user', user);
+                  this.storage.set('userId', 1);
+
+                  this.navCtrl.pop(); // Pop signup page not to see it when we log out
+                  this.loader.dismiss();
+                  this.navCtrl.push(TabsPage);
+                }, error => {
+                  this.navCtrl.pop();
+                  this.loader.dismiss();
+                  this.events.publish('error', 'Error during user fetching', 'Something bad happened, please try again later. :(');
+                })
               }, err => {
                 this.navCtrl.pop();
                 this.loader.dismiss();
