@@ -42,7 +42,7 @@ export class MyApp {
       loader.present();
 
       this.storage.get('token').then((token) => {
-        if(token.access_token) { // If there is a token, we may try to log in again
+        if(token) { // If there is a token, we may try to log in again
           this.auth.setToken(token); // Set the token again by safety
           this.noop.hello().subscribe(response => { // middleware will intercept this request and, if the token is no longer valid, will refresh it
             if(response === "Hello !") {

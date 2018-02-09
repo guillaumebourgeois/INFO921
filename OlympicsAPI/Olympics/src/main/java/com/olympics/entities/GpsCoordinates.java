@@ -1,5 +1,6 @@
 package com.olympics.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.io.Serializable;
 import java.util.Calendar;
 
@@ -53,6 +54,7 @@ public class GpsCoordinates implements Serializable {
     /**
      * @return the activity
      */
+    @JsonBackReference
     public Activity getActivity() {
         return activity;
     }

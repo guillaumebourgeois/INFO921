@@ -74,9 +74,8 @@ public class ActivityController {
 	// }
 
 	@RequestMapping(value = "/activity/{id}/gps", method = RequestMethod.PUT)
-	public boolean gpsUpdate(@PathVariable Long id, @RequestBody GpsCoordinates c) {
+	public GpsCoordinates gpsUpdate(@PathVariable Long id, @RequestBody GpsCoordinates c) {
 		c.setActivity(activityRepository.findOne(id));
-		gpsCoordinatesRepository.save(c);
-		return true;
+		return gpsCoordinatesRepository.save(c);
 	}
 }
