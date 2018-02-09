@@ -58,17 +58,6 @@ export class LoginPage {
 
       this.showAlert('Bad credentials', 'Your username nor password is wrong.');
     })
-
-    // bcrypt.genSalt(10, (err, salt) => {
-      // bcrypt.hash(this.credentials.password, salt, (err, hash) => {
-        // // Password encrypted, now send data to server
-        // let payload = {
-        //   'username': this.credentials.username,
-        //   // 'password': hash
-        //   'password': this.credentials.password // Password is now encrypted server-side
-        // };
-      // });
-  //  });
   }
 
   private presentLoginLoading() {
