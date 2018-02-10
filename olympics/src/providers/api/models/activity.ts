@@ -1,10 +1,11 @@
 import { GpsCoordinates } from "./gps-coordinates";
+import { User } from "./user";
 
 export interface Activity {
-    id?: number;
+    idActivity?: number;
     sport: string;
     startDate: number;
     endDate: number;
     gpsCoordinates?: Array<GpsCoordinates>;
-    userId: number;
+    user: User;
 }

@@ -1,7 +1,14 @@
 package com.olympics.web;
 
-import java.util.Date;
+import java.security.Principal;
 import java.util.List;
+
+import com.olympics.dao.ActivityRepository;
+import com.olympics.dao.GpsCoordinatesRepository;
+import com.olympics.dao.UserDao;
+import com.olympics.entities.Activity;
+import com.olympics.entities.GpsCoordinates;
+import com.olympics.entities.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,11 +21,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.olympics.dao.ActivityRepository;
-import com.olympics.dao.GpsCoordinatesRepository;
-import com.olympics.entities.Activity;
-import com.olympics.entities.GpsCoordinates;
-
 
 @Controller
 @RestController
@@ -29,19 +31,31 @@ public class ActivityController {
 
 	@Autowired
 	private GpsCoordinatesRepository gpsCoordinatesRepository;
+
+	@Autowired
+	private UserDao userDao;
 	
-	@RequestMapping(value = "/activities", method = RequestMethod.GET)
+	@RequestMapping(value = "/activities/all", method = RequestMethod.GET)
 	public List<Activity> getActivites() {
 		return activityRepository.findAll();
 	}
 	
-	/*@RequestMapping(value = "/user/Activities", method = RequestMethod.GET)
-	public Page<Activity> getActivitesByUser(
-			@RequestParam(name="userid",defaultValue="",required=true) String id,
-			@RequestParam(name="page",defaultValue="0") int page,
-			@RequestParam(name="size",defaultValue="5") int size) {
-		return activityRepository.findActivitiesByUser(id,new PageRequest(page, size));
-	}*/
+	@RequestMapping(value = "/activities", method = RequestMethod.GET)
+	public Page<Activity> getActivitesByToken(Principal principal,
+		@RequestParam(name="page",defaultValue="0") int page,
+		@RequestParam(name="size",defaultValue="5") int size) {
+		User user = new User();
+        user = userDao.findByUsername(principal.getName());
+        user.setPassword("");
+		return activityRepository.findActivitiesByToken(user, new PageRequest(page, size));
+	}
+
+	@RequestMapping(value = "/user/{id}/activities", method = RequestMethod.GET)
+	public Page<Activity> getActivitiesByUser(@PathVariable Long id,
+		@RequestParam(name="page",defaultValue="0") int page,
+		@RequestParam(name="size",defaultValue="5") int size) {
+		return activityRepository.findActivitiesByUser(id, new PageRequest(page, size));
+	}
 	
 	@RequestMapping(value = "/activity/{id}", method = RequestMethod.GET)
 	public Activity getActivitie(@PathVariable Long id) {

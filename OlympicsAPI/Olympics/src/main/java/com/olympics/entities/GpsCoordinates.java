@@ -1,6 +1,5 @@
 package com.olympics.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.io.Serializable;
 import java.util.Calendar;
 

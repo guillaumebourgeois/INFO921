@@ -11,6 +11,7 @@ import { Sports } from '../../providers/sports';
 import { IActivityData } from './iactivitydata';
 import { Activity } from '../../providers/api/models/activity';
 import { ActivitiesService } from '../../providers/api/services/activities.service';
+import { GpsCoordinates } from '../../providers/api/models/gps-coordinates';
 
 @Component({
   selector: 'page-activity',
@@ -24,8 +25,8 @@ export class ActivityPage {
   // private activityId: number;
   private activityData: IActivityData;
   private data: Activity = {
-    id: null,
-    userId: 0,
+    idActivity: null,
+    user: null,
     sport: '',
     startDate: 0,
     endDate: 0,
@@ -62,13 +63,13 @@ export class ActivityPage {
     this.sport = this.navParams.get('sport');
 
     // activityData initialization
-    this.storage.get('userId').then((userId) => {
-      this.data.userId = userId;
+    this.storage.get('user').then((user) => {
+      this.data.user = user;
       this.data.sport = this.sport.code;
       this.data.startDate = Date.now();
 
       this.activitiesService.startActivity(this.data).subscribe(data => {
-        this.data.id = data.id; // Retrieved activity's ID from server
+        this.data.idActivity = data.idActivity; // Retrieved activity's ID from server
         console.log(data);
       }, err => {
         console.log('Error creating activity');
@@ -160,13 +161,19 @@ export class ActivityPage {
           .filter((p) => p.coords !== undefined) //Filter Out Errors
           .subscribe((position) => {
             // this.selfPosition = new LatLng(position.coords.latitude, position.coords.longitude);
-
-            this.activityData.gpsCoordinates.push({
+            let gpsCoordinate : GpsCoordinates = {
+              id: null,
               lat: position.coords.latitude,
-              lng: position.coords.longitude
-            });
+              lng: position.coords.longitude,
+              timestamp: Date.now()
+            };
 
-            console.log(this.activityData.gpsCoordinates);
+            this.data.gpsCoordinates.push(gpsCoordinate);
+            this.activitiesService.updateActivity(this.data, gpsCoordinate).subscribe(
+              data => console.log(data),
+              error => console.log(error)
+            )
+            // console.log(this.activityData.gpsCoordinates);
 
             this.updateMap(position.coords);
         });
@@ -214,19 +221,27 @@ export class ActivityPage {
     this.isStopped = true;
     this.timer.pauseTimer();
 
-    this.activityData.endDate = new Date();
+    // this.activityData.endDate = new Date();
 
-    this.storeActivityData();
+    this.data.endDate = Date.now();
+
+    // this.storeActivityData();
     
-    // this.sendData();
+    this.activitiesService.endActivity(this.data).subscribe(() => {
+      this.navBar.backButtonClick = () => {
+        this.navCtrl.pop();
+      };
 
-    // Reset back button handler
-    this.navBar.backButtonClick = () => {
-      this.navCtrl.pop();
-    };
+      if (source == 'navbar') this.navCtrl.pop();
+    }, err => console.log(err));
 
-    // If we're coming here from back button, we want to go back NOW
-    if (source == 'navbar') this.navCtrl.pop();
+    // // Reset back button handler
+    // this.navBar.backButtonClick = () => {
+    //   this.navCtrl.pop();
+    // };
+
+    // // If we're coming here from back button, we want to go back NOW
+    // if (source == 'navbar') this.navCtrl.pop();
   }
 
   // Source is the origin of the stop request (navbar or something else)
@@ -257,7 +272,7 @@ export class ActivityPage {
   }
 
   /* Send activity data to server */
-  sendActivityData() {
+  sendData() {
     
   }
 }

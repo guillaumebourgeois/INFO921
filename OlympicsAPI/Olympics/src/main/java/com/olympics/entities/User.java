@@ -1,17 +1,12 @@
 package com.olympics.entities;
 
 import java.io.Serializable;
-import java.util.Collection;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
-
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 public class User implements Serializable{
@@ -35,17 +30,17 @@ public class User implements Serializable{
 	
 	private Integer age;
 	
-	@OneToMany(cascade=CascadeType.ALL, mappedBy="user")
-	private Collection<Activity> activities;
+	// @OneToMany(cascade=CascadeType.ALL, mappedBy="user")
+	// private Collection<Activity> activities;
 	
-	@JsonManagedReference
-	public Collection<Activity> getActivities() {
-		return activities;
-	}
+	// @JsonManagedReference
+	// public Collection<Activity> getActivities() {
+	// 	return activities;
+	// }
 
-	public void setActivities(Collection<Activity> activities) {
-		this.activities = activities;
-	}
+	// public void setActivities(Collection<Activity> activities) {
+	// 	this.activities = activities;
+	// }
 
 	public User() { super(); }
 	
