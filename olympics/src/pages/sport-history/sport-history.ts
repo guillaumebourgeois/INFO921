@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 
+import { ActivitiesService } from '../../providers/api/services/activities.service';
 import { Sports } from '../../providers/sports';
 
 @Component({
@@ -13,9 +14,9 @@ export class SportHistoryPage {
   private sport: any;
   private userId: number;
   private activityIdList: Array<number>;
-  private activitiesList: Array<any>;
+  private activitiesList: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public sports: Sports, public storage: Storage) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public sports: Sports, public storage: Storage, public activities: ActivitiesService) {
     this.sport = this.navParams.get('sport');
     this.activityIdList = [];
     this.activitiesList = [];
@@ -26,7 +27,24 @@ export class SportHistoryPage {
 
     this.sport = this.navParams.get('sport');
 
-    this.storage.get('userId').then((userId) => {
+    this.activities.getActivities(this.sport.code).subscribe(activities => {
+      var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+
+      this.activitiesList = Object.assign([], activities.content);
+
+      for (let i = 0; i < this.activitiesList.length; ++i) {
+        let date = new Date(this.activitiesList[i].startDate);
+        let day = date.getDate();
+        let month = months[date.getMonth()];
+        let year = date.getFullYear();
+        let hour = date.getHours();
+        let min = date.getMinutes();
+        this.activitiesList[i].formatedStartDate = day + " " + month + " " + year + " " + hour + ":" + min;
+      }
+      console.log(this.activitiesList);
+    })
+
+    /*this.storage.get('userId').then((userId) => {
       this.userId = userId;
 
       this.storage.get('activities' + this.userId + this.sport.name + 'Id').then((activityIdList) => {
@@ -34,15 +52,15 @@ export class SportHistoryPage {
 
         if(this.activityIdList.length) this.loadActivitiesHistory();
       })
-    })
+    })*/
   }
 
   loadActivitiesHistory() {
-    for(let i = 0; i < this.activityIdList.length; i++) {
+    /*for(let i = 0; i < this.activityIdList.length; i++) {
       this.storage.get('activity' + this.userId + this.sport.name + this.activityIdList[i]).then((activityData) => {
         this.activitiesList.push(activityData);
       })
-    }
+    }*/
   }
 
 }

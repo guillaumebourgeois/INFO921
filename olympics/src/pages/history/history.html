@@ -12,7 +12,7 @@
     <button ion-item *ngFor="let sport of sports.sports" (click)="loadSportHistoryPage(sport)">
 			<img src="assets/imgs/icon-{{sport.code}}.png" width="32" height="32" margin-right item-start />
       {{ sport.name }}
-    </button>  
+    </button>
   </ion-list>
   <!-- <ion-grid>
 	  <ion-row *ngFor="let t of temp(math.ceil(sports.sports.length/2)).fill(); let i = index">

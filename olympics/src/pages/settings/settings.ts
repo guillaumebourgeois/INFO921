@@ -20,12 +20,16 @@ export class SettingsPage {
     age: 0
   };
 
+  private cptActivity:number;
+
   constructor(public appCtrl: App, public alertCtrl: AlertController, public activities: ActivitiesService, public navCtrl: NavController, public navParams: NavParams, public events: Events, public storage: Storage) {}
 
   ionViewDidLoad() {
     this.storage.get('user').then(user => {
       this.user = user;
     })
+
+    this.cptActivity = 1;
   }
 
   public logout() {
@@ -33,7 +37,7 @@ export class SettingsPage {
   }
 
   public activitiesRequest() {
-    this.activities.getActivities().subscribe(activities => {
+    this.activities.getActivities("walk").subscribe(activities => {
       console.log(activities);
       let alert = this.alertCtrl.create({
         title: 'Sample of data',
@@ -42,5 +46,18 @@ export class SettingsPage {
       });
       alert.present();
     })
+  }
+
+  public activityRequest(){
+    this.activities.getActivity(this.cptActivity).subscribe(activity => {
+      console.log(activity);
+      let alert = this.alertCtrl.create({
+        title: 'Sample of data',
+        subTitle: JSON.stringify(activity),
+        buttons: ['Close']
+      });
+      alert.present();
+    })
+    this.cptActivity++;
   }
 }
