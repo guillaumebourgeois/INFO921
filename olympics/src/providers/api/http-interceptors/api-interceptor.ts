@@ -10,6 +10,8 @@ export class ApiInterceptor implements HttpInterceptor {
   constructor() {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
+    if(req.url.startsWith('http')) return next.handle(req);
+    
     const apiReq = req.clone({
       url: apiUrl + req.url,
       headers: req.headers.set('Access-Control-Allow-Origin', '*')

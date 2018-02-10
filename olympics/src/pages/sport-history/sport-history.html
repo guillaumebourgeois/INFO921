@@ -7,14 +7,41 @@
 
 <ion-content class="grey-background">
 
-	<ion-list margin-top>
-    <button ion-item *ngFor="let activity of activitiesList" (click)="loadActivityHistory(activity)">
-      <!--{{ activity.startDate.toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' }) }} at {{ activity.startDate.toLocaleTimeString('en-US') }}
-      -->
-      {{ activity.formatedStartDate }}
-      <!--{{ activity.idActivity }}-->
+	<!-- <ion-list margin-top>
+    <button ion-item *ngFor="let activity of activitiesPage.content" (click)="loadActivityHistory(activity)">
+      {{ activity.startDate.toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' }) }} at {{ activity.startDate.toLocaleTimeString('en-US') }}
     </button>
-	</ion-list>
+	</ion-list> -->
+
+	<ion-card *ngFor="let activity of activities">
+		<!-- <img src="{{ activity.imageUrl }}" /> -->
+		<img [attr.src]="activity.imageUrl" >
+
+		<ion-item>
+			<img src="/assets/imgs/icon-{{ activity.sport }}.png" height="32" style="width: 32px" item-start />
+			<div margin-left>
+				<h2>{{ activity.startDate.toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' }) }}</h2>
+				<p>{{ activity.startDate.toLocaleTimeString('en-US') }}</p>
+			</div>
+		</ion-item>
+
+		<ion-item>
+			<span font-bold item-left>18 min</span>
+			<span item-left>(2.6 mi)</span>
+			<button ion-button icon-left clear item-end (click)="loadActivityHistory(activity)">
+				<ion-icon name="eye"></ion-icon>
+				View
+			</button>
+		</ion-item>
+	</ion-card>
+
+	<ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+		<ion-infinite-scroll-content>
+			
+		</ion-infinite-scroll-content>
+	</ion-infinite-scroll>
+
+	<div id="map_hidden" style="height:200px; display:hidden"></div>
 
 	<!-- <ion-card *ngFor="let activity of activitiesList">
 		<ion-item>
