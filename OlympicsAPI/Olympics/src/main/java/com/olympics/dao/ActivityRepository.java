@@ -16,8 +16,8 @@ public interface ActivityRepository extends JpaRepository<Activity, Long>{
 	@Query("select a from Activity a where a.sport = :sport")
 	public Page<Activity> findActivities(@Param("sport") String sport, Pageable pageable);
 	
-	@Query("select a from Activity a where a.user = :id")
-	public Page<Activity> findActivitiesByToken(@Param("id") User user, Pageable pageable);
+	@Query("select a from Activity a where a.user = :id and a.sport = :sport")
+	public Page<Activity> findActivitiesByToken(@Param("id") User user, @Param("sport") String sport, Pageable pageable);
 
 	@Query("select a from Activity a where a.user.idUser = :id")
 	public Page<Activity> findActivitiesByUser(@Param("id") Long user, Pageable pageable);

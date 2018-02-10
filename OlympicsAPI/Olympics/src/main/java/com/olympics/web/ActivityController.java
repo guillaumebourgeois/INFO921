@@ -42,12 +42,13 @@ public class ActivityController {
 	
 	@RequestMapping(value = "/activities", method = RequestMethod.GET)
 	public Page<Activity> getActivitesByToken(Principal principal,
+		@RequestParam(name="sport",defaultValue="%") String sport,
 		@RequestParam(name="page",defaultValue="0") int page,
 		@RequestParam(name="size",defaultValue="5") int size) {
 		User user = new User();
         user = userDao.findByUsername(principal.getName());
         user.setPassword("");
-		return activityRepository.findActivitiesByToken(user, new PageRequest(page, size));
+		return activityRepository.findActivitiesByToken(user, sport, new PageRequest(page, size));
 	}
 
 	@RequestMapping(value = "/user/{id}/activities", method = RequestMethod.GET)

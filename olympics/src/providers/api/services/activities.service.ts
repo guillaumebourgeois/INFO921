@@ -13,8 +13,12 @@ const httpOptions = {
 @Injectable() export class ActivitiesService {
   constructor(private http: HttpClient) { }
 
-  getActivities() : Observable<Activity[]> {
-    return this.http.get<Activity[]>('/activities');
+  getActivities(sportCode: string, page?: number) : Observable<Activity[]> {
+    return this.http.get<Activity[]>(`/activities?sport=${sportCode}` + page ? page.toString() : ``);
+  }
+
+  getActivity(id: number): Observable<Activity> {
+    return this.http.get<Activity>(`/activity/${id.toString()}`);
   }
 
   startActivity(activity: Activity) : Observable<Activity> {

@@ -67,7 +67,8 @@ export class MyApp {
         this.storage.remove('userCredentials');
         this.storage.remove('userId');
 
-        this.nav.popTo(LoginPage);
+        if(this.nav.canGoBack())
+          this.nav.popTo(LoginPage);
       });
 
       // Handling errors properly
