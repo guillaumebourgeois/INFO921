@@ -1,8 +1,8 @@
 package com.olympics.web;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.olympics.dao.UserDao;
 import com.olympics.entities.User;
@@ -56,13 +56,13 @@ public class UserController {
     }
     
     @RequestMapping(value="/user/{id}/stats", method = RequestMethod.GET)
-    public List<Long> getStats(@PathVariable Long id) {
-    	List<Long> result = new ArrayList<Long>();
-    	result.add(0, activityRepository.getAverageDuration(id));
-    	result.add(1, activityRepository.getAverageDistance(id));
-    	result.add(2, activityRepository.getShortestActivity(id));
-    	result.add(3, activityRepository.getLongestActivity(id));
-    	result.add(4, activityRepository.getLongestDistance(id));
+    public Map<String, Long> getStats(@PathVariable Long id) {
+    	Map<String, Long> result = new HashMap<String, Long>();
+    	result.put("avgDuration", activityRepository.getAverageDuration(id));
+    	result.put("avgDistance", activityRepository.getAverageDistance(id));
+    	result.put("shortestDuration", activityRepository.getShortestActivity(id));
+    	result.put("longestDuration", activityRepository.getLongestActivity(id));
+    	result.put("longestDistance", activityRepository.getLongestDistance(id));
     	return result;
     }
 }
