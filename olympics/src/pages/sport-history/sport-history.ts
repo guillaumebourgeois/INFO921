@@ -10,6 +10,8 @@ import { Activity } from '../../providers/api/models/activity';
 import { ActivityPage } from '../activity/activity';
 import { GoogleMapsService } from '../../providers/api/services/google-maps.service';
 
+import { ActivityHistoryPage } from '../activity-history/activity-history';
+
 @Component({
   selector: 'page-sport-history',
   templateUrl: 'sport-history.html',
@@ -23,7 +25,7 @@ export class SportHistoryPage {
   private page: number;
   private maxPage: number;
 
-  constructor(public mapsService: GoogleMapsService, public navCtrl: NavController, public navParams: NavParams, public sports: Sports, public storage: Storage, public activitiesService: ActivitiesService) {
+  constructor(/*public mapsService: GoogleMapsService,*/ public navCtrl: NavController, public navParams: NavParams, public sports: Sports, public storage: Storage, public activitiesService: ActivitiesService) {
     this.sport = this.navParams.get('sport');
     this.activitiesPage = new ActivitiesPage();
     this.activities = [];
@@ -33,11 +35,15 @@ export class SportHistoryPage {
   ionViewDidLoad() {
     this.sport = this.navParams.get('sport');
 
-    this.activities.getActivities(this.sport.code).subscribe(activities => {
+    this.activitiesService.getActivities(this.sport.code).subscribe(activities => {
+      this.maxPage = activities.totalPages;
+      this.processActivities(activities.content);
+
       var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
       this.activitiesList = Object.assign([], activities.content);
 
+      /*
       for (let i = 0; i < this.activitiesList.length; ++i) {
         let date = new Date(this.activitiesList[i].startDate);
         let day = date.getDate();
@@ -48,15 +54,11 @@ export class SportHistoryPage {
         let seconds = date.getSeconds();
         this.activitiesList[i].formatedStartDate = (day < 10 ? "0" + day : day) + " " + month + " " + year + " " + (hour < 10 ? "0" + hour : hour) + ":" + (min < 10 ? "0" + min : min) + ":" + (seconds < 10 ? "0" + seconds : seconds);
       }
-      console.log(this.activitiesList);
+      console.log(this.activitiesList);*/
 
-      //this.maxPage = activities.totalPages;
-      //this.processActivities(activities.content);
-      //this.activitiesPage = activities;
+      this.activitiesPage = activities;
     })
     // console.log('ionViewDidLoad SportHistoryPage');
-
-
 
     /*this.storage.get('userId').then((userId) => {
       this.userId = userId;
@@ -105,7 +107,7 @@ export class SportHistoryPage {
     this.storage.get(`activity${activity.idActivity}`).then(storedActivity => {
       if(storedActivity) {
         console.log('Got this !')
-        // TODO: Push the activity page
+        this.navCtrl.push(ActivityHistoryPage, { 'activity': activity });
       }
       else {
         console.log('No activity here...')
@@ -120,9 +122,5 @@ export class SportHistoryPage {
         this.activitiesList.push(activityData);
       })
     }*/
-  }
-
-  public loadActivityHistory (activity) {
-    this.navCtrl.push(ActivityHistoryPage, { 'activity': activity });
   }
 }
