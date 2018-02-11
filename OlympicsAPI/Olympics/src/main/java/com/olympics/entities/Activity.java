@@ -25,6 +25,8 @@ public class Activity implements Serializable {
 	@GeneratedValue
 	private Long idActivity;
 	
+	private Long distance;
+	
 	@NotNull
 	private String sport;
 	
@@ -91,6 +93,12 @@ public class Activity implements Serializable {
 
 	public void setGpsCoordinates(Collection<GpsCoordinates> gpsCoordinates) {
 		this.gpsCoordinates = gpsCoordinates;
+	}
+	public Long getDistance() {
+		return distance;
+	}
+	public void setDistance(Long distance) {
+		this.distance = distance;
 	}
 
 }

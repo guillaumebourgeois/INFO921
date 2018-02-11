@@ -1,13 +1,17 @@
 package com.olympics.web;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.olympics.dao.UserDao;
 import com.olympics.entities.User;
 import com.olympics.service.UserService;
+import com.olympics.dao.ActivityRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.provider.token.ConsumerTokenServices;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,6 +33,9 @@ public class UserController {
     @Autowired
     private ConsumerTokenServices tokenServices;
     
+    @Autowired
+	private ActivityRepository activityRepository;
+    
     @RequestMapping(value="/profile", method = RequestMethod.GET)
     public User currentUser(Principal principal) {
         User user = new User();
@@ -46,5 +53,16 @@ public class UserController {
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
     public User create(@RequestBody User user) {
         return userService.save(user);
+    }
+    
+    @RequestMapping(value="/user/{id}/stats", method = RequestMethod.GET)
+    public List<Long> getStats(@PathVariable Long id) {
+    	List<Long> result = new ArrayList<Long>();
+    	result.add(activityRepository.getAverageDuration(id));
+    	result.add(activityRepository.getAverageDistance(id));
+    	result.add(activityRepository.getShortestActivity(id));
+    	result.add(activityRepository.getLongestActivity(id));
+    	result.add(activityRepository.getLongestDistance(id));
+    	return result;
     }
 }
