@@ -63,6 +63,11 @@ public class UserController {
     	result.put("shortestDuration", activityRepository.getShortestActivity(id));
     	result.put("longestDuration", activityRepository.getLongestActivity(id));
     	result.put("longestDistance", activityRepository.getLongestDistance(id));
+    	result.put("percentRun", activityRepository.getNbActivities(id, "run") * 100 / activityRepository.getNbActivities(id));
+    	result.put("percentSki", activityRepository.getNbActivities(id, "ski") * 100 / activityRepository.getNbActivities(id));
+    	result.put("percentCycle", activityRepository.getNbActivities(id, "cycle") * 100 / activityRepository.getNbActivities(id));
+    	result.put("percentWalk", activityRepository.getNbActivities(id, "walk") * 100 / activityRepository.getNbActivities(id));
+    	result.put("percentRide", activityRepository.getNbActivities(id, "ride") * 100 / activityRepository.getNbActivities(id));
     	return result;
     }
 }

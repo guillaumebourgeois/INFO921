@@ -28,13 +28,19 @@ public interface ActivityRepository extends JpaRepository<Activity, Long>{
 	@Query("select AVG(a.distance) from Activity a where a.user.idUser = :id")
 	public Long getAverageDistance(@Param("id") Long user);
 	
-	@Query("select MIN(DATEDIFF(a.startDate, a.endDate)) from Activity a where a.user.isUser = :id")
+	@Query("select MIN(DATEDIFF(a.startDate, a.endDate)) from Activity a where a.user.idUser = :id")
 	public Long getShortestActivity(@Param("id") Long user);
 	
-	@Query("select MAX(DATEDIFF(a.startDate, a.endDate)) from Activity a where a.user.isUser = :id")
+	@Query("select MAX(DATEDIFF(a.startDate, a.endDate)) from Activity a where a.user.idUser = :id")
 	public Long getLongestActivity(@Param("id") Long user);
 	
-	@Query("select MAX(a.distance) from Activity a where a.user.isUser = :id")
+	@Query("select MAX(a.distance) from Activity a where a.user.idUser = :id")
 	public Long getLongestDistance(@Param("id") Long user);
+	
+	@Query("select count(a) from Activity a where a.user.idUser = :id and a.sport LIKE :sport")
+	public Long getNbActivities(@Param("id") Long user, @Param("sport") String sport);
+	
+	@Query("select count(a) from Activity a where a.user.idUser = :id")
+	public Long getNbActivities(@Param("id") Long user);
 }
 	
