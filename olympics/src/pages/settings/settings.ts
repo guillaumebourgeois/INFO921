@@ -1,11 +1,14 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, Events } from 'ionic-angular';
 import { Storage } from '@ionic/storage/dist/storage';
-import { LoginPage } from '../login/login';
 import { App } from 'ionic-angular/components/app/app';
-import { ActivitiesService } from '../../providers/api/services/activities.service';
 import { AlertController } from 'ionic-angular/components/alert/alert-controller';
+
+import { ActivitiesService  } from '../../providers/api/services/activities.service';
+import { StatisticsService  } from '../../providers/api/services/statistics.service';
 import { User } from '../../providers/api/models/user';
+
+import { LoginPage } from '../login/login';
 
 @Component({
   selector: 'page-settings',
@@ -22,7 +25,7 @@ export class SettingsPage {
 
   private cptActivity:number;
 
-  constructor(public appCtrl: App, public alertCtrl: AlertController, public activities: ActivitiesService, public navCtrl: NavController, public navParams: NavParams, public events: Events, public storage: Storage) {}
+  constructor(public appCtrl: App, public alertCtrl: AlertController, public statistics: StatisticsService, public activities: ActivitiesService, public navCtrl: NavController, public navParams: NavParams, public events: Events, public storage: Storage) {}
 
   ionViewDidLoad() {
     this.storage.get('user').then(user => {
@@ -59,5 +62,17 @@ export class SettingsPage {
       alert.present();
     })
     this.cptActivity++;
+  }
+
+  public statisticsRequest(){
+    this.statistics.getStatistics(2).subscribe(statistics => {
+      console.log(statistics);
+      let alert = this.alertCtrl.create({
+        title: 'Sample of data',
+        subTitle: JSON.stringify(statistics),
+        buttons: ['Close']
+      });
+      alert.present();
+    })
   }
 }

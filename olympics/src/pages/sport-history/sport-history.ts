@@ -39,9 +39,9 @@ export class SportHistoryPage {
       this.maxPage = activities.totalPages;
       this.processActivities(activities.content);
 
-      var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      //var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
-      this.activitiesList = Object.assign([], activities.content);
+      //this.activitiesList = Object.assign([], activities.content);
 
       /*
       for (let i = 0; i < this.activitiesList.length; ++i) {

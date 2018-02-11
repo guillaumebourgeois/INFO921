@@ -29,12 +29,13 @@ import { ActivityHistoryPage  } from '../pages/activity-history/activity-history
 import { Sports     } from '../providers/sports';
 import { Timer      } from '../providers/timer';
 
-import { httpInterceptorProviders } from '../providers/api/http-interceptors/index';
-import { AuthService } from '../providers/api/services/auth.service';
-import { ActivitiesService } from '../providers/api/services/activities.service';
-import { UserService } from '../providers/api/services/user.service';
-import { NoopService } from '../providers/api/services/noop.service';
-import { GoogleMapsService } from '../providers/api/services/google-maps.service';
+import { httpInterceptorProviders   } from '../providers/api/http-interceptors/index';
+import { AuthService                } from '../providers/api/services/auth.service';
+import { ActivitiesService          } from '../providers/api/services/activities.service';
+import { UserService                } from '../providers/api/services/user.service';
+import { NoopService                } from '../providers/api/services/noop.service';
+import { GoogleMapsService          } from '../providers/api/services/google-maps.service';
+import { StatisticsService          } from '../providers/api/services/statistics.service';
 
 @NgModule({
   declarations: [
@@ -88,7 +89,8 @@ import { GoogleMapsService } from '../providers/api/services/google-maps.service
     ActivitiesService,
     UserService,
     NoopService,
-    GoogleMapsService
+    GoogleMapsService,
+    StatisticsService
   ]
 })
 export class AppModule {}
