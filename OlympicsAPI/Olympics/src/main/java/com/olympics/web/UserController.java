@@ -55,6 +55,11 @@ public class UserController {
         return userService.save(user);
     }
     
+    @RequestMapping(value = "/user/{id}/update", method = RequestMethod.POST)
+    public User update(@RequestBody User user) {
+        return userService.save(user);
+    }
+    
     @RequestMapping(value="/user/{id}/stats", method = RequestMethod.GET)
     public Map<String, Long> getStats(@PathVariable Long id) {
     	Map<String, Long> result = new HashMap<String, Long>();
