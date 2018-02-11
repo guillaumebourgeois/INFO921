@@ -23,25 +23,25 @@ public interface ActivityRepository extends JpaRepository<Activity, Long>{
 	@Query("select a from Activity a where a.user.idUser = :id")
 	public Page<Activity> findActivitiesByUser(@Param("id") Long user, Pageable pageable);
 	
-	@Query("select AVG(DATEDIFF(a.startDate, a.endDate)) from Activity a where a.user.idUser = :id and a.startDate >= :from and a.startDate < :to")
+	@Query("select AVG(DATEDIFF(a.startDate, a.endDate)) from Activity a where a.user.idUser = :id and a.startDate > :from and a.startDate < :to")
 	public Long getAverageDuration(@Param("id") Long user, @Param("from") Calendar from, @Param("to") Calendar to);
 	
-	@Query("select AVG(a.distance) from Activity a where a.user.idUser = :id and a.startDate >= :from and a.startDate < :to")
+	@Query("select AVG(a.distance) from Activity a where a.user.idUser = :id and a.startDate > :from and a.startDate < :to")
 	public Long getAverageDistance(@Param("id") Long user, @Param("from") Calendar from, @Param("to") Calendar to);
 	
-	@Query("select MIN(DATEDIFF(a.startDate, a.endDate)) from Activity a where a.user.idUser = :id and a.startDate >= :from and a.startDate < :to")
+	@Query("select MIN(DATEDIFF(a.startDate, a.endDate)) from Activity a where a.user.idUser = :id and a.startDate > :from and a.startDate < :to")
 	public Long getShortestActivity(@Param("id") Long user, @Param("from") Calendar from, @Param("to") Calendar to);
 	
-	@Query("select MAX(DATEDIFF(a.startDate, a.endDate)) from Activity a where a.user.idUser = :id and a.startDate >= :from and a.startDate < :to")
+	@Query("select MAX(DATEDIFF(a.startDate, a.endDate)) from Activity a where a.user.idUser = :id and a.startDate > :from and a.startDate < :to")
 	public Long getLongestActivity(@Param("id") Long user, @Param("from") Calendar from, @Param("to") Calendar to);
 	
-	@Query("select MAX(a.distance) from Activity a where a.user.idUser = :id and a.startDate >= :from and a.startDate < :to")
+	@Query("select MAX(a.distance) from Activity a where a.user.idUser = :id and a.startDate > :from and a.startDate < :to")
 	public Long getLongestDistance(@Param("id") Long user, @Param("from") Calendar from, @Param("to") Calendar to);
 	
-	@Query("select count(a) from Activity a where a.user.idUser = :id and a.sport LIKE :sport and a.startDate >= :from and a.startDate < :to")
+	@Query("select count(a) from Activity a where a.user.idUser = :id and a.sport LIKE :sport and a.startDate > :from and a.startDate < :to")
 	public Long getNbActivities(@Param("id") Long user, @Param("sport") String sport, @Param("from") Calendar from, @Param("to") Calendar to);
 	
-	@Query("select count(a) from Activity a where a.user.idUser = :id and a.startDate >= :from and a.startDate < :to")
+	@Query("select count(a) from Activity a where a.user.idUser = :id and a.startDate > :from and a.startDate < :to")
 	public Long getNbActivities(@Param("id") Long user, @Param("from") Calendar from, @Param("to") Calendar to);
 }
 	
