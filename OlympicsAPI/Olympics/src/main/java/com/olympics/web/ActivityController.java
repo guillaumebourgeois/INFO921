@@ -87,14 +87,6 @@ public class ActivityController {
 		a.setIdActivity(id);
 		return activityRepository.save(a);
 	}
-	
-	// @RequestMapping(value = "/activity/{id}/gps", method = RequestMethod.PUT)
-	// public void gps(@PathVariable Long id,
-	// 				@RequestParam(name="idPacket", defaultValue="0") int idPacket,
-	// 				@RequestParam(name="date", defaultValue="0") Date date,
-	// 				@RequestParam(name="coords", defaultValue="0") double coords[]) {
-	// 	activityRepository.findOne(id);
-	// }
 
 	@RequestMapping(value = "/activity/{id}/gps", method = RequestMethod.PUT)
 	public GpsCoordinates gpsUpdate(@PathVariable Long id, @RequestBody GpsCoordinates c) {
