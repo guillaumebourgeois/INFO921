@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { Activity } from '../models/activity';
 import { ActivitiesPage } from '../models/activities-page'
 import { GpsCoordinates } from '../models/gps-coordinates';
+import { ActivitiesPage } from '../models/activities-page';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -15,7 +16,7 @@ const httpOptions = {
   constructor(private http: HttpClient) { }
 
   getActivities(sportCode: string, page?: number) : Observable<ActivitiesPage> {
-    return this.http.get<ActivitiesPage>(`/activities?sport=${sportCode}` + (page ? page.toString() : ``));
+    return this.http.get<ActivitiesPage>(`/activities?sport=${sportCode}` + (page ? ('&page=' + page.toString()) : ``));
   }
 
   getActivity(id: number): Observable<Activity> {

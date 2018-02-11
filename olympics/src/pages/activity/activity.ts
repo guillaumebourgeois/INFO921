@@ -13,6 +13,8 @@ import { Activity } from '../../providers/api/models/activity';
 import { ActivitiesService } from '../../providers/api/services/activities.service';
 import { GpsCoordinates } from '../../providers/api/models/gps-coordinates';
 
+const GPS_COORDINATES_REFRESH_INTERVAL = 5000; // How often are the gps coordinates sent
+
 @Component({
   selector: 'page-activity',
   templateUrl: 'activity.html',
@@ -23,7 +25,7 @@ export class ActivityPage {
 
   private sport: any;
   // private activityId: number;
-  private activityData: IActivityData;
+  // private activityData: IActivityData;
   private data: Activity = {
     idActivity: null,
     user: null,
@@ -39,6 +41,10 @@ export class ActivityPage {
   private mapOrigin: CameraPosition<any>;
   // public selfPosition: LatLng;
   private selfMarker: Marker;
+
+  private lastPosition: GpsCoordinates;
+  private currentPosition: GpsCoordinates;
+  private positionSender: any;
 
   private isPaused: boolean = false;
   private isStopped: boolean = false;
@@ -71,6 +77,19 @@ export class ActivityPage {
       this.activitiesService.startActivity(this.data).subscribe(data => {
         this.data.idActivity = data.idActivity; // Retrieved activity's ID from server
         console.log(data);
+
+        this.positionSender = window.setInterval(() => {
+          this.data.gpsCoordinates.push(this.currentPosition);
+
+          if(this.data.gpsCoordinates.length > 1) this.lastPosition = this.data.gpsCoordinates[this.data.gpsCoordinates.length - 2];
+
+          if(this.lastPosition && this.lastPosition.lat != this.currentPosition.lat && this.lastPosition.lng != this.currentPosition.lng) {
+            this.activitiesService.updateActivity(this.data, this.currentPosition).subscribe(
+              data => console.log(data.lat),
+              error => console.log(error)
+            )
+          }
+        }, GPS_COORDINATES_REFRESH_INTERVAL)
       }, err => {
         console.log('Error creating activity');
       })
@@ -161,18 +180,18 @@ export class ActivityPage {
           .filter((p) => p.coords !== undefined) //Filter Out Errors
           .subscribe((position) => {
             // this.selfPosition = new LatLng(position.coords.latitude, position.coords.longitude);
-            let gpsCoordinate : GpsCoordinates = {
+            this.currentPosition = {
               id: null,
               lat: position.coords.latitude,
               lng: position.coords.longitude,
               timestamp: Date.now()
             };
 
-            this.data.gpsCoordinates.push(gpsCoordinate);
-            this.activitiesService.updateActivity(this.data, gpsCoordinate).subscribe(
-              data => console.log(data),
-              error => console.log(error)
-            )
+            // this.data.gpsCoordinates.push(this.currentPosition);
+            // this.activitiesService.updateActivity(this.data, this.currentPosition).subscribe(
+            //   data => console.log(data),
+            //   error => console.log(error)
+            // )
             // console.log(this.activityData.gpsCoordinates);
 
             this.updateMap(position.coords);
@@ -219,6 +238,7 @@ export class ActivityPage {
 
   stopActivity(source) {
     this.isStopped = true;
+    window.clearInterval(this.positionSender);
     this.timer.pauseTimer();
 
     // this.activityData.endDate = new Date();
@@ -268,7 +288,7 @@ export class ActivityPage {
 
   /* Store the activity data into Ionic storage */
   storeActivityData() {
-    this.storage.set('activity' + this.activityData.userId + this.sport.name + this.activityData.activityId, this.activityData);
+    // this.storage.set('activity' + this.activityData.userId + this.sport.name + this.activityData.activityId, this.activityData);
   }
 
   /* Send activity data to server */

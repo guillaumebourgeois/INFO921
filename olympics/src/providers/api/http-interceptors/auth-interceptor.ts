@@ -27,7 +27,7 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if(req.url.startsWith('/oauth/token') || req.url.startsWith('/signup')) {
+    if(req.url.startsWith('http') || req.url.startsWith('/oauth/token') || req.url.startsWith('/signup')) {
       return next.handle(req);
     }
 
