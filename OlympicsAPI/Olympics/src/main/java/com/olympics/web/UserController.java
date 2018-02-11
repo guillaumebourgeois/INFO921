@@ -58,11 +58,11 @@ public class UserController {
     @RequestMapping(value="/user/{id}/stats", method = RequestMethod.GET)
     public List<Long> getStats(@PathVariable Long id) {
     	List<Long> result = new ArrayList<Long>();
-    	result.add(activityRepository.getAverageDuration(id));
-    	result.add(activityRepository.getAverageDistance(id));
-    	result.add(activityRepository.getShortestActivity(id));
-    	result.add(activityRepository.getLongestActivity(id));
-    	result.add(activityRepository.getLongestDistance(id));
+    	result.add(0, activityRepository.getAverageDuration(id));
+    	result.add(1, activityRepository.getAverageDistance(id));
+    	result.add(2, activityRepository.getShortestActivity(id));
+    	result.add(3, activityRepository.getLongestActivity(id));
+    	result.add(4, activityRepository.getLongestDistance(id));
     	return result;
     }
 }
