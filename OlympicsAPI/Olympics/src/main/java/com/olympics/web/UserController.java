@@ -102,8 +102,9 @@ public class UserController {
         global.put("distance", distance);
 
         Calendar dateTmp = Calendar.getInstance();
-        dateTmp.setTimeInMillis(from.getTimeInMillis());
-
+        dateTmp.set(Calendar.MONTH, from.get(Calendar.MONTH));
+        dateTmp.set(Calendar.YEAR, from.get(Calendar.YEAR));
+        
         Map<String, Object> month;
     	while (to.compareTo(from) >= 0) {
             month = new HashMap<String, Object>();
