@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, Events } from 'ionic-angular';
 import { Storage } from '@ionic/storage/dist/storage';
-import { App } from 'ionic-angular/components/app/app';
 import { AlertController } from 'ionic-angular/components/alert/alert-controller';
 
 import { ActivitiesService  } from '../../providers/api/services/activities.service';
@@ -9,6 +8,7 @@ import { ActivitiesService  } from '../../providers/api/services/activities.serv
 import { User } from '../../providers/api/models/user';
 
 import { LoginPage } from '../login/login';
+import { AuthService } from '../../providers/api/services/auth.service';
 
 @Component({
   selector: 'page-settings',
@@ -25,7 +25,7 @@ export class SettingsPage {
 
   private cptActivity:number;
 
-  constructor(public appCtrl: App, public alertCtrl: AlertController, /*public statistics: StatisticsService,*/ public activities: ActivitiesService, public navCtrl: NavController, public navParams: NavParams, public events: Events, public storage: Storage) {}
+  constructor(public auth: AuthService, public alertCtrl: AlertController, /*public statistics: StatisticsService,*/ public activities: ActivitiesService, public navCtrl: NavController, public navParams: NavParams, public events: Events, public storage: Storage) {}
 
   ionViewDidLoad() {
     this.storage.get('user').then(user => {
@@ -36,7 +36,10 @@ export class SettingsPage {
   }
 
   public logout() {
-    this.events.publish('user:logout');
+    this.auth.revokeToken().subscribe(
+      () => this.events.publish('user:logout'),
+      err => this.events.publish('error', err.error.error, err.error.error_description)
+    )
   }
 
   public activitiesRequest() {
