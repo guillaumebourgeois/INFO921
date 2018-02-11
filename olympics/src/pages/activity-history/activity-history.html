@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Activity History</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content class="no-scroll">
+  <ion-card>
+    <ion-card-header>
+      <span margin-left>Début de l'activité</span>
+    </ion-card-header>
+    <ion-card-content>
+      {{ activity.formatedStartDate }}
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <span margin-left>Fin de l'activité</span>
+    </ion-card-header>
+    <ion-card-content>
+      {{ activity.formatedEndDate }}
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <span margin-left>Durée de l'activité</span>
+    </ion-card-header>
+    <ion-card-content>
+      {{ activity.duration }}
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>

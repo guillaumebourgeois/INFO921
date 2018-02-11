@@ -4,6 +4,7 @@ import { Storage } from '@ionic/storage';
 
 import { ActivitiesService } from '../../providers/api/services/activities.service';
 import { Sports } from '../../providers/sports';
+import { ActivityHistoryPage } from '../activity-history/activity-history';
 
 @Component({
   selector: 'page-sport-history',
@@ -28,7 +29,7 @@ export class SportHistoryPage {
     this.sport = this.navParams.get('sport');
 
     this.activities.getActivities(this.sport.code).subscribe(activities => {
-      var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+      var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
       this.activitiesList = Object.assign([], activities.content);
 
@@ -39,7 +40,8 @@ export class SportHistoryPage {
         let year = date.getFullYear();
         let hour = date.getHours();
         let min = date.getMinutes();
-        this.activitiesList[i].formatedStartDate = day + " " + month + " " + year + " " + hour + ":" + min;
+        let seconds = date.getSeconds();
+        this.activitiesList[i].formatedStartDate = (day < 10 ? "0" + day : day) + " " + month + " " + year + " " + (hour < 10 ? "0" + hour : hour) + ":" + (min < 10 ? "0" + min : min) + ":" + (seconds < 10 ? "0" + seconds : seconds);
       }
       console.log(this.activitiesList);
     })
@@ -63,4 +65,7 @@ export class SportHistoryPage {
     }*/
   }
 
+  public loadActivityHistory (activity) {
+    this.navCtrl.push(ActivityHistoryPage, { 'activity': activity });
+  }
 }

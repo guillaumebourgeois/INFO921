@@ -77,7 +77,7 @@ export class ActivityPage {
     });
     // this.activityData.startDate = new Date();
     // this.activityData.sportCode = this.sport.code;
-    
+
     // this.storage.get('lastActivityId').then((value) => {
     //   this.activityData.activityId = (value !== undefined) ? ++value : 0;
 
@@ -199,7 +199,7 @@ export class ActivityPage {
     else {
       this.map.addMarker(selfMarkerOptions).then((marker) => { this.selfMarker = marker; });
     }
-  
+
     this.map.setCameraTarget(new LatLng(position.latitude, position.longitude));
   }
 
@@ -226,7 +226,7 @@ export class ActivityPage {
     this.data.endDate = Date.now();
 
     // this.storeActivityData();
-    
+
     this.activitiesService.endActivity(this.data).subscribe(() => {
       this.navBar.backButtonClick = () => {
         this.navCtrl.pop();
@@ -273,6 +273,6 @@ export class ActivityPage {
 
   /* Send activity data to server */
   sendData() {
-    
+
   }
 }
