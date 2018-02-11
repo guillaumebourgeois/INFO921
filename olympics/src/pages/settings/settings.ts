@@ -5,7 +5,7 @@ import { App } from 'ionic-angular/components/app/app';
 import { AlertController } from 'ionic-angular/components/alert/alert-controller';
 
 import { ActivitiesService  } from '../../providers/api/services/activities.service';
-import { StatisticsService  } from '../../providers/api/services/statistics.service';
+//import { StatisticsService  } from '../../providers/api/services/statistics.service';
 import { User } from '../../providers/api/models/user';
 
 import { LoginPage } from '../login/login';
@@ -25,7 +25,7 @@ export class SettingsPage {
 
   private cptActivity:number;
 
-  constructor(public appCtrl: App, public alertCtrl: AlertController, public statistics: StatisticsService, public activities: ActivitiesService, public navCtrl: NavController, public navParams: NavParams, public events: Events, public storage: Storage) {}
+  constructor(public appCtrl: App, public alertCtrl: AlertController, /*public statistics: StatisticsService,*/ public activities: ActivitiesService, public navCtrl: NavController, public navParams: NavParams, public events: Events, public storage: Storage) {}
 
   ionViewDidLoad() {
     this.storage.get('user').then(user => {
@@ -64,7 +64,7 @@ export class SettingsPage {
     this.cptActivity++;
   }
 
-  public statisticsRequest(){
+  /*public statisticsRequest(){
     this.statistics.getStatistics(2).subscribe(statistics => {
       console.log(statistics);
       let alert = this.alertCtrl.create({
@@ -74,5 +74,5 @@ export class SettingsPage {
       });
       alert.present();
     })
-  }
+  }*/
 }
