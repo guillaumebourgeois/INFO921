@@ -9,6 +9,7 @@ export interface Activity {
   endDate: number | Date;
   gpsCoordinates?: Array<GpsCoordinates>;
   user: User;
+  distance: number;
   imageUrl?: string;
 }
 
@@ -20,6 +21,7 @@ export class Activity implements Activity {
     this.endDate = 0
     this.gpsCoordinates = []
     this.user = null
+    this.distance = 0
     this.imageUrl = ""
   }
 }

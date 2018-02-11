@@ -1,7 +1,8 @@
 package com.olympics.web;
 
 import java.security.Principal;
-import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -62,42 +63,84 @@ public class UserController {
     }
     
     @RequestMapping(value="/user/{id}/stats", method = RequestMethod.GET)
-    public Map<String, Long> getStats(
-    		@PathVariable Long id,
-    		@RequestParam(name="dateFrom",defaultValue="") Timestamp dateFrom,
-			@RequestParam(name="dateTo",defaultValue="") Timestamp dateTo) {
-    	Map<String, Long> result = new HashMap<String, Long>();
-    	result.put("avgDuration", activityRepository.getAverageDuration(id, dateFrom, dateTo));
-    	result.put("avgDistance", activityRepository.getAverageDistance(id, dateFrom, dateTo));
-    	result.put("shortestDuration", activityRepository.getShortestActivity(id, dateFrom, dateTo));
-    	result.put("longestDuration", activityRepository.getLongestActivity(id, dateFrom, dateTo));
-    	result.put("longestDistance", activityRepository.getLongestDistance(id, dateFrom, dateTo));
-    	result.put("percentRun", activityRepository.getNbActivities(id, "run", dateFrom, dateTo) * 100 / activityRepository.getNbActivities(id, dateFrom, dateTo));
-    	result.put("percentSki", activityRepository.getNbActivities(id, "ski", dateFrom, dateTo) * 100 / activityRepository.getNbActivities(id, dateFrom, dateTo));
-    	result.put("percentCycle", activityRepository.getNbActivities(id, "cycle", dateFrom, dateTo) * 100 / activityRepository.getNbActivities(id, dateFrom, dateTo));
-    	result.put("percentWalk", activityRepository.getNbActivities(id, "walk", dateFrom, dateTo) * 100 / activityRepository.getNbActivities(id, dateFrom, dateTo));
-    	result.put("percentRide", activityRepository.getNbActivities(id, "ride", dateFrom, dateTo) * 100 / activityRepository.getNbActivities(id, dateFrom, dateTo));
-    	
-    	Long nbMilsInOneMonth = 2628000000L;
+    public Map<String, Object> getStats(
+            @PathVariable Long id,
+            @RequestParam(name="from",defaultValue="") String fromString,
+            @RequestParam(name="to",defaultValue="") String toString) {
+        Calendar from = Calendar.getInstance();
+        from.setTimeInMillis(Long.parseLong(fromString));
+         // new Calendar(Long.parseLong(fromString));
+        Calendar to = Calendar.getInstance();
+        to.setTimeInMillis(Long.parseLong(toString));
+        // new Calendar(Long.parseLong(toString));
+        Map<String, Object> response = new HashMap<String, Object>();
+
+        Map<String, Object> global = new HashMap<String, Object>();
+        ArrayList<Map<String, Object>> monthly = new ArrayList<Map<String, Object>>();
+
+        Map<String, Object> duration = new HashMap<String, Object>();
+    	duration.put("average", activityRepository.getAverageDuration(id, from, to));
+    	duration.put("shortest", activityRepository.getShortestActivity(id, from, to));
+        duration.put("longest", activityRepository.getLongestActivity(id, from, to));
+        
+        Map<String, Object> distance = new HashMap<String, Object>();
+        distance.put("average", activityRepository.getAverageDistance(id, from, to));
+        distance.put("longest", activityRepository.getLongestDistance(id, from, to));
+
+        Map<String, Object> proportions = new HashMap<String, Object>();
+        proportions.put("run", (activityRepository.getNbActivities(id, "run", from, to) != 0) ? activityRepository.getNbActivities(id, "run", from, to) * 100 / activityRepository.getNbActivities(id, from, to) : 0);
+    	proportions.put("ski", (activityRepository.getNbActivities(id, "ski", from, to) != 0) ? activityRepository.getNbActivities(id, "ski", from, to) * 100 / activityRepository.getNbActivities(id, from, to) : 0);
+    	proportions.put("cycle", (activityRepository.getNbActivities(id, "cycle", from, to) != 0) ? activityRepository.getNbActivities(id, "cycle", from, to) * 100 / activityRepository.getNbActivities(id, from, to) : 0);
+    	proportions.put("walk", (activityRepository.getNbActivities(id, "walk", from, to) != 0) ? activityRepository.getNbActivities(id, "walk", from, to) * 100 / activityRepository.getNbActivities(id, from, to) : 0);
+        proportions.put("ride", (activityRepository.getNbActivities(id, "ride", from, to) != 0) ? activityRepository.getNbActivities(id, "ride", from, to) * 100 / activityRepository.getNbActivities(id, from, to) : 0);
+        
+        global.put("proportions", proportions);
+        global.put("duration", duration);
+        global.put("distance", distance);
+
+        Long nbMilsInOneMonth = 2628000000L;
     	Integer cpt = 0;
-    	Timestamp dateTmp = new Timestamp(dateFrom.getTime());
-    	while (dateTo.after(dateTmp)) {
-    		result.put("avgDuration" + cpt, activityRepository.getAverageDuration(id, dateFrom, dateTmp));
-        	result.put("avgDistance" + cpt, activityRepository.getAverageDistance(id, dateFrom, dateTmp));
-        	result.put("shortestDuration" + cpt, activityRepository.getShortestActivity(id, dateFrom, dateTmp));
-        	result.put("longestDuration" + cpt, activityRepository.getLongestActivity(id, dateFrom, dateTmp));
-        	result.put("longestDistance" + cpt, activityRepository.getLongestDistance(id, dateFrom, dateTmp));
-        	result.put("percentRun" + cpt, activityRepository.getNbActivities(id, "run", dateFrom, dateTmp) * 100 / activityRepository.getNbActivities(id, dateFrom, dateTmp));
-        	result.put("percentSki" + cpt, activityRepository.getNbActivities(id, "ski", dateFrom, dateTmp) * 100 / activityRepository.getNbActivities(id, dateFrom, dateTmp));
-        	result.put("percentCycle" + cpt, activityRepository.getNbActivities(id, "cycle", dateFrom, dateTmp) * 100 / activityRepository.getNbActivities(id, dateFrom, dateTmp));
-        	result.put("percentWalk" + cpt, activityRepository.getNbActivities(id, "walk", dateFrom, dateTmp) * 100 / activityRepository.getNbActivities(id, dateFrom, dateTmp));
-        	result.put("percentRide" + cpt, activityRepository.getNbActivities(id, "ride", dateFrom, dateTmp) * 100 / activityRepository.getNbActivities(id, dateFrom, dateTmp));
+        Calendar dateTmp = Calendar.getInstance();
+        dateTmp.setTimeInMillis(from.getTimeInMillis());
+
+        //LocalDateTime localDateTime = dateTmp.toLocalDateTime();
+        Map<String, Object> month;
+    	while (to.after(from)) {
+            month = new HashMap<String, Object>();
+
+            Map<String, Object> monthDuration = new HashMap<String, Object>();
+    		monthDuration.put("average", activityRepository.getAverageDuration(id, from, dateTmp));
+        	monthDuration.put("shortest", activityRepository.getShortestActivity(id, from, dateTmp));
+            monthDuration.put("longest", activityRepository.getLongestActivity(id, from, dateTmp));
+            
+            Map<String, Object> monthDistance = new HashMap<String, Object>();
+        	monthDistance.put("average", activityRepository.getAverageDistance(id, from, dateTmp));
+            monthDistance.put("longest", activityRepository.getLongestDistance(id, from, dateTmp));
+            
+            Map<String, Object> monthProportions = new HashMap<String, Object>();
+        	monthProportions.put("run", (activityRepository.getNbActivities(id, "run", from, to) != 0) ? activityRepository.getNbActivities(id, "run", from, to) * 100 / activityRepository.getNbActivities(id, from, to) : 0);
+    	    monthProportions.put("ski", (activityRepository.getNbActivities(id, "ski", from, to) != 0) ? activityRepository.getNbActivities(id, "ski", from, to) * 100 / activityRepository.getNbActivities(id, from, to) : 0);
+    	    monthProportions.put("cycle", (activityRepository.getNbActivities(id, "cycle", from, to) != 0) ? activityRepository.getNbActivities(id, "cycle", from, to) * 100 / activityRepository.getNbActivities(id, from, to) : 0);
+    	    monthProportions.put("walk", (activityRepository.getNbActivities(id, "walk", from, to) != 0) ? activityRepository.getNbActivities(id, "walk", from, to) * 100 / activityRepository.getNbActivities(id, from, to) : 0);
+            monthProportions.put("ride", (activityRepository.getNbActivities(id, "ride", from, to) != 0) ? activityRepository.getNbActivities(id, "ride", from, to) * 100 / activityRepository.getNbActivities(id, from, to) : 0);
     		
-    		dateTmp.setTime(dateTmp.getTime() + nbMilsInOneMonth);
-    		dateFrom.setTime(dateFrom.getTime() + nbMilsInOneMonth);
-    		cpt++;
-    	}
-    	
-    	return result;
+    		dateTmp.setTimeInMillis(dateTmp.getTimeInMillis() + nbMilsInOneMonth);
+    		from.setTimeInMillis(from.getTimeInMillis() + nbMilsInOneMonth);
+            cpt++;
+
+            dateTmp.setTimeInMillis(from.getTimeInMillis());
+
+            month.put("year", dateTmp.get(Calendar.YEAR));
+            month.put("month", dateTmp.get(Calendar.MONTH) + 1);
+            month.put("duration", monthDuration);
+            month.put("distance", monthDistance);
+            month.put("proportions", monthProportions);
+
+            monthly.add(month);
+        }
+        
+        response.put("global", global);
+        response.put("monthly", monthly);
+    	return response;
     }
 }

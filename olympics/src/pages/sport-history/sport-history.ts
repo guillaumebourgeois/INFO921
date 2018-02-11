@@ -39,9 +39,9 @@ export class SportHistoryPage {
       this.maxPage = activities.totalPages;
       this.processActivities(activities.content);
 
-      //var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      // var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
-      //this.activitiesList = Object.assign([], activities.content);
+      // this.activitiesList = Object.assign([], activities.content);
 
       /*
       for (let i = 0; i < this.activitiesList.length; ++i) {
@@ -89,14 +89,14 @@ export class SportHistoryPage {
       this.storage.set(`activity${activity.idActivity}`, activity);
       activity.startDate = new Date(<number>activity.startDate);
       activity.endDate = new Date(<number>activity.endDate);
-      if(activity.gpsCoordinates.length > 0) {
-        this.mapsService.getActivityImage(activity).subscribe(
-          data => {
-            activity.imageUrl = data;
-          },
-          err => console.log(err)
-        )
-      }
+      // if(activity.gpsCoordinates.length > 0) {
+      //   this.mapsService.getActivityImage(activity).subscribe(
+      //     data => {
+      //       activity.imageUrl = data;
+      //     },
+      //     err => console.log(err)
+      //   )
+      // }
       console.log(activity);
       this.activities.push(activity);
     });
