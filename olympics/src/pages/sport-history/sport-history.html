@@ -7,11 +7,11 @@
 
 <ion-content class="grey-background">
 
-	<!-- <ion-list margin-top>
-    <button ion-item *ngFor="let activity of activitiesPage.content" (click)="loadActivityHistory(activity)">
-      {{ activity.startDate.toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' }) }} at {{ activity.startDate.toLocaleTimeString('en-US') }}
+	<!--ion-list margin-top>
+    <button ion-item *ngFor="let activity of activitiesList" (click)="loadActivityHistory(activity)">
+      {{ activity.formatedStartDate }}
     </button>
-	</ion-list> -->
+	</ion-list-->
 
 	<ion-card *ngFor="let activity of activities">
 		<!-- <img src="{{ activity.imageUrl }}" /> -->
@@ -37,7 +37,7 @@
 
 	<ion-infinite-scroll (ionInfinite)="doInfinite($event)">
 		<ion-infinite-scroll-content>
-			
+
 		</ion-infinite-scroll-content>
 	</ion-infinite-scroll>
 

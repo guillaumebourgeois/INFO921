@@ -10,6 +10,8 @@ import { Activity } from '../../providers/api/models/activity';
 import { ActivityPage } from '../activity/activity';
 import { GoogleMapsService } from '../../providers/api/services/google-maps.service';
 
+import { ActivityHistoryPage } from '../activity-history/activity-history';
+
 @Component({
   selector: 'page-sport-history',
   templateUrl: 'sport-history.html',
@@ -23,7 +25,7 @@ export class SportHistoryPage {
   private page: number;
   private maxPage: number;
 
-  constructor(public mapsService: GoogleMapsService, public navCtrl: NavController, public navParams: NavParams, public sports: Sports, public storage: Storage, public activitiesService: ActivitiesService) {
+  constructor(/*public mapsService: GoogleMapsService,*/ public navCtrl: NavController, public navParams: NavParams, public sports: Sports, public storage: Storage, public activitiesService: ActivitiesService) {
     this.sport = this.navParams.get('sport');
     this.activitiesPage = new ActivitiesPage();
     this.activities = [];
@@ -36,28 +38,27 @@ export class SportHistoryPage {
     this.activitiesService.getActivities(this.sport.code).subscribe(activities => {
       this.maxPage = activities.totalPages;
       this.processActivities(activities.content);
-        // this.map.clear();
-        // console.log('hey')
-        // this.map.setCameraTarget({
-        //   lat: activity.gpsCoordinates[0].lat,
-        //   lng: activity.gpsCoordinates[0].lng
-        // })
-        // this.map.addPolyline({
-        //   points: activity.gpsCoordinates,
-        // });
 
-        // this.map.toDataURL().then(image => {
-        //   // activity.imageUrl = image;
-        // })
-        // this.map.one(GoogleMapsEvent.CAMERA_MOVE_END).then(() => {
-          
-        // })
+      var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+      this.activitiesList = Object.assign([], activities.content);
+
+      /*
+      for (let i = 0; i < this.activitiesList.length; ++i) {
+        let date = new Date(this.activitiesList[i].startDate);
+        let day = date.getDate();
+        let month = months[date.getMonth()];
+        let year = date.getFullYear();
+        let hour = date.getHours();
+        let min = date.getMinutes();
+        let seconds = date.getSeconds();
+        this.activitiesList[i].formatedStartDate = (day < 10 ? "0" + day : day) + " " + month + " " + year + " " + (hour < 10 ? "0" + hour : hour) + ":" + (min < 10 ? "0" + min : min) + ":" + (seconds < 10 ? "0" + seconds : seconds);
+      }
+      console.log(this.activitiesList);*/
+
       this.activitiesPage = activities;
-      
     })
     // console.log('ionViewDidLoad SportHistoryPage');
-
-    
 
     /*this.storage.get('userId').then((userId) => {
       this.userId = userId;
@@ -106,7 +107,7 @@ export class SportHistoryPage {
     this.storage.get(`activity${activity.idActivity}`).then(storedActivity => {
       if(storedActivity) {
         console.log('Got this !')
-        // TODO: Push the activity page
+        this.navCtrl.push(ActivityHistoryPage, { 'activity': activity });
       }
       else {
         console.log('No activity here...')

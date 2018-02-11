@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Activity History</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content class="no-scroll">
+  <ion-card>
+    <ion-card-header>
+      <span margin-left>Start time</span>
+    </ion-card-header>
+    <ion-card-content>
+      <h2>{{ activity.startDate.toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' }) }}</h2>
+      <p>{{ activity.startDate.toLocaleTimeString('en-US') }}</p>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <span margin-left>End time</span>
+    </ion-card-header>
+    <ion-card-content>
+      <h2>{{ activity.endDate.toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' }) }}</h2>
+      <p>{{ activity.endDate.toLocaleTimeString('en-US') }}</p>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <span margin-left>Duration</span>
+    </ion-card-header>
+    <ion-card-content>
+      <h2>{{ activity.duration }}</h2>
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>
