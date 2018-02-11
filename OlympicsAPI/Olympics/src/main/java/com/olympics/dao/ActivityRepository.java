@@ -1,5 +1,7 @@
 package com.olympics.dao;
 
+import java.sql.Timestamp;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,25 +24,25 @@ public interface ActivityRepository extends JpaRepository<Activity, Long>{
 	@Query("select a from Activity a where a.user.idUser = :id")
 	public Page<Activity> findActivitiesByUser(@Param("id") Long user, Pageable pageable);
 	
-	@Query("select AVG(DATEDIFF(a.startDate, a.endDate)) from Activity a where a.user.idUser = :id")
-	public Long getAverageDuration(@Param("id") Long user);
+	@Query("select AVG(DATEDIFF(a.startDate, a.endDate)) from Activity a where a.user.idUser = :id and a.startDate > :from and a.startDate < dateTo")
+	public Long getAverageDuration(@Param("id") Long user, @Param("from") Timestamp dateFrom, @Param("to") Timestamp dateTo);
 	
-	@Query("select AVG(a.distance) from Activity a where a.user.idUser = :id")
-	public Long getAverageDistance(@Param("id") Long user);
+	@Query("select AVG(a.distance) from Activity a where a.user.idUser = :id and a.startDate > :from and a.startDate < dateTo")
+	public Long getAverageDistance(@Param("id") Long user, @Param("from") Timestamp dateFrom, @Param("to") Timestamp dateTo);
 	
-	@Query("select MIN(DATEDIFF(a.startDate, a.endDate)) from Activity a where a.user.idUser = :id")
-	public Long getShortestActivity(@Param("id") Long user);
+	@Query("select MIN(DATEDIFF(a.startDate, a.endDate)) from Activity a where a.user.idUser = :id and a.startDate > :from and a.startDate < dateTo")
+	public Long getShortestActivity(@Param("id") Long user, @Param("from") Timestamp dateFrom, @Param("to") Timestamp dateTo);
 	
-	@Query("select MAX(DATEDIFF(a.startDate, a.endDate)) from Activity a where a.user.idUser = :id")
-	public Long getLongestActivity(@Param("id") Long user);
+	@Query("select MAX(DATEDIFF(a.startDate, a.endDate)) from Activity a where a.user.idUser = :id and a.startDate > :from and a.startDate < dateTo")
+	public Long getLongestActivity(@Param("id") Long user, @Param("from") Timestamp dateFrom, @Param("to") Timestamp dateTo);
 	
-	@Query("select MAX(a.distance) from Activity a where a.user.idUser = :id")
-	public Long getLongestDistance(@Param("id") Long user);
+	@Query("select MAX(a.distance) from Activity a where a.user.idUser = :id and a.startDate > :from and a.startDate < dateTo")
+	public Long getLongestDistance(@Param("id") Long user, @Param("from") Timestamp dateFrom, @Param("to") Timestamp dateTo);
 	
-	@Query("select count(a) from Activity a where a.user.idUser = :id and a.sport LIKE :sport")
-	public Long getNbActivities(@Param("id") Long user, @Param("sport") String sport);
+	@Query("select count(a) from Activity a where a.user.idUser = :id and a.sport LIKE :sport and a.startDate > :from and a.startDate < dateTo")
+	public Long getNbActivities(@Param("id") Long user, @Param("sport") String sport, @Param("from") Timestamp dateFrom, @Param("to") Timestamp dateTo);
 	
-	@Query("select count(a) from Activity a where a.user.idUser = :id")
-	public Long getNbActivities(@Param("id") Long user);
+	@Query("select count(a) from Activity a where a.user.idUser = :id and a.startDate > :from and a.startDate < dateTo")
+	public Long getNbActivities(@Param("id") Long user, @Param("from") Timestamp dateFrom, @Param("to") Timestamp dateTo);
 }
 	

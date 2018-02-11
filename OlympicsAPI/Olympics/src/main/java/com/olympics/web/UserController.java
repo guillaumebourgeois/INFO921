@@ -1,6 +1,7 @@
 package com.olympics.web;
 
 import java.security.Principal;
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -61,18 +62,42 @@ public class UserController {
     }
     
     @RequestMapping(value="/user/{id}/stats", method = RequestMethod.GET)
-    public Map<String, Long> getStats(@PathVariable Long id) {
+    public Map<String, Long> getStats(
+    		@PathVariable Long id,
+    		@RequestParam(name="dateFrom",defaultValue="") Timestamp dateFrom,
+			@RequestParam(name="dateTo",defaultValue="") Timestamp dateTo) {
     	Map<String, Long> result = new HashMap<String, Long>();
-    	result.put("avgDuration", activityRepository.getAverageDuration(id));
-    	result.put("avgDistance", activityRepository.getAverageDistance(id));
-    	result.put("shortestDuration", activityRepository.getShortestActivity(id));
-    	result.put("longestDuration", activityRepository.getLongestActivity(id));
-    	result.put("longestDistance", activityRepository.getLongestDistance(id));
-    	result.put("percentRun", activityRepository.getNbActivities(id, "run") * 100 / activityRepository.getNbActivities(id));
-    	result.put("percentSki", activityRepository.getNbActivities(id, "ski") * 100 / activityRepository.getNbActivities(id));
-    	result.put("percentCycle", activityRepository.getNbActivities(id, "cycle") * 100 / activityRepository.getNbActivities(id));
-    	result.put("percentWalk", activityRepository.getNbActivities(id, "walk") * 100 / activityRepository.getNbActivities(id));
-    	result.put("percentRide", activityRepository.getNbActivities(id, "ride") * 100 / activityRepository.getNbActivities(id));
+    	result.put("avgDuration", activityRepository.getAverageDuration(id, dateFrom, dateTo));
+    	result.put("avgDistance", activityRepository.getAverageDistance(id, dateFrom, dateTo));
+    	result.put("shortestDuration", activityRepository.getShortestActivity(id, dateFrom, dateTo));
+    	result.put("longestDuration", activityRepository.getLongestActivity(id, dateFrom, dateTo));
+    	result.put("longestDistance", activityRepository.getLongestDistance(id, dateFrom, dateTo));
+    	result.put("percentRun", activityRepository.getNbActivities(id, "run", dateFrom, dateTo) * 100 / activityRepository.getNbActivities(id, dateFrom, dateTo));
+    	result.put("percentSki", activityRepository.getNbActivities(id, "ski", dateFrom, dateTo) * 100 / activityRepository.getNbActivities(id, dateFrom, dateTo));
+    	result.put("percentCycle", activityRepository.getNbActivities(id, "cycle", dateFrom, dateTo) * 100 / activityRepository.getNbActivities(id, dateFrom, dateTo));
+    	result.put("percentWalk", activityRepository.getNbActivities(id, "walk", dateFrom, dateTo) * 100 / activityRepository.getNbActivities(id, dateFrom, dateTo));
+    	result.put("percentRide", activityRepository.getNbActivities(id, "ride", dateFrom, dateTo) * 100 / activityRepository.getNbActivities(id, dateFrom, dateTo));
+    	
+    	Long nbMilsInOneMonth = 2628000000L;
+    	Integer cpt = 0;
+    	Timestamp dateTmp = new Timestamp(dateFrom.getTime());
+    	while (dateTo.after(dateTmp)) {
+    		result.put("avgDuration" + cpt, activityRepository.getAverageDuration(id, dateFrom, dateTmp));
+        	result.put("avgDistance" + cpt, activityRepository.getAverageDistance(id, dateFrom, dateTmp));
+        	result.put("shortestDuration" + cpt, activityRepository.getShortestActivity(id, dateFrom, dateTmp));
+        	result.put("longestDuration" + cpt, activityRepository.getLongestActivity(id, dateFrom, dateTmp));
+        	result.put("longestDistance" + cpt, activityRepository.getLongestDistance(id, dateFrom, dateTmp));
+        	result.put("percentRun" + cpt, activityRepository.getNbActivities(id, "run", dateFrom, dateTmp) * 100 / activityRepository.getNbActivities(id, dateFrom, dateTmp));
+        	result.put("percentSki" + cpt, activityRepository.getNbActivities(id, "ski", dateFrom, dateTmp) * 100 / activityRepository.getNbActivities(id, dateFrom, dateTmp));
+        	result.put("percentCycle" + cpt, activityRepository.getNbActivities(id, "cycle", dateFrom, dateTmp) * 100 / activityRepository.getNbActivities(id, dateFrom, dateTmp));
+        	result.put("percentWalk" + cpt, activityRepository.getNbActivities(id, "walk", dateFrom, dateTmp) * 100 / activityRepository.getNbActivities(id, dateFrom, dateTmp));
+        	result.put("percentRide" + cpt, activityRepository.getNbActivities(id, "ride", dateFrom, dateTmp) * 100 / activityRepository.getNbActivities(id, dateFrom, dateTmp));
+    		
+    		dateTmp.setTime(dateTmp.getTime() + nbMilsInOneMonth);
+    		dateFrom.setTime(dateFrom.getTime() + nbMilsInOneMonth);
+    		cpt++;
+    	}
+    	
     	return result;
     }
 }
