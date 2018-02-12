@@ -7,9 +7,8 @@
 </ion-header>
 
 
-<ion-content class="no-scroll">
-  <!--h1 margin-left>Welcome, {{user.username}}.</h1-->
-  <ion-list margin-top>
+<ion-content>
+  <!-- <ion-list margin-top>
     <ion-item (click)="activitiesRequest()">
       <ion-icon name="leaf" item-start></ion-icon>
       Test activities request
@@ -20,13 +19,52 @@
       Test activity request
     </ion-item>
 
-    <!--ion-item (click)="statisticsRequest()">
+    <ion-item (click)="statisticsRequest()">
       <ion-icon name="leaf" item-start></ion-icon>
       Test statistics request
-    </ion-item-->
-  </ion-list>
+    </ion-item>
+  </ion-list> -->
 
-  <ion-list>
+  <h1 margin-left>Update your profile</h1>
+
+  <form (ngSubmit)="updateProfile()">
+    <ion-row>
+      <ion-col>
+        <ion-list inset>
+
+          <ion-item margin-top>
+            <ion-input type="text" placeholder="{{ user.username }}" name="username" [(ngModel)]="user.username" required></ion-input>
+          </ion-item>
+          
+          <ion-item margin-top>
+            <ion-input type="password" placeholder="Password" name="password" [(ngModel)]="user.password" required></ion-input>
+          </ion-item>
+
+          <ion-item margin-top>
+            <ion-input type="password" placeholder="Confirm password" name="confirmPassword" [(ngModel)]="confirmPassword" required></ion-input>
+          </ion-item>
+
+          <ion-item margin-top>
+            <ion-input type="email" placeholder="{{ user.email }}" name="email" [(ngModel)]="user.email" required></ion-input>
+          </ion-item>
+
+          <!-- <ion-item margin-top>
+            <ion-input type="text" placeholder="Lastname" name="lastname" [(ngModel)]="credentials.lastname" required></ion-input>
+          </ion-item> -->
+
+        </ion-list>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col class="signup-col">
+        <button ion-button class="submit-btn" type="submit">Send</button>
+      </ion-col>
+    </ion-row>
+
+  </form>
+
+  <!-- <ion-list>
     <ion-item>
       <ion-label>Username</ion-label>
       <ion-input readonly placeholder="{{ user.username }}"></ion-input>
@@ -36,7 +74,21 @@
       <ion-label>Email</ion-label>
       <ion-input readonly placeholder="{{ user.email }}"></ion-input>
     </ion-item>
-  </ion-list>
+
+    <ion-item>
+      <ion-label>Password</ion-label>
+      <ion-input readonly type="password" placeholder="Your new password"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Confirm</ion-label>
+      <ion-input readonly placeholder="Confirm password"></ion-input>
+    </ion-item>
+
+    <ion-item (click)="updateProfile()" text-center>
+      Update your profile
+    </ion-item>
+  </ion-list> -->
 
   <ion-list>
     <ion-item (click)="logout()" class="logout" text-center>

@@ -31,8 +31,18 @@
       <span margin-left>Duration</span>
     </ion-card-header>
     <ion-card-content>
-      <h2>{{ activity.duration }}</h2>
+      <h2>{{ duration }}</h2>
     </ion-card-content>
   </ion-card>
 
+  <ion-card>
+    <ion-card-header>
+      <span margin-left>Distance</span>
+    </ion-card-header>
+    <ion-card-content>
+      <h2>{{ activity.distance }} meters</h2>
+    </ion-card-content>
+  </ion-card>
+  
+  <div id="map"></div>
 </ion-content>

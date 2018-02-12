@@ -26,8 +26,8 @@
 		</ion-item>
 
 		<ion-item>
-			<span font-bold item-left>18 min</span>
-			<span item-left>(2.6 mi)</span>
+			<span font-bold item-left>{{ (activity.endDate - activity.startDate) / 1000 / 60 | floor }} min</span>
+			<span item-left>({{ activity.distance / 1000 | round }} km)</span>
 			<button ion-button icon-left clear item-end (click)="loadActivityHistory(activity)">
 				<ion-icon name="eye"></ion-icon>
 				View
