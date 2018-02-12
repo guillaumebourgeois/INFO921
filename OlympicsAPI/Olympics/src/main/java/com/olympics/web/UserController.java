@@ -66,22 +66,22 @@ public class UserController {
     public User update(@RequestBody User user, Principal principal) throws Exception {
 	   
     	User usertmp = userDao.findOne(user.getIdUser());
-    	if(principal.getName().equals(usertmp.getUsername())) {
+    	if(usertmp != null && principal.getName().equals(usertmp.getUsername())) {
     		User userBd = userDao.findOne(user.getIdUser());
 	    	if(userBd.getAge()!=user.getAge())
 	    		userBd.setAge(user.getAge());
-	    	if(!userBd.getEmail().equals(user.getEmail()) && !"".equals(user.getEmail())) {
+	    	if(! userBd.getEmail().equals(user.getEmail()) && !"".equals(user.getEmail())) {
 	    		
 	    		User usertmp2 = userDao.findByEmail(user.getEmail());
-	    		if(usertmp != null)
+	    		if(usertmp2 != null)
 	    			throw new Exception("Email already exist");
 	    		else
-	    			userBd.setEmail(user.getEmail());
+	    			userBd.setEmail(user.getEmail());	
 	    		
 	    	}
-	    	if(!userBd.getUsername().equals(user.getUsername()) && !"".equals(user.getUsername())){
+	    	if(! userBd.getUsername().equals(user.getUsername()) && !"".equals(user.getUsername())){
 	    		User usertmp3 = userDao.findByUsername(user.getUsername());
-				if(usertmp!=null)
+				if(usertmp3!=null)
 					throw new Exception("Username already exist");
 				else
 					userBd.setUsername(user.getUsername());
