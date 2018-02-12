@@ -62,7 +62,7 @@ public class UserController {
         return userDao.save(user);
     }
     
-    @RequestMapping(value = "/userupdate", method = RequestMethod.POST)
+    @RequestMapping(value = "/user", method = RequestMethod.PUT)
     public User update(@RequestBody User user, Principal principal) throws Exception {
 	   
     	User usertmp = userDao.findOne(user.getIdUser());
