@@ -4,8 +4,26 @@
   </ion-navbar>
 </ion-header>
 
-
 <ion-content padding class="no-scroll">
+  <div>
+    <ion-item>
+      <ion-label>Month</ion-label>
+      <ion-select [(ngModel)]="currentMonth" (ionChange)="onChange($event)">
+        <ion-option *ngFor="let monthOption of months" [value]="monthOption.id" [selected]="monthOption.id == currentMonth">
+          {{ monthOption.month }}
+        </ion-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Year</ion-label>
+      <ion-select [(ngModel)]="currentYear" (ionChange)="onChange($event)">
+        <ion-option value="2018">2018</ion-option>
+      </ion-select>
+    </ion-item>
+  </div>
+  <ion-item-divider>
+  </ion-item-divider>
   <div>
     <button ion-button [color]="(statsDisplayed == 0) ? 'primary' : 'light'" (click)="ChangeDisplay(0)">Duration</button>
 
