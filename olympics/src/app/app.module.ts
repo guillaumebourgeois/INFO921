@@ -35,6 +35,8 @@ import { ActivitiesService          } from '../providers/api/services/activities
 import { UserService                } from '../providers/api/services/user.service';
 import { NoopService                } from '../providers/api/services/noop.service';
 import { GoogleMapsService          } from '../providers/api/services/google-maps.service';
+import { RoundPipe } from './round.pipe';
+import { FloorPipe } from './floor.pipe';
 //import { StatisticsService          } from '../providers/api/services/statistics.service';
 
 @NgModule({
@@ -50,7 +52,9 @@ import { GoogleMapsService          } from '../providers/api/services/google-map
     TabsPage,
     CreateAccountPage,
     SportHistoryPage,
-    ActivityHistoryPage
+    ActivityHistoryPage,
+    RoundPipe,
+    FloorPipe
   ],
   imports: [
     BrowserModule,

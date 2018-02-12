@@ -50,6 +50,7 @@ export class ActivityPage {
       this.data.user = user;
       this.data.sport = this.sport.code;
       this.data.startDate = Date.now();
+      this.data.endDate = Date.now();
 
       this.activitiesService.startActivity(this.data).subscribe(data => {
         this.data.idActivity = data.idActivity; // Retrieved activity's ID from server
@@ -61,6 +62,7 @@ export class ActivityPage {
           if(this.data.gpsCoordinates.length > 1) this.lastPosition = this.data.gpsCoordinates[this.data.gpsCoordinates.length - 2];
 
           if(this.lastPosition && this.lastPosition.lat != this.currentPosition.lat && this.lastPosition.lng != this.currentPosition.lng) {
+            this.data.distance += this.distanceBetween(this.lastPosition, this.currentPosition);
             this.activitiesService.updateActivity(this.data, this.currentPosition).subscribe(
               data => console.log(data.lat),
               error => console.log(error)
@@ -186,6 +188,7 @@ export class ActivityPage {
     this.timer.pauseTimer();
 
     this.data.endDate = Date.now();
+    this.data.gpsCoordinates = []; // Don't send the gps coordinates twice
 
     this.activitiesService.endActivity(this.data).subscribe(
       () => console.log('Data sent succesfully'),
@@ -221,5 +224,20 @@ export class ActivityPage {
     });
 
     confirm.present();
+  }
+
+  degreesToRadian(degrees: number) {
+    return (Math.PI * degrees) / 180;
+  }
+
+  distanceBetween(a: GpsCoordinates, b: GpsCoordinates) {
+    let r = 6378000
+
+    let latA = this.degreesToRadian(a.lat);
+    let lngA  = this.degreesToRadian(a.lng);
+    let latB = this.degreesToRadian(b.lat);
+    let lngB = this.degreesToRadian(b.lng);
+
+    return r * (Math.PI / 2 - Math.asin(Math.sin(latB) * Math.sin(latA) + Math.cos(lngB - lngA) * Math.cos(latB) * Math.cos(latA)))
   }
 }
