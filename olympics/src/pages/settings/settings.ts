@@ -6,9 +6,11 @@ import { AlertController } from 'ionic-angular/components/alert/alert-controller
 import { ActivitiesService  } from '../../providers/api/services/activities.service';
 //import { StatisticsService  } from '../../providers/api/services/statistics.service';
 import { User } from '../../providers/api/models/user';
+import * as bcrypt from 'bcryptjs';
 
 import { LoginPage } from '../login/login';
 import { AuthService } from '../../providers/api/services/auth.service';
+import { UserService } from '../../providers/api/services/user.service';
 
 @Component({
   selector: 'page-settings',
@@ -20,12 +22,12 @@ export class SettingsPage {
     username: '',
     password: '',
     email: '',
-    age: 0
+    age: null
   };
-
+  private confirmPassword: string = '';
   private cptActivity:number;
 
-  constructor(public auth: AuthService, public alertCtrl: AlertController, /*public statistics: StatisticsService,*/ public activities: ActivitiesService, public navCtrl: NavController, public navParams: NavParams, public events: Events, public storage: Storage) {}
+  constructor(public userService: UserService, public auth: AuthService, public alertCtrl: AlertController, /*public statistics: StatisticsService,*/ public activities: ActivitiesService, public navCtrl: NavController, public navParams: NavParams, public events: Events, public storage: Storage) {}
 
   ionViewDidLoad() {
     this.storage.get('user').then(user => {
@@ -65,6 +67,34 @@ export class SettingsPage {
       alert.present();
     })
     this.cptActivity++;
+  }
+
+  updateProfile() {
+    if (this.user.password != '') {
+      if (this.user.password == this.confirmPassword) {
+        bcrypt.genSalt(10, (err, salt) => {
+          bcrypt.hash(this.user.password, salt, (err, hash) => {
+            let body = {
+              username: this.user.username,
+              password: hash,
+              email: this.user.email,
+              idUser: this.user.idUser
+            }
+            this.userService.updateProfile(body).subscribe(
+              data => this.events.publish('error', 'Your profile has been updated.'),
+              err => this.events.publish('error', err.error, err.message || '')
+            )
+          })
+        })
+      } else {
+        this.events.publish('error', 'Password does not match.')
+      }
+    } else {
+      this.userService.updateProfile(this.user).subscribe(
+        data => this.events.publish('error', 'Your profile has been updated.'),
+        err => this.events.publish('error', err.error, err.message || '')
+      )
+    }
   }
 
   /*public statisticsRequest(){

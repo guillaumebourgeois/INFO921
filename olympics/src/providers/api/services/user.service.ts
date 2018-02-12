@@ -26,6 +26,6 @@ const httpOptions = {
   }
 
   updateProfile(body: any) : Observable<any> {
-    return this.http.post(`/user/${body.idUser}/update`, body, httpOptions);
+    return this.http.put('/user', body, httpOptions);
   }
 }
