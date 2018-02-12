@@ -25,8 +25,8 @@ export class StatisticsPage {
   private proportionsChart: any;
 
   private data = {
-                    "distance": {"average": 0, "longest": 0, "shortest": 0},
-                    "duration": {"average": 0, "longest": 0},
+                    "distance": {"average": 0, "longest": 0},
+                    "duration": {"average": 0, "longest": 0, "shortest": 0},
                     "proportions": {"ski": 0, "run": 0, "cycle": 0, "ride": 0, "walk": 0}
                   };
 
