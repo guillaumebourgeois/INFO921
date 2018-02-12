@@ -10,7 +10,7 @@
       <ion-label>Month</ion-label>
       <ion-select [(ngModel)]="currentMonth" (ionChange)="onChange($event)">
         <ion-option *ngFor="let monthOption of months" [value]="monthOption.id" [selected]="monthOption.id == currentMonth">
-          {{ monthOption.month }}
+          {{ monthOption.name }}
         </ion-option>
       </ion-select>
     </ion-item>

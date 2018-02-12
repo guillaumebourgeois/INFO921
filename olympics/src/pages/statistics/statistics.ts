@@ -24,24 +24,28 @@ export class StatisticsPage {
   private distanceChart: any;
   private proportionsChart: any;
 
-  private data: any;
+  private data = {
+                    "distance": {"average": 0, "longest": 0, "shortest": 0},
+                    "duration": {"average": 0, "longest": 0},
+                    "proportions": {"ski": 0, "run": 0, "cycle": 0, "ride": 0, "walk": 0}
+                  };
 
   private currentMonth: any;
   private currentYear: any;
   private currentDate: any;
   private months = [
-                      {"id":1, "month":"January"},
-                      {"id":2, "month":"February"},
-                      {"id":3, "month":"March"},
-                      {"id":4, "month":"April"},
-                      {"id":5, "month":"May"},
-                      {"id":6, "month":"June"},
-                      {"id":7, "month":"July"},
-                      {"id":8, "month":"August"},
-                      {"id":9, "month":"September"},
-                      {"id":10, "month":"October"},
-                      {"id":11, "month":"November"},
-                      {"id":12, "month":"December"}
+                      {"id":1, "name":"January"},
+                      {"id":2, "name":"February"},
+                      {"id":3, "name":"March"},
+                      {"id":4, "name":"April"},
+                      {"id":5, "name":"May"},
+                      {"id":6, "name":"June"},
+                      {"id":7, "name":"July"},
+                      {"id":8, "name":"August"},
+                      {"id":9, "name":"September"},
+                      {"id":10, "name":"October"},
+                      {"id":11, "name":"November"},
+                      {"id":12, "name":"December"}
                     ];
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public statisticsService: StatisticsService, public userService: UserService) {
@@ -49,73 +53,15 @@ export class StatisticsPage {
       this.idUser = user.idUser;
 
       this.currentDate = new Date();
+      this.currentMonth = this.currentDate.getMonth() + 1;
+      this.currentYear = this.currentDate.getFullYear();
 
-      this.getDatas(this.currentDate.getMonth() + 1, this.currentDate.getFullYear());
+      this.getDatas();
     })
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad StatisticsPage');
-
-    this.durationChart = new Chart(this.durationCanvas.nativeElement, {
-        type: 'bar',
-        data: {
-            labels: ["Longest", "Average", "Shortest"],
-            datasets: [{
-                label: 'Duration',
-                data: [17572, 10040, 0],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255,99,132,1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero:true
-                    }
-                }]
-            }
-        }
-    });
-
-    this.distanceChart = new Chart(this.distanceCanvas.nativeElement, {
-      type: 'bar',
-      data: {
-          labels: ["Longest", "Average"],
-          datasets: [{
-              label: 'Distance',
-              data: [7654, 1218, 0],
-              backgroundColor: [
-                  'rgba(255, 99, 132, 0.2)',
-                  'rgba(54, 162, 235, 0.2)'
-              ],
-              borderColor: [
-                  'rgba(255,99,132,1)',
-                  'rgba(54, 162, 235, 1)'
-              ],
-              borderWidth: 1
-          }]
-      },
-      options: {
-          scales: {
-              yAxes: [{
-                  ticks: {
-                      beginAtZero:true
-                  }
-              }]
-          }
-      }
-    });
 
     /*this.distanceChart = new Chart(this.distanceCanvas.nativeElement, {
       type: 'line',
@@ -147,14 +93,93 @@ export class StatisticsPage {
           ]
       }
     });*/
+  }
 
+  private drawDuration (){
+    this.durationChart = new Chart(this.durationCanvas.nativeElement, {
+        type: 'bar',
+        data: {
+            labels: ["Longest", "Average", "Shortest"],
+            datasets: [{
+                label: 'Duration',
+                data: [
+                        this.data.duration.longest,
+                        this.data.duration.average,
+                        this.data.duration.shortest
+                      ],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero:true
+                    }
+                }]
+            }
+        }
+    });
+  }
+
+  private drawDistance (){
+    this.distanceChart = new Chart(this.distanceCanvas.nativeElement, {
+      type: 'bar',
+      data: {
+          labels: ["Longest", "Average"],
+          datasets: [{
+              label: 'Distance',
+              data: [
+                      this.data.distance.longest,
+                      this.data.distance.average
+                    ],
+              backgroundColor: [
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(54, 162, 235, 0.2)'
+              ],
+              borderColor: [
+                  'rgba(255,99,132,1)',
+                  'rgba(54, 162, 235, 1)'
+              ],
+              borderWidth: 1
+          }]
+      },
+      options: {
+          scales: {
+              yAxes: [{
+                  ticks: {
+                      beginAtZero:true
+                  }
+              }]
+          }
+      }
+    });
+  }
+
+  private drawProportions (){
     this.proportionsChart = new Chart(this.proportionsCanvas.nativeElement, {
       type: 'doughnut',
       data: {
           labels: ["Ski", "Run", "Cycle", "Ride", "Walk"],
           datasets: [{
               label: 'Proportions',
-              data: [28.5, 57.1, 7.1, 0, 7.1],
+              data: [
+                      this.data.proportions.ski,
+                      this.data.proportions.run,
+                      this.data.proportions.cycle,
+                      this.data.proportions.ride,
+                      this.data.proportions.walk
+                    ],
               backgroundColor: [
                   'rgba(255, 99, 132, 0.2)',
                   'rgba(54, 162, 235, 0.2)',
@@ -172,37 +197,45 @@ export class StatisticsPage {
           }]
       }
     });
-
   }
 
-  private getDatas(month: number, year: number){
-    if ((month == this.currentDate.getMonth() + 1) && (year == this.currentDate.getFullYear())) {
-      this.currentMonth = month;
-      this.currentYear = year;
+  private getDatas (){
+      let startMonth = "" + this.currentYear + "-" + (this.currentMonth < 10 ? "0" + this.currentMonth : this.currentMonth);
 
-      let startMonth = Date.parse(month + ", 1, " + year);
+      this.statisticsService.getStatistics(this.idUser, startMonth, startMonth).subscribe(data => {
+        this.data = data.monthly[0];
 
-      return this.statisticsService.getStatistics(this.idUser, startMonth, Date.now()).subscribe(data => {
-        return data;
+        if (this.data.duration.longest == null)
+           this.data.duration.longest = 0;
+        if (this.data.duration.average == null)
+           this.data.duration.average = 0;
+        if (this.data.duration.shortest == null)
+            this.data.duration.shortest= 0;
+
+        if (this.data.distance.longest == null)
+           this.data.distance.longest = 0;
+        if (this.data.distance.average == null)
+           this.data.distance.average = 0;
+
+        if (this.data.proportions.ski == null)
+          this.data.proportions.ski = 0;
+        if (this.data.proportions.run == null)
+          this.data.proportions.run = 0;
+        if (this.data.proportions.cycle == null)
+          this.data.proportions.cycle = 0;
+        if (this.data.proportions.ride == null)
+          this.data.proportions.ride = 0;
+        if (this.data.proportions.walk == null)
+          this.data.proportions.walk = 0;
+
+        this.drawDuration();
+        this.drawDistance();
+        this.drawProportions();
       })
-    }
-    else {
-      this.currentMonth = month;
-      this.currentYear = year;
-
-      let date = new Date (year, month - 1, 0);
-
-      let startMonth = Date.parse(month + ", 1, " + year);
-      let endMonth = Date.parse(month + ", " + date.getDate() + ", " + year);
-
-      return this.statisticsService.getStatistics(this.idUser, startMonth, endMonth).subscribe(data => {
-        return data;
-      })
-    }
   }
 
   private onChange (){
-    this.getDatas(this.currentMonth, this.currentYear);
+    this.getDatas();
   }
 
   private ChangeDisplay(mode: number) {
