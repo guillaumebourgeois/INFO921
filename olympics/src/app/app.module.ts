@@ -93,8 +93,8 @@ import { FloorPipe } from './floor.pipe';
     ActivitiesService,
     UserService,
     NoopService,
-    GoogleMapsService/*,
-    StatisticsService*/
+    GoogleMapsService,
+    StatisticsService
   ]
 })
 export class AppModule {}
