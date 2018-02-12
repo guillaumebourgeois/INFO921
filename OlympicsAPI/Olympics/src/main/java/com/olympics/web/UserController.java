@@ -13,6 +13,7 @@ import com.olympics.dao.ActivityRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.provider.token.ConsumerTokenServices;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,9 +27,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 
 public class UserController {
-
-    @Autowired
-    private UserService userService;
     
     @Autowired
 	private UserDao userDao;
@@ -54,13 +52,46 @@ public class UserController {
     }
     
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
-    public User create(@RequestBody User user) {
-        return userService.save(user);
+    public User create(@RequestBody User user) throws Exception{
+		User usertmp = userDao.findByUsername(user.getUsername());
+		if(usertmp!=null)
+			throw new Exception("Username already exist");
+		usertmp = userDao.findByEmail(user.getEmail());
+		if(usertmp != null)
+			throw new Exception("Email already exist");
+        return userDao.save(user);
     }
     
-    @RequestMapping(value = "/user/{id}/update", method = RequestMethod.POST)
-    public User update(@RequestBody User user) {
-        return userService.save(user);
+    @RequestMapping(value = "/userupdate", method = RequestMethod.POST)
+    public User update(@RequestBody User user, Principal principal) throws Exception {
+	   
+    	User usertmp = userDao.findOne(user.getIdUser());
+    	if(principal.getName().equals(usertmp.getUsername())) {
+    		User userBd = userDao.findOne(user.getIdUser());
+	    	if(userBd.getAge()!=user.getAge())
+	    		userBd.setAge(user.getAge());
+	    	if(!userBd.getEmail().equals(user.getEmail()) && !"".equals(user.getEmail())) {
+	    		
+	    		User usertmp2 = userDao.findByEmail(user.getEmail());
+	    		if(usertmp != null)
+	    			throw new Exception("Email already exist");
+	    		else
+	    			userBd.setEmail(user.getEmail());
+	    		
+	    	}
+	    	if(!userBd.getUsername().equals(user.getUsername()) && !"".equals(user.getUsername())){
+	    		User usertmp3 = userDao.findByUsername(user.getUsername());
+				if(usertmp!=null)
+					throw new Exception("Username already exist");
+				else
+					userBd.setUsername(user.getUsername());
+	    	}
+	    	if(!"".equals(user.getPassword()))
+	    		userBd.setPassword(user.getPassword());
+	        return userDao.save(userBd);
+    	}
+    	else
+    		throw new Exception("Id incorrect");
     }
     
     @RequestMapping(value="/user/{id}/stats", method = RequestMethod.GET)
@@ -102,8 +133,9 @@ public class UserController {
         global.put("distance", distance);
 
         Calendar dateTmp = Calendar.getInstance();
-        dateTmp.setTimeInMillis(from.getTimeInMillis());
-
+        dateTmp.set(Calendar.MONTH, from.get(Calendar.MONTH));
+        dateTmp.set(Calendar.YEAR, from.get(Calendar.YEAR));
+        
         Map<String, Object> month;
     	while (to.compareTo(from) >= 0) {
             month = new HashMap<String, Object>();
