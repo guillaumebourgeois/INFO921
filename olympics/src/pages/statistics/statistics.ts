@@ -12,15 +12,15 @@ import { UserService       } from '../../providers/api/services/user.service';
 })
 export class StatisticsPage {
 
-  @ViewChild('durationCanvas') durationCanvas;
+  //@ViewChild('durationCanvas') durationCanvas;
   @ViewChild('distanceCanvas') distanceCanvas;
   @ViewChild('proportionsCanvas') proportionsCanvas;
 
-  private statsDisplayed: number = 0;
+  private statsDisplayed: number = 1;
 
   private idUser: number;
 
-  private durationChart: any;
+  //private durationChart: any;
   private distanceChart: any;
   private proportionsChart: any;
 
@@ -95,7 +95,7 @@ export class StatisticsPage {
     });*/
   }
 
-  private drawDuration (){
+  /*private drawDuration (){
     this.durationChart = new Chart(this.durationCanvas.nativeElement, {
         type: 'bar',
         data: {
@@ -130,7 +130,7 @@ export class StatisticsPage {
             }
         }
     });
-  }
+  }*/
 
   private drawDistance (){
     this.distanceChart = new Chart(this.distanceCanvas.nativeElement, {
@@ -205,12 +205,12 @@ export class StatisticsPage {
       this.statisticsService.getStatistics(this.idUser, startMonth, startMonth).subscribe(data => {
         this.data = data.monthly[0];
 
-        if (this.data.duration.longest == null)
+        /*if (this.data.duration.longest == null)
            this.data.duration.longest = 0;
         if (this.data.duration.average == null)
            this.data.duration.average = 0;
         if (this.data.duration.shortest == null)
-            this.data.duration.shortest= 0;
+            this.data.duration.shortest= 0;*/
 
         if (this.data.distance.longest == null)
            this.data.distance.longest = 0;
@@ -228,7 +228,7 @@ export class StatisticsPage {
         if (this.data.proportions.walk == null)
           this.data.proportions.walk = 0;
 
-        this.drawDuration();
+        //this.drawDuration();
         this.drawDistance();
         this.drawProportions();
       })

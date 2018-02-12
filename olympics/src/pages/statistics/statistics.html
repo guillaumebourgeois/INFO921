@@ -25,21 +25,21 @@
   <ion-item-divider>
   </ion-item-divider>
   <div>
-    <button ion-button [color]="(statsDisplayed == 0) ? 'primary' : 'light'" (click)="ChangeDisplay(0)">Duration</button>
+    <!--button ion-button [color]="(statsDisplayed == 0) ? 'primary' : 'light'" (click)="ChangeDisplay(0)">Duration</button-->
 
     <button ion-button [color]="(statsDisplayed == 1) ? 'primary' : 'light'" (click)="ChangeDisplay(1)">Distance</button>
 
     <button ion-button [color]="(statsDisplayed == 2) ? 'primary' : 'light'" (click)="ChangeDisplay(2)">Proportions</button>
   </div>
 
-  <ion-card [ngClass]="(statsDisplayed == 0)?'' : 'Hidden'">
+  <!--ion-card [ngClass]="(statsDisplayed == 0)?'' : 'Hidden'">
     <ion-card-header>
       Duration
     </ion-card-header>
     <ion-card-content>
       <canvas #durationCanvas></canvas>
     </ion-card-content>
-  </ion-card>
+  </ion-card-->
 
   <ion-card [ngClass]="(statsDisplayed == 1)?'' : 'Hidden'">
     <ion-card-header>
